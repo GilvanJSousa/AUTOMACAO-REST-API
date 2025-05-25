@@ -60,30 +60,24 @@ A estrutura de arquivos está organizada da seguinte maneira:
 
 ```
 src/
-├── main/
-│   └── java/
-│       └── org/
-│           └── br/
-│               └── com/
-│                   └── Main.java           # Classe principal da aplicação
 └── test/
-    └── java/
-        └── org/
-            └── br/
-                └── com/
-                    └── testes/
-                        ├── controllers/    # Controladores para gerenciar requisições HTTP
-                        ├── manager/        # Gerenciadores de recursos e configurações
-                        ├── model/          # Classes de modelo de dados
-                        ├── steps/          # Passos de teste e definições
-                        ├── utils/          # Utilitários e helpers
-                        └── tokens/         # Gerenciamento de tokens e autenticação
+    ├── java/
+    │   └── org/
+    │       └── br/
+    │           └── com/
+    │               └── testes/
+    │                   ├── controllers/    # Controladores para gerenciar requisições HTTP
+    │                   │   └── usuarios/   # Controladores específicos de usuários
+    │                   ├── manager/        # Gerenciadores de recursos e configurações
+    │                   ├── model/          # Classes de modelo de dados
+    │                   ├── steps/          # Passos de teste e definições
+    │                   ├── utils/          # Utilitários e helpers
+    │                   └── tokens/         # Gerenciamento de tokens e autenticação
+    └── resources/
+        └── features/    # Arquivos de feature do Cucumber
 ```
 
 ### Descrição dos Diretórios
-
-#### src/main/java
-- **Main.java**: Classe principal que contém o ponto de entrada da aplicação
 
 #### src/test/java
 - **controllers/**: Contém as classes responsáveis por gerenciar as requisições HTTP e interações com a API
@@ -92,6 +86,9 @@ src/
 - **steps/**: Implementações dos passos de teste usando Cucumber
 - **utils/**: Classes utilitárias e helpers para suporte aos testes
 - **tokens/**: Gerenciamento de tokens de autenticação e autorização
+
+#### src/test/resources
+- **features/**: Arquivos de feature do Cucumber que descrevem os cenários de teste
 
 ---
 
@@ -102,6 +99,8 @@ src/
 - REST Assured: Biblioteca para testes de API REST
 - Maven: Ferramenta de automação de build e gerenciamento de dependências
 - Cucumber: Framework para testes BDD (Behavior Driven Development)
+- Lombok: Redução de código boilerplate
+- Faker: Geração de dados fake para testes
 
 ---
 
