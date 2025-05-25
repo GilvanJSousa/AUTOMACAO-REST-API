@@ -20,12 +20,10 @@ public class UsuarioController {
     private static final String BASE_URL = "http://localhost:3000";
     private static final String ENDPOINT_USUARIOS = "/usuarios";
     private static final String ENDPOINT_LOGIN = "/auth/login";
-    private Usuario usuarioAtual;
 
     public UsuarioController() {
         response = null;
     }
-
 
     public void cadastrarNovoUsuario() {
         Usuario usuarioGerado = FakerApiData.gerarUsuarioFake();
@@ -33,13 +31,16 @@ public class UsuarioController {
                 .contentType(ContentType.JSON)
                 .baseUri(BASE_URL)
                 .body(usuarioGerado)
+                .log().all()
                 .when()
-                .post(ENDPOINT_USUARIOS);
+                .post(ENDPOINT_USUARIOS)
+                .then()
+                .extract()
+                .response();
 
         UsuarioManager.setEmailUsuario(usuarioGerado.getEmail());
         UsuarioManager.setSenhaUsuario(usuarioGerado.getSenha());
         UsuarioManager.setIdUsuario(response.jsonPath().getString("id"));
-
     }
 
     public void realizarLogin() {
@@ -52,8 +53,12 @@ public class UsuarioController {
                         "{\"email\": \"" + email + "\"," +
                         " \"senha\": \"" + senha + "\"}"
                 )
+                .log().all()
                 .when()
-                .post(ENDPOINT_LOGIN);
+                .post(ENDPOINT_LOGIN)
+                .then()
+                .extract()
+                .response();
 
         if (response.getStatusCode() == 200) {
             String token = response.jsonPath().getString("token");
@@ -67,8 +72,12 @@ public class UsuarioController {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
+                .log().all()
                 .when()
-                .get(ENDPOINT_USUARIOS);
+                .get(ENDPOINT_USUARIOS)
+                .then()
+                .extract()
+                .response();
     }
 
     public void consultarUsuarioPorId() {
@@ -78,8 +87,12 @@ public class UsuarioController {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
+                .log().all()
                 .when()
-                .get(ENDPOINT_USUARIOS + "/" + idUsuario);
+                .get(ENDPOINT_USUARIOS + "/" + idUsuario)
+                .then()
+                .extract()
+                .response();
     }
 
     public void atualizarUsuarioPorId(String id, String nomeCompleto, String nomeUsuario) {
@@ -103,27 +116,27 @@ public class UsuarioController {
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
+                .log().all()
                 .when()
-                .delete(ENDPOINT_USUARIOS + "/" + idUsuario);
+                .delete(ENDPOINT_USUARIOS + "/" + idUsuario)
+                .then()
+                .extract()
+                .response();
     }
 
     public void validarStatusCode(int statusCode) {
+        this.response.then()
+                .log().body();
         assertEquals("StatusCode deve ser: " + statusCode, this.response.getStatusCode(), statusCode);
     }
 
-
     public void validarNomeUsuario(){
         List<Map<String, Object>> usuarios = this.response.jsonPath().getList("$");
-        System.out.println(usuarios);
         boolean usuarioEncontrado = usuarios.stream()
                 .anyMatch(usuario -> usuario.get("email").equals(UsuarioManager.getEmailUsuario()));
 
         assertTrue("Usuário não consta na lista de cadastrados",
                 usuarioEncontrado);
-    }
-
-    public Usuario getUsuarioAtual() {
-        return usuarioAtual;
     }
 
     public void atualizarNomeUsuario() {
@@ -138,8 +151,11 @@ public class UsuarioController {
                 .body(new HashMap<String, String>() {{
                     put("nomeUsuario", usuarioGerado.getNomeUsuario());
                 }})
+                .log().all()
                 .when()
-                .put(ENDPOINT_USUARIOS + "/" + idUsuario);
+                .put(ENDPOINT_USUARIOS + "/" + idUsuario)
+                .then()
+                .extract()
+                .response();
     }
-
 }

@@ -10,15 +10,12 @@ public class UsuarioSteps {
 
     public UsuarioSteps(){
         this.usuarioController = new UsuarioController();
-
     }
 
     @When("que envio uma requisição de registro de usuario CMS")
     public void queEnvioUmaRequisicaoDeRegistroUsuarioCMS() {
         usuarioController.cadastrarNovoUsuario();
-
     }
-
 
     @When("o sistema processa a requisição")
     public void oSistemaProcessaARequisicao() {
