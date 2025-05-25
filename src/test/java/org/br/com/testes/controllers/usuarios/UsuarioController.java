@@ -4,7 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
-import org.br.com.testes.model.Usuario;
+import org.br.com.testes.model.UsuarioResponse;
 import org.br.com.testes.utils.FakerApiData;
 
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class UsuarioController {
     }
 
     public void cadastrarNovoUsuario() {
-        Usuario usuarioGerado = FakerApiData.gerarUsuarioFake();
+        UsuarioResponse usuarioGerado = FakerApiData.gerarUsuarioFake();
         this.response = given()
                 .contentType(ContentType.JSON)
                 .baseUri(BASE_URL)
@@ -38,8 +38,8 @@ public class UsuarioController {
                 .extract()
                 .response();
 
-        UsuarioManager.setEmailUsuario(usuarioGerado.getEmail());
-        UsuarioManager.setSenhaUsuario(usuarioGerado.getSenha());
+        UsuarioManager.setEmailUsuario(usuarioGerado.email());
+        UsuarioManager.setSenhaUsuario(usuarioGerado.senha());
         UsuarioManager.setIdUsuario(response.jsonPath().getString("id"));
     }
 
@@ -142,14 +142,14 @@ public class UsuarioController {
     public void atualizarNomeUsuario() {
         String token = TokenManager.getToken();
         String idUsuario = UsuarioManager.getIdUsuario();
-        Usuario usuarioGerado = FakerApiData.gerarUsuarioFake();
+        UsuarioResponse usuarioGerado = FakerApiData.gerarUsuarioFake();
         
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
                 .body(new HashMap<String, String>() {{
-                    put("nomeUsuario", usuarioGerado.getNomeUsuario());
+                    put("nomeUsuario", usuarioGerado.nomeUsuario());
                 }})
                 .log().all()
                 .when()

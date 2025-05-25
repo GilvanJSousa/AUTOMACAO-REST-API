@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.apachecommons.CommonsLog;
-import org.br.com.testes.model.Usuario;
+import org.br.com.testes.model.UsuarioResponse;
 
 import java.util.Locale;
 
@@ -12,7 +12,7 @@ import java.util.Locale;
 @Data
 public class FakerApiData {
     private static final Faker faker = new Faker(new Locale("pt-BR"));
-    private static Usuario usuarioFaker;
+    private static UsuarioResponse usuarioFaker;
 
     @Getter
     private static String name;
@@ -22,15 +22,16 @@ public class FakerApiData {
     /**
      * Gera um usuário CMS fake com dados aleatórios ou retorna o usuário padrao.
      *
-     * @return um objeto Usuario com dados fictícios
+     * @return um objeto UsuarioResponse com dados fictícios
      */
-    public static Usuario gerarUsuarioFake() {
+    public static UsuarioResponse gerarUsuarioFake() {
         if (usuarioFaker == null) {
-            usuarioFaker = new Usuario();
-            usuarioFaker.setNomeCompleto(faker.name().fullName());
-            usuarioFaker.setNomeUsuario(faker.name().username());
-            usuarioFaker.setEmail(faker.internet().emailAddress());
-            usuarioFaker.setSenha(gerarSenhaValida());
+            usuarioFaker = new UsuarioResponse(
+                faker.name().fullName(),
+                faker.name().username(),
+                faker.internet().emailAddress(),
+                gerarSenhaValida()
+            );
         }
         return usuarioFaker;
     }
