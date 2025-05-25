@@ -1,121 +1,123 @@
-# Automação de Testes REST API
+# Automação de Testes API REST
 
 ![](.gitbucket/images/banner.png)
 
 # O Projeto
-O projeto de automação de testes tem o objetivo de ajudar nos ciclos de testes regressivos de APIs REST, reduzindo o esforço manual e ganhando velocidade a cada ciclo e a cada entrega.
+Este projeto de automação de testes tem como objetivo validar a funcionalidade de APIs REST, reduzindo o esforço manual e ganhando velocidade a cada ciclo de testes.
 
 # Sumário
 
-- [1- Download e configuração do Java](#1--download-do-java)
-- [2- Instalação IntelliJ](#2--instalar-o-intellij)
-- [3- Instalação Maven](#3--instalar-o-maven)
-- [4- Instalação Git](#4--instalar-do-git)
-- [5- Estrutura do projeto](#5--estrutura-do-projeto)
+- [1- Configurando o Ambiente](#1--configurando-o-ambiente)
+- [2- Clonando o Projeto](#2--clonando-o-projeto)
+- [3- Estrutura do Projeto](#3--estrutura-do-projeto)
+- [4- Tecnologias Utilizadas](#4--tecnologias-utilizadas)
+- [5- Executando os Testes](#5--executando-os-testes)
 
-<h1>Configurando o ambiente</h1>
+---
 
-# 1- Download do Java
+<h1><a name="1--configurando-o-ambiente"></a>1- Configurando o Ambiente</h1>
 
-Baixar o JDK de acordo com o seu sistema operacional (Recomendamos instalar o Java 8 para evitar incompatibilidade com o framework)
+Para executar este projeto, você precisará do seguinte:
 
-- [Download Java 8](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html) - Java Development Kit significa Kit de Desenvolvimento Java, e é um conjunto de utilitários que permitem criar sistemas de software para a plataforma Java. É composto por compilador e bibliotecas.
+### 1.1- Java Development Kit (JDK)
+- Recomendamos o Java 8 ou superior
+- **Instalação:** Faça o download no [site oficial da Oracle](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html)
+- **Configuração:**
+    - Defina a variável de ambiente `JAVA_HOME` para o diretório de instalação do JDK
+    - Adicione `%JAVA_HOME%\bin` (Windows) ou `$JAVA_HOME/bin` (Linux/macOS) à sua variável de ambiente `PATH`
 
-<h3>1.1 - Configurando o JDK no Windows:</h3>
-A) Vá até as variáveis de ambiente no Windows e adicione a seguinte variável com o respectivo valor e clique em OK:
+### 1.2- Maven
+- Utilizado para gerenciamento de dependências e build do projeto
+- **Instalação:** Faça o download no [site oficial do Maven](https://maven.apache.org/download.cgi)
+- **Configuração:**
+    - Defina a variável de ambiente `MAVEN_HOME` para o diretório de instalação do Maven
+    - Adicione `%MAVEN_HOME%\bin` (Windows) ou `$MAVEN_HOME/bin` (Linux/macOS) à sua variável de ambiente `PATH`
 
-- Nome da variável:  ***JAVA_HOME***
-- Valor da variável: ***C:\Program Files\Java\jdk1.8.0_333***
-- Nome da variável:  ***JRE_HOME***
-- Valor da variável: ***C:\Program Files\Java\jdk1.8.0_333\jre***
+### 1.3- IntelliJ IDEA
+- Recomendamos o [IntelliJ IDEA Community Edition](https://www.jetbrains.com/pt-br/idea/download)
+- **Instalação:** Baixe e instale a partir do site oficial
 
-> ***Atenção:*** O valor da variável é ilustrativo. O diretório correto deve ser o local onde está instalado o JDK, podendo haver diferenças na versão (números após o jdk1.8)
+### 1.4- Git
+- Para controle de versão
+- **Instalação:** Faça o download no [site oficial do Git](https://git-scm.com/downloads)
 
-B) Selecione a variável PATH e clique em Editar... Clique no botão Novo e adicione o seguinte valor de variável ***%JAVA_HOME%\bin***
+---
 
-# 2- Instalar o IntelliJ
+<h1><a name="2--clonando-o-projeto"></a>2- Clonando o Projeto</h1>
 
-- [Download IntelliJ community version](https://www.jetbrains.com/pt-br/idea/download) - O IntelliJ IDEA é um ambiente de desenvolvimento integrado escrito em Java para o desenvolvimento de software de computador. É desenvolvido pela JetBrains e está disponível como uma edição da comunidade licenciada do Apache 2.
+1. Abra seu terminal ou Git Bash
+2. Navegue até o diretório onde deseja clonar o projeto
+3. Execute o comando:
+    ```bash
+    git clone <URL_DO_SEU_REPOSITORIO>
+    ```
 
-# 3- Instalar o Maven
+---
 
-- [Download Maven](https://maven.apache.org/download.cgi) - O Maven é uma ferramenta de automação de build utilizada principalmente em projetos Java.
-
-<h3>3.1 - Configurando o Maven no Windows:</h3>
-A) Após realizar o download deve ser descompactado o arquivo e movido para a pasta ***C:\Users\USUARIO\AppData\Local*** devendo alterar para o seu usuário.
-
-B) Vá até as variáveis de ambiente no Windows e adicione a seguinte variável com o respectivo valor e clique em OK:
-- Nome da variável:  ***MAVEN_HOME***
-- Valor da variável: ***C:\Users\USUARIO\AppData\Local\maven***
-
-C) Selecione a variável PATH e clique em Editar... Clique no botão Novo e adicione o seguinte valor de variável ***%MAVEN_HOME%\bin***
-
-# 4- Instalar do Git
-
-- [Download Git](https://git-scm.com/downloads) - Software utilizado para versionamento de código, para acompanhar novas mudanças e criar ambiente de trabalho coletivo.
-
-Após o download apenas deve ser executado para realizar a instalação seguindo a instalação padrão.
-
-<h3>Clone do projeto</h3>
-
-1. Para realizar o clone do projeto deve se entrar no repositório, acessar o botão ***clone*** no topo do projeto, copiar a URL gerada.
-2. Abrir o git bash
-3. Navegar até a pasta que deseja fazer o clone do projeto usar o comando cd para acessar os arquivos e ls para verificar as pasta existentes no arquivo.
-4. Usar o comando que foi copiado do repositório, semelhante ao seguinte:
-```bash
-git clone https://github.com/seu-usuario/seu-projeto.git
-```
-
-# 5- Estrutura do projeto
+<h1><a name="3--estrutura-do-projeto"></a>3- Estrutura do Projeto</h1>
 
 A estrutura de arquivos está organizada da seguinte maneira:
 
 ```
-src/test/java/org/br/com/testes/
-├── controllers/         # Controladores para as requisições HTTP
-│   ├── usuarios/       # Controladores específicos para usuários
-│   └── artigos/       # Controladores específicos para artigos
-│
-├── manager/            # Gerenciadores de estado e recursos
-│   ├── TokenManager.java
-│   ├── AuthenticationToken.java
-│   └── ErrorManager.java
-│
-├── model/             # Modelos de dados
-│   ├── usuarios/      # Modelos relacionados a usuários
-│   └── artigos/      # Modelos relacionados a artigos
-│
-├── steps/             # Steps do Cucumber
-│   ├── UsuarioCmsSteps.java
-│   └── ArtigosSteps.java
-│
-├── tokens/            # Gerenciamento de tokens
-│   ├── GerarTokenResquest.java
-│   └── GerarToken.java
-│
-└── utils/             # Utilitários
-    ├── JsonUtils.java
-    ├── Utils.java
-    ├── FakerApiData.java
-    └── DataUtils.java
+src/
+├── main/
+│   └── java/
+│       └── org/
+│           └── br/
+│               └── com/
+│                   └── Main.java           # Classe principal da aplicação
+└── test/
+    └── java/
+        └── org/
+            └── br/
+                └── com/
+                    └── testes/
+                        ├── controllers/    # Controladores para gerenciar requisições HTTP
+                        ├── manager/        # Gerenciadores de recursos e configurações
+                        ├── model/          # Classes de modelo de dados
+                        ├── steps/          # Passos de teste e definições
+                        ├── utils/          # Utilitários e helpers
+                        └── tokens/         # Gerenciamento de tokens e autenticação
 ```
 
-## Tecnologias Utilizadas
-- Java
-- REST Assured
-- Cucumber
-- JUnit
-- Faker
+### Descrição dos Diretórios
 
-## Executando os Testes
+#### src/main/java
+- **Main.java**: Classe principal que contém o ponto de entrada da aplicação
 
-Para executar todos os testes:
-```bash
-mvn clean test
-```
+#### src/test/java
+- **controllers/**: Contém as classes responsáveis por gerenciar as requisições HTTP e interações com a API
+- **manager/**: Classes para gerenciamento de recursos, configurações e estados do teste
+- **model/**: Classes que representam os modelos de dados utilizados nos testes
+- **steps/**: Implementações dos passos de teste usando Cucumber
+- **utils/**: Classes utilitárias e helpers para suporte aos testes
+- **tokens/**: Gerenciamento de tokens de autenticação e autorização
 
-Para executar testes específicos usando tags do Cucumber:
-```bash
-mvn clean test -D"cucumber.filter.tags=@tag_name"
-``` 
+---
 
+<h1><a name="4--tecnologias-utilizadas"></a>4- Tecnologias Utilizadas</h1>
+
+- Java: Linguagem de programação principal
+- JUnit 5: Framework para escrita e execução de testes
+- REST Assured: Biblioteca para testes de API REST
+- Maven: Ferramenta de automação de build e gerenciamento de dependências
+- Cucumber: Framework para testes BDD (Behavior Driven Development)
+
+---
+
+<h1><a name="5--executando-os-testes"></a>5- Executando os Testes</h1>
+
+Para executar os testes:
+
+1. Abra o terminal na raiz do projeto
+2. Execute o comando Maven:
+    ```bash
+    mvn clean test
+    ```
+
+Você também pode executar os testes diretamente pela sua IDE (IntelliJ, Eclipse, etc.). Geralmente, clicando com o botão direito no arquivo de teste ou na classe e selecionando "Run Test".
+
+---
+
+**Próximos Passos:**
+À medida que o projeto evoluir, este README será atualizado com mais detalhes sobre a arquitetura, novos tipos de teste e configurações adicionais.
