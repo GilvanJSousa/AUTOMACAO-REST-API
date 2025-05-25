@@ -16,9 +16,7 @@ public class FakerApiData {
 
     @Getter
     private static String name;
-    @Getter
     private static String email;
-    @Getter
     private static String senha;
 
     /**
