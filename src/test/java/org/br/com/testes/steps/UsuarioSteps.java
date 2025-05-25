@@ -57,11 +57,7 @@ public class UsuarioSteps {
 
     @When("que envio a solicitação de PUT com ID")
     public void queEnvioASolicitacaoDePUTComID() {
-//        usuarioCmsController.atualizarUsuarioPorId(
-//            usuarioCmsController.getUsuarioId(),
-//            usuarioCmsController.getUsuarioCadastrado().getNomeCompleto(),
-//            usuarioCmsController.getUsuarioCadastrado().getNomeUsuario()
-//        );
+        usuarioController.atualizarNomeUsuario();
     }
 
     @Then("valido o retorno usuario atualizado com status code {int} e mensagem {string}")

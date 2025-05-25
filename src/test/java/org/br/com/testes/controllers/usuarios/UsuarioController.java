@@ -20,6 +20,7 @@ public class UsuarioController {
     private static final String BASE_URL = "http://localhost:3000";
     private static final String ENDPOINT_USUARIOS = "/usuarios";
     private static final String ENDPOINT_LOGIN = "/auth/login";
+    private Usuario usuarioAtual;
 
     public UsuarioController() {
         response = null;
@@ -78,7 +79,7 @@ public class UsuarioController {
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
                 .when()
-                .delete(ENDPOINT_USUARIOS + "/" + idUsuario);
+                .get(ENDPOINT_USUARIOS + "/" + idUsuario);
     }
 
     public void atualizarUsuarioPorId(String id, String nomeCompleto, String nomeUsuario) {
@@ -119,6 +120,26 @@ public class UsuarioController {
 
         assertTrue("Usuário não consta na lista de cadastrados",
                 usuarioEncontrado);
+    }
+
+    public Usuario getUsuarioAtual() {
+        return usuarioAtual;
+    }
+
+    public void atualizarNomeUsuario() {
+        String token = TokenManager.getToken();
+        String idUsuario = UsuarioManager.getIdUsuario();
+        Usuario usuarioGerado = FakerApiData.gerarUsuarioFake();
+        
+        this.response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .baseUri(BASE_URL)
+                .body(new HashMap<String, String>() {{
+                    put("nomeUsuario", usuarioGerado.getNomeUsuario());
+                }})
+                .when()
+                .put(ENDPOINT_USUARIOS + "/" + idUsuario);
     }
 
 }

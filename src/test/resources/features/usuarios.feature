@@ -24,13 +24,10 @@ Feature: Gerenciamento de Usuários CMS
     When eu envio a requisição de busca de usuário por ID
     Then a API deve retornar o código de status 200
 
-#  @CT-1005
-#  Scenario: Validar alteração de usuário
-#    Given que eu tenho um token de autenticação válido
-#    When que envio a solicitação de PUT com ID
-#    Then valido o retorno usuario atualizado com status code 200 e mensagem 'Usuário atualizado ou sem alterações'
-#
-
+  @CT-1005
+  Scenario: Validar alteração de usuário
+    When que envio a solicitação de PUT com ID
+    Then valido o retorno usuario atualizado com status code 200 e mensagem 'Usuário atualizado ou sem alterações'
 
   @CT-1006
   Scenario: Validar exclusão de usuario
