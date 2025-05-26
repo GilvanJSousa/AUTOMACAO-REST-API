@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 import org.junit.Test;
 import static io.restassured.RestAssured.given;
 
-public class MpCartaoDeCredito {
+public class MpCartaoDeCreditoController {
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_SALES = "/1/sales";
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
