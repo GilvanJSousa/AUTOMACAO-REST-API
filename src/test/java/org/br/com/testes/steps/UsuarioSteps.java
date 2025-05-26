@@ -1,74 +1,49 @@
 package org.br.com.testes.steps;
 
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.br.com.testes.controllers.usuarios.UsuarioController;
+import org.br.com.testes.utils.FakerApiData;
 
 public class UsuarioSteps {
 
     private final UsuarioController usuarioController;
+    String nome = FakerApiData.getName();
+    String email = FakerApiData.getEmail();
+    String password = FakerApiData.getPassword();
 
     public UsuarioSteps(){
         this.usuarioController = new UsuarioController();
     }
 
-    @When("que envio uma requisição de registro de usuario CMS")
-    public void queEnvioUmaRequisicaoDeRegistroUsuarioCMS() {
-        usuarioController.cadastrarNovoUsuario();
+    @Given("que cadastro um usuario valido para os testes")
+    public void queCadastroUmUsuarioValidoParaOsTestes() {
+        usuarioController.cadastrarNovoUsuario(
+                nome,
+                email,
+                password,
+                "true"
+        );
     }
 
-    @When("o sistema processa a requisição")
-    public void oSistemaProcessaARequisicao() {
-        // Implementação do processamento
+    @Given("envio a solicitação de cadastro na loja")
+    public void envioASolicitacaoDeCompraNaLoja() {
+        usuarioController.cadastrarNovoUsuario(
+                nome,
+                email,
+                password,
+                "true");
     }
 
-    @Then("a API deve retornar o código de status {int}")
-    public void aAPIDeveRetornarOCodigoDeStatus(int statusCode) {
-        usuarioController.validarStatusCode(statusCode);
-    }
-
-    @When("eu envio a requisição de login com as credenciais do usuário")
-    public void euEnvioARequisicaoDeLoginComAsCredenciaisDoUsuario() {
-        usuarioController.realizarLogin();
-    }
-
-    @Then("o token de autenticação deve ser retornado")
-    public void oTokenDeAutenticacaoDeveSerRetornado() {
-        usuarioController.validarStatusCode(200);
-    }
-
-    @When("eu envio a requisição de listar de usuários com autenticação")
-    public void euEnvioARequisicaoDeListarDeUsuariosComAutenticacao() {
-        usuarioController.listarUsuariosComAutenticacao();
-    }
-
-    @Then("os dados do usuário devem ser retornados na resposta")
-    public void osDadosDoUsuarioDevemSerRetornadosNaResposta() {
-        usuarioController.validarNomeUsuario();
-    }
-
-    @When("eu envio a requisição de busca de usuário por ID")
-    public void euEnvioARequisicaoDeBuscaDeUsuarioPorID() {
+    @Given("envio a solicitação de GET com id")
+    public void envioASolicitaçãoDeGETComId() {
         usuarioController.consultarUsuarioPorId();
     }
 
-    @When("que envio a solicitação de PUT com ID")
-    public void queEnvioASolicitacaoDePUTComID() {
-        usuarioController.atualizarNomeUsuario();
+    @Then("deve retornar usuario com status code {int}")
+    public void deveRetornarUsuarioComStatusCode(int arg0) {
+        usuarioController.validarStatusCode(200);
     }
 
-    @Then("valido o retorno usuario atualizado com status code {int} e mensagem {string}")
-    public void validoORetornoUsuarioAtualizadoComStatusCodeENesagem(int statusCode, String mensagem) {
-        usuarioController.validarStatusCode(statusCode);
-    }
-
-    @When("envio uma solicitação de DELETE para o ID")
-    public void envioUmaSolicitacaoDeDELETEParaOID() {
-        usuarioController.excluirUsuarioPorId();
-    }
-
-    @Then("deve retornar o status code {int} para exclusão")
-    public void deveRetornarOStatusCodeParaExclusao(int statusCode) {
-        usuarioController.validarStatusCode(statusCode);
-    }
 }

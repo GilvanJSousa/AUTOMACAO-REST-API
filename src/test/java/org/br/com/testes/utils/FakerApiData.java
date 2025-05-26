@@ -16,25 +16,27 @@ public class FakerApiData {
 
     @Getter
     private static String name;
+    @Getter
     private static String email;
-    private static String senha;
+    @Getter
+    private static String password;
 
     /**
      * Gera um usuário CMS fake com dados aleatórios ou retorna o usuário padrao.
      *
      * @return um objeto UsuarioResponse com dados fictícios
      */
-    public static UsuarioResponse gerarUsuarioFake() {
-        if (usuarioFaker == null) {
-            usuarioFaker = new UsuarioResponse(
-                faker.name().fullName(),
-                faker.name().username(),
-                faker.internet().emailAddress(),
-                gerarSenhaValida()
-            );
-        }
-        return usuarioFaker;
-    }
+//    public static UsuarioResponse gerarUsuarioFake() {
+//        if (usuarioFaker == null) {
+//            usuarioFaker = new UsuarioResponse(
+//                faker.name().fullName(),
+//                faker.name().username(),
+//                faker.internet().emailAddress(),
+//                gerarSenhaValida()
+//            );
+//        }
+//        return usuarioFaker;
+//    }
 
     /**
      * Gera uma senha válida que atende aos requisitos da API.

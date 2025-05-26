@@ -5,7 +5,9 @@ import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.UsuarioResponse;
+import org.br.com.testes.model.UsuarioResquest;
 import org.br.com.testes.utils.FakerApiData;
+import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +18,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class UsuarioController {
+
     private Response response;
-    private static final String BASE_URL = "http://localhost:3000";
+    private static final String BASE_URL = "https://serverest.dev";
     private static final String ENDPOINT_USUARIOS = "/usuarios";
     private static final String ENDPOINT_LOGIN = "/auth/login";
 
@@ -25,21 +28,27 @@ public class UsuarioController {
         response = null;
     }
 
-    public void cadastrarNovoUsuario() {
-        UsuarioResponse usuarioGerado = FakerApiData.gerarUsuarioFake();
-        this.response = given()
-                .contentType(ContentType.JSON)
-                .baseUri(BASE_URL)
-                .body(usuarioGerado)
-                .log().all()
-                .when()
-                .post(ENDPOINT_USUARIOS)
-                .then()
-                .extract()
-                .response();
+    // CADASTRAR USUARIOS
+    public void cadastrarNovoUsuario(String nome, String email, String password, String administrador) {
+        UsuarioResquest usuarioRequest = UsuarioResquest.builder()
+                .nome(nome)
+                .email(email)
+                .password(password)
+                .administrador(administrador)
+                .build();
 
-        UsuarioManager.setEmailUsuario(usuarioGerado.email());
-        UsuarioManager.setSenhaUsuario(usuarioGerado.senha());
+        response = given()
+                .contentType(ContentType.JSON)
+                .body(usuarioRequest)
+                .log().body()
+                .when()
+                .post(BASE_URL + ENDPOINT_USUARIOS)
+                .then()
+                .log().all()
+                .extract().response();
+
+//        UsuarioManager.setEmailUsuario(usuarioGerado.email());
+//        UsuarioManager.setSenhaUsuario(usuarioGerado.password());
         UsuarioManager.setIdUsuario(response.jsonPath().getString("id"));
     }
 
@@ -139,23 +148,23 @@ public class UsuarioController {
                 usuarioEncontrado);
     }
 
-    public void atualizarNomeUsuario() {
-        String token = TokenManager.getToken();
-        String idUsuario = UsuarioManager.getIdUsuario();
-        UsuarioResponse usuarioGerado = FakerApiData.gerarUsuarioFake();
-        
-        this.response = given()
-                .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + token)
-                .baseUri(BASE_URL)
-                .body(new HashMap<String, String>() {{
-                    put("nomeUsuario", usuarioGerado.nomeUsuario());
-                }})
-                .log().all()
-                .when()
-                .put(ENDPOINT_USUARIOS + "/" + idUsuario)
-                .then()
-                .extract()
-                .response();
-    }
+//    public void atualizarNomeUsuario() {
+//        String token = TokenManager.getToken();
+//        String idUsuario = UsuarioManager.getIdUsuario();
+//        UsuarioResponse usuarioGerado = FakerApiData.gerarUsuarioFake();
+//
+//        this.response = given()
+//                .contentType(ContentType.JSON)
+//                .header("Authorization", "Bearer " + token)
+//                .baseUri(BASE_URL)
+//                .body(new HashMap<String, String>() {{
+//                    put("nomeUsuario", usuarioGerado.nomeUsuario());
+//                }})
+//                .log().all()
+//                .when()
+//                .put(ENDPOINT_USUARIOS + "/" + idUsuario)
+//                .then()
+//                .extract()
+//                .response();
+//    }
 }
