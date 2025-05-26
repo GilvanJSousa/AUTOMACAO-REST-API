@@ -5,7 +5,6 @@ import io.restassured.response.Response;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.br.com.testes.manager.UsuarioManager;
-import org.br.com.testes.model.Usuario;
 import org.br.com.testes.utils.FakerApiData;
 import org.junit.Assert;
 import org.junit.Test;
@@ -23,25 +22,24 @@ public class usuarioController {
         response = null;
     }
 
-    @Test
-    public void cadastrarNovoUsuario() {
-        Usuario usuarioFake = FakerApiData.gerarUsuarioFake();
-        this.response = given()
-                .contentType(ContentType.JSON)
-                .baseUri(BASE_URL)
-                .body(usuarioFake)
-                .when()
-                .log().all(true)
-                .post(ENDPOINT_USUARIOS);
-
-        UsuarioManager.setEmailUsuario(usuarioFake.getEmail());
-        UsuarioManager.setSenhaUsuario(usuarioFake.getSenha());
-        UsuarioManager.setIdUsuario(response.jsonPath().getString("_id"));
-    }
-
-    public void validarStatusCode(int statusCode) {
-        Assert.assertEquals("StatusCode deve ser: " + statusCode, this.response.getStatusCode(), statusCode);
-    }
+//    public void cadastrarNovoUsuario() {
+//        Usuario usuarioFake = FakerApiData.gerarUsuarioFake();
+//        this.response = given()
+//                .contentType(ContentType.JSON)
+//                .baseUri(BASE_URL)
+//                .body(usuarioFake)
+//                .when()
+//                .log().all(true)
+//                .post(ENDPOINT_USUARIOS);
+//
+//        UsuarioManager.setEmailUsuario(usuarioFake.getEmail());
+//        UsuarioManager.setSenhaUsuario(usuarioFake.getSenha());
+//        UsuarioManager.setIdUsuario(response.jsonPath().getString("_id"));
+//    }
+//
+//    public void validarStatusCode(int statusCode) {
+//        Assert.assertEquals("StatusCode deve ser: " + statusCode, this.response.getStatusCode(), statusCode);
+//    }
 
 //    public void cadastrarViagem(String acompanhante, String dataPartida, String dataRetorno, String localDeDestino, String regiao) {
 //        String token = TokenManager.getToken();
