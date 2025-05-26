@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.apachecommons.CommonsLog;
-import org.br.com.testes.model.Usuario;
+
 
 import java.util.Locale;
 
@@ -12,7 +12,7 @@ import java.util.Locale;
 @Data
 public class FakerApiData {
     private static final Faker faker = new Faker(new Locale("pt-BR"));
-    private static Usuario usuarioFaker;
+
 
     @Getter
     private static String name;
@@ -26,16 +26,6 @@ public class FakerApiData {
      *
      * @return um objeto Usuario com dados fictícios
      */
-    public static Usuario gerarUsuarioFake() {
-        if (usuarioFaker == null) {
-            usuarioFaker = new Usuario();
-            usuarioFaker.setNomeCompleto(faker.name().fullName());
-            usuarioFaker.setNomeUsuario(faker.name().username());
-            usuarioFaker.setEmail(faker.internet().emailAddress());
-            usuarioFaker.setSenha(gerarSenhaValida());
-        }
-        return usuarioFaker;
-    }
 
     /**
      * Gera uma senha válida que atende aos requisitos da API.
