@@ -42,4 +42,25 @@ public class usuarioController {
     public void validarStatusCode(int statusCode) {
         Assert.assertEquals("StatusCode deve ser: " + statusCode, this.response.getStatusCode(), statusCode);
     }
+
+//    public void cadastrarViagem(String acompanhante, String dataPartida, String dataRetorno, String localDeDestino, String regiao) {
+//        String token = TokenManager.getToken();
+//
+//        CadastrarViagemRequest cadastrarViagemRequest = CadastrarViagemRequest.builder()
+//                .acompanhante(acompanhante)
+//                .dataPartida(dataPartida)
+//                .dataRetorno(dataRetorno)
+//                .localDeDestino(localDeDestino)
+//                .regiao(regiao)
+//                .build();
+//
+//        this.response = given()
+//                .contentType(ContentType.JSON)
+//                .header("Authorization", token)
+//                .baseUri(BASE_URL)
+//                .body(cadastrarViagemRequest)
+//                .log().body()
+//                .when()
+//                .post(END_POINT_CADASTRAR_VIAGEM);
+//    }
 }
