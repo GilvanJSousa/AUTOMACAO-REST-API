@@ -1,4 +1,4 @@
-package org.br.com.testes.controllers.usuarios;
+package org.br.com.testes.controllers.mpCartao;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
