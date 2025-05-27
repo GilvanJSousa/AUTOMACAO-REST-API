@@ -1,5 +1,6 @@
 package org.br.com.testes.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,54 +9,134 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MpCartaoDeCreditoRequest {
-    //TODO: Campos básicos
+    @JsonProperty("MerchantOrderId")
     private String merchantOrderId;
-    private String type;
-    private Integer amount;
-    private Integer installments;
-    private String softDescriptor;
-    private String currency;
-    private String country;
-    private String provider;
-    private Integer serviceTaxAmount;
-    private String interest;
-    private Boolean capture;
-    private Boolean recurrent;
 
-    //TODO: Campos do cartão
-    private String cardNumber;
-    private String holder;
-    private String expirationDate;
-    private String securityCode;
-    private String brand;
-    private String saveCard;
+    @JsonProperty("Customer")
+    private Customer customer;
 
-    //TODO: Campos do cliente
-    private String customerName;
-    private String customerIdentity;
-    private String customerIdentityType;
-    private String customerEmail;
-    private String customerBirthdate;
+    @JsonProperty("Payment")
+    private Payment payment;
 
-    //TODO: Campos de endereço
-    private String addressStreet;
-    private String addressNumber;
-    private String addressComplement;
-    private String addressZipCode;
-    private String addressCity;
-    private String addressState;
-    private String addressCountry;
+    @Getter
+    @Setter
+    @Builder
+    public static class Customer {
+        @JsonProperty("Name")
+        private String name;
 
-    //TODO: Campos de endereço de entrega
-    private String deliveryStreet;
-    private String deliveryNumber;
-    private String deliveryComplement;
-    private String deliveryZipCode;
-    private String deliveryCity;
-    private String deliveryState;
-    private String deliveryCountry;
+        @JsonProperty("Identity")
+        private String identity;
 
-    //TODO: Campos para autenticação
-    private String returnUrl;
-    private Boolean authenticate;
+        @JsonProperty("IdentityType")
+        private String identityType;
+
+        @JsonProperty("Email")
+        private String email;
+
+        @JsonProperty("Birthdate")
+        private String birthdate;
+
+        @JsonProperty("Address")
+        private Address address;
+
+        @JsonProperty("DeliveryAddress")
+        private Address deliveryAddress;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Address {
+        @JsonProperty("Street")
+        private String street;
+
+        @JsonProperty("Number")
+        private String number;
+
+        @JsonProperty("Complement")
+        private String complement;
+
+        @JsonProperty("ZipCode")
+        private String zipCode;
+
+        @JsonProperty("City")
+        private String city;
+
+        @JsonProperty("State")
+        private String state;
+
+        @JsonProperty("Country")
+        private String country;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class Payment {
+        @JsonProperty("Type")
+        private String type;
+
+        @JsonProperty("Amount")
+        private Integer amount;
+
+        @JsonProperty("Currency")
+        private String currency;
+
+        @JsonProperty("Country")
+        private String country;
+
+        @JsonProperty("Provider")
+        private String provider;
+
+        @JsonProperty("ServiceTaxAmount")
+        private Integer serviceTaxAmount;
+
+        @JsonProperty("Installments")
+        private Integer installments;
+
+        @JsonProperty("Interest")
+        private String interest;
+
+        @JsonProperty("Capture")
+        private Boolean capture;
+
+        @JsonProperty("Recurrent")
+        private Boolean recurrent;
+
+        @JsonProperty("SoftDescriptor")
+        private String softDescriptor;
+
+        @JsonProperty("ReturnUrl")
+        private String returnUrl;
+
+        @JsonProperty("Authenticate")
+        private Boolean authenticate;
+
+        @JsonProperty("CreditCard")
+        private CreditCard creditCard;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class CreditCard {
+        @JsonProperty("CardNumber")
+        private String cardNumber;
+
+        @JsonProperty("Holder")
+        private String holder;
+
+        @JsonProperty("ExpirationDate")
+        private String expirationDate;
+
+        @JsonProperty("SecurityCode")
+        private String securityCode;
+
+        @JsonProperty("Brand")
+        private String brand;
+
+        @JsonProperty("SaveCard")
+        private String saveCard;
+    }
 }

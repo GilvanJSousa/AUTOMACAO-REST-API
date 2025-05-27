@@ -1,5 +1,6 @@
 package org.br.com.testes.steps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -17,7 +18,7 @@ public class MpCartaoDeCreditoSteps {
     }
 
     @Given("que eu tenho um cartão de crédito válido")
-    public void queEuTenhoUmCartaoDeCreditoValido() {
+    public void queEuTenhoUmCartaoDeCreditoValido() throws JsonProcessingException {
         logger.info("Preparing standard Credit Card request...");
         // Example: logger.debug("Credit Card request details: {}", controller.getCreditCardRequestDetailsAsString()); // Assuming method exists
         controller.prepararRequisicaoCartaoCredito();
@@ -25,7 +26,7 @@ public class MpCartaoDeCreditoSteps {
     }
 
     @Given("que eu tenho um cartão de crédito válido para autenticação")
-    public void queEuTenhoUmCartaoDeCreditoValidoParaAutenticacao() {
+    public void queEuTenhoUmCartaoDeCreditoValidoParaAutenticacao() throws JsonProcessingException {
         logger.info("Preparing authenticated Credit Card request...");
         // Example: logger.debug("Authenticated Credit Card request details: {}", controller.getCreditCardRequestDetailsAsString());
         controller.prepararRequisicaoCartaoCreditoAutenticado();
@@ -33,7 +34,7 @@ public class MpCartaoDeCreditoSteps {
     }
 
     @Given("que eu tenho um cartão de crédito válido com dados completos")
-    public void queEuTenhoUmCartaoDeCreditoValidoComDadosCompletos() {
+    public void queEuTenhoUmCartaoDeCreditoValidoComDadosCompletos() throws JsonProcessingException {
         logger.info("Preparing complete Credit Card request...");
         // Example: logger.debug("Complete Credit Card request details: {}", controller.getCreditCardRequestDetailsAsString());
         controller.prepararRequisicaoCartaoCreditoCompleto();

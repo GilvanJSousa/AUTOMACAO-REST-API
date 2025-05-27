@@ -1,7 +1,11 @@
 package org.br.com.testes.controllers.mpCartao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.br.com.testes.model.MpCartaoDeCreditoRequest;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.anyOf;
@@ -16,94 +20,115 @@ public class MpCartaoDeCreditoController {
     private boolean isAutenticado = false;
     private boolean isCompleto = false;
 
-    public void prepararRequisicaoCartaoCredito() {
-        isAutenticado = false;
-        isCompleto = false;
-        requestBody = "{\"MerchantOrderId\":\"2014111703\",\"Payment\":{\"Type\":\"CreditCard\",\"Amount\":15700,\"Installments\":1,\"SoftDescriptor\":\"123456789ABCD\",\"CreditCard\":{\"CardNumber\":\"4551870000000183\",\"Holder\":\"Teste Holder\",\"ExpirationDate\":\"12/2021\",\"SecurityCode\":\"123\",\"Brand\":\"Visa\"}}}";
+    public void prepararRequisicaoCartaoCredito() throws JsonProcessingException {
+        MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
+                .merchantOrderId("2014111703")
+                .payment(MpCartaoDeCreditoRequest.Payment.builder()
+                        .type("CreditCard")
+                        .amount(15700)
+                        .installments(1)
+                        .softDescriptor("123456789ABCD")
+                        .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
+                                .cardNumber("4551870000000183")
+                                .holder("Teste Holder")
+                                .expirationDate("12/2021")
+                                .securityCode("123")
+                                .brand("Visa")
+                                .build())
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
-    public void prepararRequisicaoCartaoCreditoAutenticado() {
+    public void prepararRequisicaoCartaoCreditoAutenticado() throws JsonProcessingException {
         isAutenticado = true;
         isCompleto = false;
-        requestBody = "{ " +
-                "\"MerchantOrderId\":\"2014111903\", " +
-                "\"Customer\":{ " +
-                "  \"Name\":\"Comprador Teste\" " +
-                "}, " +
-                "\"Payment\":{ " +
-                "    \"Type\":\"CreditCard\", " +
-                "    \"Amount\":15700, " +
-                "    \"Provider\":\"Cielo\", " +
-                "    \"ReturnUrl\":\"https://www.google.com.br\", " +
-                "    \"Installments\":1, " +
-                "    \"Authenticate\":true, " +
-                "    \"CreditCard\":{ " +
-                "      \"CardNumber\":\"1234123412341231\", " +
-                "      \"Holder\":\"Teste Holder\", " +
-                "      \"ExpirationDate\":\"12/2018\", " +
-                "      \"SecurityCode\":\"123\", " +
-                "      \"Brand\":\"Visa\" " +
-                "    } " +
-                "} " +
-                "}";
+
+        MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
+                .merchantOrderId("2014111903")
+                .customer(MpCartaoDeCreditoRequest.Customer.builder()
+                        .name("Comprador Teste")
+                        .build())
+                .payment(MpCartaoDeCreditoRequest.Payment.builder()
+                        .type("CreditCard")
+                        .amount(15700)
+                        .provider("Cielo")
+                        .returnUrl("https://www.google.com.br")  //TODO: Agora funcionará corretamente
+                        .installments(1)
+                        .authenticate(true)
+                        .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
+                                .cardNumber("1234123412341231")
+                                .holder("Teste Holder")
+                                .expirationDate("12/2018")
+                                .securityCode("123")
+                                .brand("Visa")
+                                .build())
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
-    public void prepararRequisicaoCartaoCreditoCompleto() {
+    public void prepararRequisicaoCartaoCreditoCompleto() throws JsonProcessingException {
         isAutenticado = false;
         isCompleto = true;
-        requestBody = "{  " +
-                "   \"MerchantOrderId\":\"2014111701\"," +
-                "    \"Customer\":{  " +
-                "      \"Name\":\"Comprador Teste\"," +
-                "      \"Identity\":\"11225468954\"," +
-                "      \"IdentityType\":\"CPF\"," +
-                "      \"Email\":\"compradorteste@teste.com\"," +
-                "      \"Birthdate\":\"1991-01-02\"," +
-                "      \"Address\":{  " +
-                "         \"Street\":\"Rua Teste\"," +
-                "         \"Number\":\"123\"," +
-                "         \"Complement\":\"AP 123\"," +
-                "         \"ZipCode\":\"12345987\"," +
-                "         \"City\":\"Rio de Janeiro\"," +
-                "         \"State\":\"RJ\"," +
-                "         \"Country\":\"BRA\"" +
-                "      }," +
-                "        \"DeliveryAddress\": {" +
-                "            \"Street\": \"Rua Teste\"," +
-                "            \"Number\": \"123\"," +
-                "            \"Complement\": \"AP 123\"," +
-                "            \"ZipCode\": \"12345987\"," +
-                "            \"City\": \"Rio de Janeiro\"," +
-                "            \"State\": \"RJ\"," +
-                "            \"Country\": \"BRA\"" +
-                "        }" +
-                "   }," +
-                "   \"Payment\":{  " +
-                "     \"Type\":\"CreditCard\"," +
-                "     \"Amount\":15700," +
-                "     \"Currency\":\"BRL\"," +
-                "     \"Country\":\"BRA\"," +
-                "     \"Provider\":\"Simulado\"," +
-                "     \"ServiceTaxAmount\":0," +
-                "     \"Installments\":1," +
-                "     \"Interest\":\"ByMerchant\"," +
-                "     \"Capture\":false," +
-                "     \"Authenticate\":false,    " +
-                "     \"Recurrent\": false," +
-                "     \"SoftDescriptor\":\"123456789ABCD\"," +
-                "     \"CreditCard\":{  " +
-                "         \"CardNumber\":\"4024007197692931\"," +
-                "         \"Holder\":\"Teste Holder\"," +
-                "         \"ExpirationDate\":\"12/2021\"," +
-                "         \"SecurityCode\":\"123\"," +
-                "         \"SaveCard\":\"false\"," +
-                "         \"Brand\":\"Visa\"" +
-                "     }" +
-                "   }" +
-                "}";
+
+        MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
+                .merchantOrderId("2014111701")
+                .customer(MpCartaoDeCreditoRequest.Customer.builder()
+                        .name("Comprador Teste")
+                        .identity("11225468954")
+                        .identityType("CPF")
+                        .email("compradorteste@teste.com")
+                        .birthdate("1991-01-02")
+                        .address(MpCartaoDeCreditoRequest.Address.builder()
+                                .street("Rua Teste")
+                                .number("123")
+                                .complement("AP 123")
+                                .zipCode("12345987")
+                                .city("Rio de Janeiro")
+                                .state("RJ")
+                                .country("BRA")
+                                .build())
+                        .deliveryAddress(MpCartaoDeCreditoRequest.Address.builder()
+                                .street("Rua Teste")
+                                .number("123")
+                                .complement("AP 123")
+                                .zipCode("12345987")
+                                .city("Rio de Janeiro")
+                                .state("RJ")
+                                .country("BRA")
+                                .build())
+                        .build())
+                .payment(MpCartaoDeCreditoRequest.Payment.builder()
+                        .type("CreditCard")
+                        .amount(15700)
+                        .currency("BRL")
+                        .country("BRA")
+                        .provider("Simulado")
+                        .serviceTaxAmount(0)
+                        .installments(1)
+                        .interest("ByMerchant")
+                        .capture(false)
+                        .recurrent(false)
+                        .softDescriptor("123456789ABCD")
+                        .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
+                                .cardNumber("4024007197692931")
+                                .holder("Teste Holder")
+                                .expirationDate("12/2021")
+                                .securityCode("123")
+                                .saveCard("false")
+                                .brand("Visa")
+                                .build())
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
     public Response enviarRequisicaoPagamento() {
+        //TODO: Configurando e enviando a requisição
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -117,17 +142,28 @@ public class MpCartaoDeCreditoController {
     }
 
     public void validarPagamentoProcessadoComSucesso() {
+        //TODO: Validando resposta baseado no tipo de requisição
         if (isAutenticado || isCompleto) {
-            response.then()
-                    .body("Payment.Status", equalTo(1))
-                    .body("Payment.ReturnCode", equalTo("4"))
-                    .body("Payment.ReturnMessage", equalTo("Operation Successful"));
+            validarRespostaSucesso();
         } else {
-            response.then()
-                    .body("Payment.Status", equalTo(3))
-                    .body("Payment.ReturnCode", equalTo("57"))
-                    .body("Payment.ReturnMessage", equalTo("Card Expired"));
+            validarRespostaCartaoExpirado();
         }
+    }
+
+    private void validarRespostaSucesso() {
+        //TODO: Validações para transação com sucesso
+        response.then()
+                .body("Payment.Status", equalTo(1))
+                .body("Payment.ReturnCode", equalTo("4"))
+                .body("Payment.ReturnMessage", equalTo("Operation Successful"));
+    }
+
+    private void validarRespostaCartaoExpirado() {
+        //TODO: Validações para cartão expirado
+        response.then()
+                .body("Payment.Status", equalTo(3))
+                .body("Payment.ReturnCode", equalTo("57"))
+                .body("Payment.ReturnMessage", equalTo("Card Expired"));
     }
 
     public void validarStatusCode(int statusCode) {
