@@ -1,7 +1,15 @@
 package org.br.com.testes.tokens;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Builder
-public record GerarTokenResquest(String email, String password) {
+@NoArgsConstructor
+@AllArgsConstructor
+public class GerarTokenResquest {
+    private String email;
+    private String password;
 }
