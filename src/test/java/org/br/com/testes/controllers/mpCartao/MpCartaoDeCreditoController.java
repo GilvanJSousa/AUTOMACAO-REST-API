@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.model.MpCartaoDeCreditoRequest;
+import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.model.mpCartao.MpCartaoDeCreditoRequest;
+import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
+import static java.lang.Math.log;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.anyOf;
 
@@ -54,7 +57,7 @@ public class MpCartaoDeCreditoController {
                         .type("CreditCard")
                         .amount(15700)
                         .provider("Cielo")
-                        .returnUrl("https://www.google.com.br")  //TODO: Agora funcionará corretamente
+                        .returnUrl("https://www.google.com.br")
                         .installments(1)
                         .authenticate(true)
                         .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
@@ -128,7 +131,6 @@ public class MpCartaoDeCreditoController {
     }
 
     public Response enviarRequisicaoPagamento() {
-        //TODO: Configurando e enviando a requisição
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -138,11 +140,15 @@ public class MpCartaoDeCreditoController {
                 .body(requestBody)
                 .when()
                 .post(ENDPOINT_SALES);
+
+        // Armazenando o PaymentId após a requisição
+        UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
+        System.out.println("Payment ID: " + UsuarioManager.getPaymentId());
+        
         return response;
     }
 
     public void validarPagamentoProcessadoComSucesso() {
-        //TODO: Validando resposta baseado no tipo de requisição
         if (isAutenticado || isCompleto) {
             validarRespostaSucesso();
         } else {
@@ -151,7 +157,6 @@ public class MpCartaoDeCreditoController {
     }
 
     private void validarRespostaSucesso() {
-        //TODO: Validações para transação com sucesso
         response.then()
                 .body("Payment.Status", equalTo(1))
                 .body("Payment.ReturnCode", equalTo("4"))
@@ -159,7 +164,6 @@ public class MpCartaoDeCreditoController {
     }
 
     private void validarRespostaCartaoExpirado() {
-        //TODO: Validações para cartão expirado
         response.then()
                 .body("Payment.Status", equalTo(3))
                 .body("Payment.ReturnCode", equalTo("57"))

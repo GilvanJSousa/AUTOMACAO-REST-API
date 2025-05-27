@@ -1,4 +1,4 @@
-package org.br.com.testes.model;
+package org.br.com.testes.model.mpCartao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
