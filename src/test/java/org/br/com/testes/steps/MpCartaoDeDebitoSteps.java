@@ -9,56 +9,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MpCartaoDeDebitoSteps {
-    private final MpCartaoDeDebitoController controller;
+    private final MpCartaoDeDebitoController mpCartaoDeDebitoController;
     private static final Logger logger = LoggerFactory.getLogger(MpCartaoDeDebitoSteps.class);
 
     public MpCartaoDeDebitoSteps() {
-        controller = new MpCartaoDeDebitoController();
+        mpCartaoDeDebitoController = new MpCartaoDeDebitoController();
     }
 
     @Given("que eu tenho um cartão de débito válido")
     public void queEuTenhoUmCartaoDeDebitoValido() {
-        controller.prepararRequisicaoCartaoDebito();
+        mpCartaoDeDebitoController.prepararRequisicaoCartaoDebito();
 
     }
 
     @Given("que eu tenho um cartão de débito válido para autenticação")
     public void queEuTenhoUmCartaoDeDebitoValidoParaAutenticacao() {
-        controller.prepararRequisicaoCartaoDebitoAutenticado();
+        mpCartaoDeDebitoController.prepararRequisicaoCartaoDebitoAutenticado();
     }
 
     @Given("que eu tenho um cartão de débito válido com dados completos")
     public void queEuTenhoUmCartaoDeDebitoValidoComDadosCompletos() {
-        controller.prepararRequisicaoCartaoDebitoCompleto();
+        mpCartaoDeDebitoController.prepararRequisicaoCartaoDebitoCompleto();
 
     }
 
     @When("eu envio a requisição de pagamento com débito")
     public void euEnvioARequisicaoDePagamentoComDebito() {
-        controller.enviarRequisicaoPagamento();
+        mpCartaoDeDebitoController.enviarRequisicaoPagamento();
     }
 
     @When("eu envio a requisição de pagamento com débito autenticado")
     public void euEnvioARequisicaoDePagamentoComDebitoAutenticado() {
-        controller.enviarRequisicaoPagamento();
+        mpCartaoDeDebitoController.enviarRequisicaoPagamento();
     }
 
     @When("eu envio a requisição de pagamento com débito completo")
     public void euEnvioARequisicaoDePagamentoComDebitoCompleto() {
-        controller.enviarRequisicaoPagamento();
+        mpCartaoDeDebitoController.enviarRequisicaoPagamento();
     }
 
     @Then("o pagamento com débito deve ser processado com sucesso")
     public void oPagamentoComDebitoDeveSerProcessadoComSucesso() {
-        logger.info("Asserting that Debit Card payment was processed successfully...");
-        controller.validarPagamentoProcessadoComSucesso();
-        logger.info("Assertion for successful Debit Card payment complete.");
+        mpCartaoDeDebitoController.validarPagamentoProcessadoComSucesso();
     }
 
     @And("o status code do pagamento com débito deve ser {int}")
     public void oStatusCodeDoPagamentoComDebitoDeveSer(int statusCode) {
-        logger.info("Asserting that Debit Card payment response status code is {}", statusCode);
-        controller.validarStatusCode(statusCode);
-        logger.info("Assertion for Debit Card payment status code complete.");
+        mpCartaoDeDebitoController.validarStatusCode(statusCode);
     }
 }

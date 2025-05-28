@@ -9,4 +9,4 @@ Feature: Consulta de Transação de Cartão de Crédito
     Given que eu tenho um PaymentId válido
     When eu envio a requisição de consulta
     Then a transação deve ser consultada com sucesso
-    And o status code deve ser 200 
+    And o status code da consulta deve ser 200 

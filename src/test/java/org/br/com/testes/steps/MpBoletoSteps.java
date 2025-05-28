@@ -9,30 +9,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MpBoletoSteps {
-    private final MpBoletoController controller;
+    private final MpBoletoController mpBoletoController;
     private static final Logger logger = LoggerFactory.getLogger(MpBoletoSteps.class);
 
     public MpBoletoSteps() {
-        controller = new MpBoletoController();
+        mpBoletoController = new MpBoletoController();
     }
 
     @Given("que eu tenho um boleto válido")
     public void queEuTenhoUmBoletoValido() {
-        controller.prepararRequisicaoBoleto();
+        mpBoletoController.prepararRequisicaoBoleto();
     }
 
     @When("eu envio a requisição de pagamento com boleto")
     public void euEnvioARequisicaoDePagamentoComBoleto() {
-        controller.enviarRequisicaoPagamento();
+        mpBoletoController.enviarRequisicaoPagamento();
     }
 
     @Then("o pagamento com boleto deve ser processado com sucesso")
     public void oPagamentoComBoletoDeveSerProcessadoComSucesso() {
-        controller.validarPagamentoProcessadoComSucesso();
+        mpBoletoController.validarPagamentoProcessadoComSucesso();
     }
 
     @And("o status code do pagamento com boleto deve ser {int}")
     public void oStatusCodeDoPagamentoComBoletoDeveSer(int statusCode) {
-        controller.validarStatusCode(statusCode);
+        mpBoletoController.validarStatusCode(statusCode);
     }
 }

@@ -8,10 +8,10 @@ import org.br.com.testes.controllers.consultaCapturaCancelamento.ConsultaTransac
 import org.br.com.testes.manager.UsuarioManager;
 
 public class MpConsultaTransacaoSteps {
-    private final ConsultaTransacaoController controller;
+    private final ConsultaTransacaoController consultaTransacaoController;
 
     public MpConsultaTransacaoSteps() {
-        controller = new ConsultaTransacaoController();
+        consultaTransacaoController = new ConsultaTransacaoController();
     }
 
     @Given("que eu tenho um PaymentId válido")
@@ -22,16 +22,16 @@ public class MpConsultaTransacaoSteps {
 
     @When("eu envio a requisição de consulta")
     public void euEnvioARequisicaoDeConsulta() {
-        controller.consultarTransacao();
+        consultaTransacaoController.consultarTransacao();
     }
 
     @Then("a transação deve ser consultada com sucesso")
     public void aTransacaoDeveSerConsultadaComSucesso() {
-        controller.validarConsultaTransacao();
+        consultaTransacaoController.validarConsultaTransacao();
     }
 
-    @And("o status code deve ser {int}")
+    @And("o status code da consulta deve ser {int}")
     public void oStatusCodeDeveSer(int statusCode) {
-        controller.validarStatusCode(statusCode);
+        consultaTransacaoController.validarStatusCode(statusCode);
     }
 } 
