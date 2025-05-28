@@ -2,6 +2,7 @@ package org.br.com.testes.controllers.mpCartao;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.UsuarioManager;
@@ -22,6 +23,12 @@ public class MpCartaoDeCreditoController {
     private Response response;
     private boolean isAutenticado = false;
     private boolean isCompleto = false;
+    private final ObjectMapper objectMapper;
+
+    public MpCartaoDeCreditoController() {
+        objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
 
     public void prepararRequisicaoCartaoCredito() throws JsonProcessingException {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
@@ -41,7 +48,7 @@ public class MpCartaoDeCreditoController {
                         .build())
                 .build();
 
-        requestBody = new ObjectMapper().writeValueAsString(request);
+        requestBody = objectMapper.writeValueAsString(request);
     }
 
     public void prepararRequisicaoCartaoCreditoAutenticado() throws JsonProcessingException {
@@ -70,7 +77,7 @@ public class MpCartaoDeCreditoController {
                         .build())
                 .build();
 
-        requestBody = new ObjectMapper().writeValueAsString(request);
+        requestBody = objectMapper.writeValueAsString(request);
     }
 
     public void prepararRequisicaoCartaoCreditoCompleto() throws JsonProcessingException {
@@ -127,7 +134,7 @@ public class MpCartaoDeCreditoController {
                         .build())
                 .build();
 
-        requestBody = new ObjectMapper().writeValueAsString(request);
+        requestBody = objectMapper.writeValueAsString(request);
     }
 
     public Response enviarRequisicaoPagamento() {

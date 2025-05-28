@@ -1,6 +1,7 @@
 package org.br.com.testes.model.mpCartao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +10,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MpCartaoDeCreditoRequest {
-    @JsonProperty("MerchantOrderId")
     private String merchantOrderId;
-
-    @JsonProperty("Customer")
     private Customer customer;
-
-    @JsonProperty("Payment")
     private Payment payment;
 
     @Getter

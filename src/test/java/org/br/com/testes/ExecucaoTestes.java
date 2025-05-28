@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
-        tags = "@TransaçãoBoleto",
+        tags = "@TransaçãoBoleto or @TransaçãoCredito or @TransaçãoDebito",
         monochrome = false,
         dryRun = false,
         plugin = {
