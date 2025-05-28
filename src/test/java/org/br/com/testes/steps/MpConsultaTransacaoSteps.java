@@ -8,7 +8,7 @@ import org.br.com.testes.controllers.consultaCapturaCancelamento.ConsultaTransac
 import org.br.com.testes.manager.UsuarioManager;
 
 public class MpConsultaTransacaoSteps {
-    private ConsultaTransacaoController controller;
+    private final ConsultaTransacaoController controller;
 
     public MpConsultaTransacaoSteps() {
         controller = new ConsultaTransacaoController();
