@@ -1,8 +1,6 @@
 package org.br.com.testes.controllers.mpCartao;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.UsuarioManager;
@@ -21,16 +19,8 @@ public class MpCartaoDeCreditoController {
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
     private Response response;
-    private boolean isAutenticado = false;
-    private boolean isCompleto = false;
-    private final ObjectMapper objectMapper;
 
-    public MpCartaoDeCreditoController() {
-        objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
-
-    public void prepararRequisicaoCartaoCredito() throws JsonProcessingException {
+    public void prepararRequisicaoCartaoCredito() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
                 .merchantOrderId("2014111703")
                 .payment(MpCartaoDeCreditoRequest.Payment.builder()
@@ -48,13 +38,10 @@ public class MpCartaoDeCreditoController {
                         .build())
                 .build();
 
-        requestBody = objectMapper.writeValueAsString(request);
+        requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
-    public void prepararRequisicaoCartaoCreditoAutenticado() throws JsonProcessingException {
-        isAutenticado = true;
-        isCompleto = false;
-
+    public void prepararRequisicaoCartaoCreditoAutenticado() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
                 .merchantOrderId("2014111903")
                 .customer(MpCartaoDeCreditoRequest.Customer.builder()
@@ -77,13 +64,10 @@ public class MpCartaoDeCreditoController {
                         .build())
                 .build();
 
-        requestBody = objectMapper.writeValueAsString(request);
+        requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
-    public void prepararRequisicaoCartaoCreditoCompleto() throws JsonProcessingException {
-        isAutenticado = false;
-        isCompleto = true;
-
+    public void prepararRequisicaoCartaoCreditoCompleto() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
                 .merchantOrderId("2014111701")
                 .customer(MpCartaoDeCreditoRequest.Customer.builder()
@@ -134,7 +118,7 @@ public class MpCartaoDeCreditoController {
                         .build())
                 .build();
 
-        requestBody = objectMapper.writeValueAsString(request);
+        requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
     public Response enviarRequisicaoPagamento() {
@@ -155,11 +139,17 @@ public class MpCartaoDeCreditoController {
         return response;
     }
 
-    public void validarPagamentoProcessadoComSucesso() {
-        if (isAutenticado || isCompleto) {
-            validarRespostaSucesso();
-        } else {
-            validarRespostaCartaoExpirado();
+    public void validarPagamentoProcessadoComSucesso(String tipoValidacao) {
+        switch (tipoValidacao.toLowerCase()) {
+            case "autenticado":
+            case "completo":
+                validarRespostaSucesso();
+                break;
+            case "simples":
+                validarRespostaCartaoExpirado();
+                break;
+            default:
+                throw new IllegalArgumentException("Tipo de validação inválido: " + tipoValidacao);
         }
     }
 
