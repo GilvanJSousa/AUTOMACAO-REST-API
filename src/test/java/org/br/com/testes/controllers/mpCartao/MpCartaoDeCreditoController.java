@@ -132,7 +132,9 @@ public class MpCartaoDeCreditoController {
 
         // Armazenando o PaymentId após a requisição
         UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
+        UsuarioManager.setAmount(response.jsonPath().getString("Payment.Amount"));
         System.out.println("Payment ID: " + UsuarioManager.getPaymentId());
+        System.out.println("Amount: " + UsuarioManager.getAmount());
     }
 
     public void validarPagamentoSimples() {
