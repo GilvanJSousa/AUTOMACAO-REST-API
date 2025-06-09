@@ -14,7 +14,7 @@ public class ConsultaTransacaoController {
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private Response response;
 
-    public Response consultarTransacao() {
+    public void consultarTransacao() {
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -23,15 +23,14 @@ public class ConsultaTransacaoController {
                 .baseUri(BASE_URL)
                 .when()
                 .get(ENDPOINT_SALES + "/" + UsuarioManager.getPaymentId());
-        
-        return response;
     }
 
     public void validarConsultaTransacao() {
         response.then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
                 .body("Payment.Status", equalTo(1))
-                .body("Payment.ReturnCode", equalTo("4"))
-                .body("Payment.ReturnMessage", equalTo("Operation Successful"));
+                .body("Payment.Amount", equalTo(15700));
     }
 
     public void validarStatusCode(int statusCode) {
