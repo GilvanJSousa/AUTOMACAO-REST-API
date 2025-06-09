@@ -1,6 +1,5 @@
 package org.br.com.testes.steps;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -18,17 +17,17 @@ public class MpCartaoDeCreditoSteps {
     }
 
     @Given("que eu tenho um cartão de crédito válido")
-    public void queEuTenhoUmCartaoDeCreditoValido() throws JsonProcessingException {
+    public void queEuTenhoUmCartaoDeCreditoValido() throws Exception {
         mpCartaoDeCreditoController.prepararRequisicaoCartaoCredito();
     }
 
     @Given("que eu tenho um cartão de crédito válido para autenticação")
-    public void queEuTenhoUmCartaoDeCreditoValidoParaAutenticacao() throws JsonProcessingException {
+    public void queEuTenhoUmCartaoDeCreditoValidoParaAutenticacao() throws Exception {
         mpCartaoDeCreditoController.prepararRequisicaoCartaoCreditoAutenticado();
     }
 
     @Given("que eu tenho um cartão de crédito válido com dados completos")
-    public void queEuTenhoUmCartaoDeCreditoValidoComDadosCompletos() throws JsonProcessingException {
+    public void queEuTenhoUmCartaoDeCreditoValidoComDadosCompletos() throws Exception {
         mpCartaoDeCreditoController.prepararRequisicaoCartaoCreditoCompleto();
     }
 
@@ -49,7 +48,17 @@ public class MpCartaoDeCreditoSteps {
 
     @Then("o pagamento deve ser processado com sucesso")
     public void oPagamentoDeveSerProcessadoComSucesso() {
-        mpCartaoDeCreditoController.validarPagamentoProcessadoComSucesso();
+        mpCartaoDeCreditoController.validarPagamentoSimples();
+    }
+
+    @Then("o pagamento autenticado deve ser processado com sucesso")
+    public void oPagamentoAutenticadoDeveSerProcessadoComSucesso() {
+        mpCartaoDeCreditoController.validarPagamentoAutenticado();
+    }
+
+    @Then("o pagamento completo deve ser processado com sucesso")
+    public void oPagamentoCompletoDeveSerProcessadoComSucesso() {
+        mpCartaoDeCreditoController.validarPagamentoCompleto();
     }
 
     @And("o status code deve ser {int}")

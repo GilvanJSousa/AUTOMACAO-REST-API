@@ -4,7 +4,7 @@ Feature: Pagamento com Boleto
   Eu quero realizar um pagamento com boleto
   Para que eu possa finalizar minha compra
 
-  @CT-3001
+  @pagamentoBoleto
   Scenario: Realizar pagamento com boleto básico
     Given que eu tenho um boleto válido
     When eu envio a requisição de pagamento com boleto

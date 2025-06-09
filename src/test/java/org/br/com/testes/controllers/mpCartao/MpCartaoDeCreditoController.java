@@ -4,13 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.UsuarioManager;
-import org.br.com.testes.model.mpCartao.MpCartaoDeCreditoRequest;
-import org.junit.Test;
+import org.br.com.testes.model.mpCartao.*;
 
-import static io.restassured.RestAssured.given;
-import static java.lang.Math.log;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.anyOf;
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 public class MpCartaoDeCreditoController {
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
@@ -19,6 +16,7 @@ public class MpCartaoDeCreditoController {
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
     private Response response;
+
 
     public void prepararRequisicaoCartaoCredito() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
@@ -121,7 +119,7 @@ public class MpCartaoDeCreditoController {
         requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
-    public Response enviarRequisicaoPagamento() {
+    public void enviarRequisicaoPagamento() {
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -135,22 +133,18 @@ public class MpCartaoDeCreditoController {
         // Armazenando o PaymentId após a requisição
         UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
         System.out.println("Payment ID: " + UsuarioManager.getPaymentId());
-        
-        return response;
     }
 
-    public void validarPagamentoProcessadoComSucesso(String tipoValidacao) {
-        switch (tipoValidacao.toLowerCase()) {
-            case "autenticado":
-            case "completo":
-                validarRespostaSucesso();
-                break;
-            case "simples":
-                validarRespostaCartaoExpirado();
-                break;
-            default:
-                throw new IllegalArgumentException("Tipo de validação inválido: " + tipoValidacao);
-        }
+    public void validarPagamentoSimples() {
+        validarRespostaCartaoExpirado();
+    }
+
+    public void validarPagamentoAutenticado() {
+        validarRespostaSucesso();
+    }
+
+    public void validarPagamentoCompleto() {
+        validarRespostaSucesso();
     }
 
     private void validarRespostaSucesso() {

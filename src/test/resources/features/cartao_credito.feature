@@ -11,16 +11,16 @@ Feature: Pagamento com Cartão de Crédito
     Then o pagamento deve ser processado com sucesso
     And o status code deve ser 201
 
-  @CT-1002
+  @TransacaoCredito @CT-1002
   Scenario: Realizar pagamento com cartão de crédito autenticado
     Given que eu tenho um cartão de crédito válido para autenticação
     When eu envio a requisição de pagamento autenticado
-    Then o pagamento deve ser processado com sucesso
+    Then o pagamento autenticado deve ser processado com sucesso
     And o status code deve ser 201
 
-  @CT-1003
+  @TransacaoCredito @CT-1003
   Scenario: Realizar pagamento com cartão de crédito completo
     Given que eu tenho um cartão de crédito válido com dados completos
     When eu envio a requisição de pagamento completo
-    Then o pagamento deve ser processado com sucesso
+    Then o pagamento completo deve ser processado com sucesso
     And o status code deve ser 201 
