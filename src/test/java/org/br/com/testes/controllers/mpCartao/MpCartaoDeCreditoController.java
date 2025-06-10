@@ -8,6 +8,7 @@ import org.br.com.testes.model.mpCartao.*;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static org.br.com.testes.model.mpCartao.MpCartaoDeCreditoRequest.*;
 
 public class MpCartaoDeCreditoController {
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
@@ -21,12 +22,12 @@ public class MpCartaoDeCreditoController {
     public void prepararRequisicaoCartaoCredito() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
                 .merchantOrderId("2014111703")
-                .payment(MpCartaoDeCreditoRequest.Payment.builder()
+                .payment(Payment.builder()
                         .type("CreditCard")
                         .amount(15700)
                         .installments(1)
                         .softDescriptor("123456789ABCD")
-                        .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
+                        .creditCard(CreditCard.builder()
                                 .cardNumber("4551870000000183")
                                 .holder("Teste Holder")
                                 .expirationDate("12/2021")
@@ -42,17 +43,17 @@ public class MpCartaoDeCreditoController {
     public void prepararRequisicaoCartaoCreditoAutenticado() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
                 .merchantOrderId("2014111903")
-                .customer(MpCartaoDeCreditoRequest.Customer.builder()
+                .customer(Customer.builder()
                         .name("Comprador Teste")
                         .build())
-                .payment(MpCartaoDeCreditoRequest.Payment.builder()
+                .payment(Payment.builder()
                         .type("CreditCard")
                         .amount(15700)
                         .provider("Cielo")
                         .returnUrl("https://www.google.com.br")
                         .installments(1)
                         .authenticate(true)
-                        .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
+                        .creditCard(CreditCard.builder()
                                 .cardNumber("1234123412341231")
                                 .holder("Teste Holder")
                                 .expirationDate("12/2018")
@@ -68,13 +69,13 @@ public class MpCartaoDeCreditoController {
     public void prepararRequisicaoCartaoCreditoCompleto() throws Exception {
         MpCartaoDeCreditoRequest request = MpCartaoDeCreditoRequest.builder()
                 .merchantOrderId("2014111701")
-                .customer(MpCartaoDeCreditoRequest.Customer.builder()
+                .customer(Customer.builder()
                         .name("Comprador Teste")
                         .identity("11225468954")
                         .identityType("CPF")
                         .email("compradorteste@teste.com")
                         .birthdate("1991-01-02")
-                        .address(MpCartaoDeCreditoRequest.Address.builder()
+                        .address(Address.builder()
                                 .street("Rua Teste")
                                 .number("123")
                                 .complement("AP 123")
@@ -83,7 +84,7 @@ public class MpCartaoDeCreditoController {
                                 .state("RJ")
                                 .country("BRA")
                                 .build())
-                        .deliveryAddress(MpCartaoDeCreditoRequest.Address.builder()
+                        .deliveryAddress(Address.builder()
                                 .street("Rua Teste")
                                 .number("123")
                                 .complement("AP 123")
@@ -93,7 +94,7 @@ public class MpCartaoDeCreditoController {
                                 .country("BRA")
                                 .build())
                         .build())
-                .payment(MpCartaoDeCreditoRequest.Payment.builder()
+                .payment(Payment.builder()
                         .type("CreditCard")
                         .amount(15700)
                         .currency("BRL")
@@ -105,7 +106,7 @@ public class MpCartaoDeCreditoController {
                         .capture(false)
                         .recurrent(false)
                         .softDescriptor("123456789ABCD")
-                        .creditCard(MpCartaoDeCreditoRequest.CreditCard.builder()
+                        .creditCard(CreditCard.builder()
                                 .cardNumber("4024007197692931")
                                 .holder("Teste Holder")
                                 .expirationDate("12/2021")
