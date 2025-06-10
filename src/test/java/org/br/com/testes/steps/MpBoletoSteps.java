@@ -17,7 +17,7 @@ public class MpBoletoSteps {
     }
 
     @Given("que eu tenho um boleto válido")
-    public void queEuTenhoUmBoletoValido() {
+    public void queEuTenhoUmBoletoValido() throws Exception {
         mpBoletoController.prepararRequisicaoBoleto();
     }
 
