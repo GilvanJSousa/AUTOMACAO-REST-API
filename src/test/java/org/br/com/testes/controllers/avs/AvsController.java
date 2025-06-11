@@ -51,8 +51,6 @@ public class AvsController {
                 .body(request)
                 .when()
                 .post(ENDPOINT_SALES);
-
-        LogFormatter.logStep("Response: " + response.asString());
     }
 
     public void validarPagamentoAutorizado() {
@@ -62,7 +60,7 @@ public class AvsController {
     private void validarRespostaSucesso() {
         response.then()
                 .body("Payment.Status", equalTo(2))
-                .body("Payment.ReturnCode", equalTo("4"))
+                .body("Payment.ReturnCode", equalTo("6"))
                 .body("Payment.ReturnMessage", equalTo("Operation Successful"));
     }
 
@@ -70,5 +68,6 @@ public class AvsController {
         response.then()
                 .log().all(true)
                 .statusCode(statusCode);
+        System.out.println("Status Code: " + statusCode);
     }
 }

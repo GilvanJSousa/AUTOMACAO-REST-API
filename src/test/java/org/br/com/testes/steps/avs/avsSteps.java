@@ -1,5 +1,6 @@
 package org.br.com.testes.steps.avs;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -27,5 +28,11 @@ public class AvsSteps {
 
     @Then("valido que o pagamento foi autorizado com sucesso com AVS")
     public void validoQueOPagamentoFoiAutorizadoComSucessoComAvs() {
+        avsController.validarPagamentoAutorizado();
+    }
+
+    @And("o status code do 'AVS' ser {int}")
+    public void oStatusCodeDoAvsSer(int statusCode) {
+        avsController.validarStatusCode(statusCode);
     }
 } 
