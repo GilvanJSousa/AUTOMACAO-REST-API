@@ -15,12 +15,7 @@ public class LogFormatter {
     }
 
     public static void logStep(String message) {
-        String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String logMessage = String.format("==================================================\n[%s] STEP: %s\n==================================================", 
-            timestamp, message);
-        
-        logger.info(logMessage);
-        logToFile(logMessage);
+        logger.info("STEP: {}", message);
     }
 
     public static void logRequest(String method, String url, String body) {

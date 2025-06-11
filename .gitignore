@@ -176,3 +176,9 @@ dist
 # Log files
 logs/
 *.log
+
+# Arquivos de configuração com dados sensíveis
+src/test/resources/config.properties
+
+# Arquivos de configuração de exemplo
+!src/test/resources/config.properties.example

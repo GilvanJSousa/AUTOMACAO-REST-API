@@ -1,0 +1,5 @@
+# Configurações da API Cielo
+# Substitua os valores abaixo pelos seus dados de acesso
+cielo.base.url=https://apisandbox.cieloecommerce.cielo.com.br
+cielo.merchant.id=seu_merchant_id_aqui
+cielo.merchant.key=sua_merchant_key_aqui 
