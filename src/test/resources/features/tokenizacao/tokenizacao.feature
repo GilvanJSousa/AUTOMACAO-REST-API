@@ -25,3 +25,19 @@ Feature: Tokenizacao de Cartao
     When envio a requisicao de pagamento com cartao tokenizado
     Then valido que o pagamento foi realizado com sucesso
     And valido o status code 201 para 'API de pagamento'
+
+  @RealizarPagamentoComCartaoTokenizadoAmex @CT-5004
+  Scenario: Realizar pagamento com cartao tokenizado American Express com sucesso
+    Given que tenho o token do cartao American Express
+    And que tenho os dados do pagamento com cartao American Express
+    When envio a requisicao de pagamento com cartao tokenizado
+    Then valido que o pagamento foi realizado com sucesso
+    And valido o status code 201 para 'API de pagamento'
+
+  @RealizarPagamentoComCartaoTokenizadoVisa @CT-5005
+  Scenario: Realizar pagamento com cartao tokenizado Visa com sucesso
+    Given que tenho o token do cartao Visa
+    And que tenho os dados do pagamento com cartao Visa
+    When envio a requisicao de pagamento com cartao tokenizado
+    Then valido que o pagamento foi realizado com sucesso
+    And valido o status code 201 para 'API de pagamento'

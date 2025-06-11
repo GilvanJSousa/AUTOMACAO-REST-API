@@ -58,6 +58,26 @@ public class TokenizacaoSteps {
         tokenizacaoController.prepararRequisicaoPagamento();
     }
 
+    @Given("que tenho o token do cartao American Express")
+    public void queTenhoOTokenDoCartaoAmericanExpress() {
+        Assertions.assertNotNull(TokenizacaoManager.getCardToken(), "Token do cartão não encontrado");
+    }
+
+    @Given("que tenho os dados do pagamento com cartao American Express")
+    public void queTenhoOsDadosDoPagamentoComCartaoAmericanExpress() throws Exception {
+        tokenizacaoController.prepararRequisicaoPagamentoAmex();
+    }
+
+    @Given("que tenho o token do cartao Visa")
+    public void queTenhoOTokenDoCartaoVisa() {
+        Assertions.assertNotNull(TokenizacaoManager.getCardToken(), "Token do cartão não encontrado");
+    }
+
+    @Given("que tenho os dados do pagamento com cartao Visa")
+    public void queTenhoOsDadosDoPagamentoComCartaoVisa() throws Exception {
+        tokenizacaoController.prepararRequisicaoPagamentoVisa();
+    }
+
     @When("envio a requisicao de pagamento com cartao tokenizado")
     public void envioARequisicaoDePagamentoComCartaoTokenizado() {
         tokenizacaoController.enviarRequisicaoPagamento();

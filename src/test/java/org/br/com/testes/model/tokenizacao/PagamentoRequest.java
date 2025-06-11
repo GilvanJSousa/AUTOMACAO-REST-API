@@ -40,5 +40,6 @@ public class PagamentoRequest {
         private String securityCode;
         private String saveCard;
         private String brand;
+        private String cardToken;
     }
 } 

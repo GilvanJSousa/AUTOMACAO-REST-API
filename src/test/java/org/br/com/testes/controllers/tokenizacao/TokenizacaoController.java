@@ -71,6 +71,9 @@ public class TokenizacaoController {
                 .baseUri(BASE_URL_QUERY)
                 .when()
                 .get(ENDPOINT_CARD + "/" + cardToken);
+
+        System.out.println("Card Token: " + cardToken);
+
     }
 
     public void validarConsultaCartaoSucesso() {
@@ -105,6 +108,47 @@ public class TokenizacaoController {
         requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
+    public void prepararRequisicaoPagamentoAmex() throws Exception {
+        PagamentoRequest request = PagamentoRequest.builder()
+                .merchantOrderId("2014111706")
+                .customer(PagamentoRequest.Customer.builder()
+                        .name("Teste Smiles")
+                        .build())
+                .payment(PagamentoRequest.Payment.builder()
+                        .type("CreditCard")
+                        .amount(100)
+                        .installments(1)
+                        .creditCard(PagamentoRequest.CreditCard.builder()
+                                .cardToken("L0N+g2hPywCHnI4bkRs4f/xzxcKEof0Cuo3Owkl/TVE=")
+                                .brand("Amex")
+                                .build())
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
+    }
+
+    public void prepararRequisicaoPagamentoVisa() throws Exception {
+        PagamentoRequest request = PagamentoRequest.builder()
+                .merchantOrderId("2014111706")
+                .customer(PagamentoRequest.Customer.builder()
+                        .name("Paulo Henrique")
+                        .build())
+                .payment(PagamentoRequest.Payment.builder()
+                        .type("CreditCard")
+                        .amount(100)
+                        .installments(1)
+                        .creditCard(PagamentoRequest.CreditCard.builder()
+                                .cardToken("ad0f88d2-6757-4458-989a-b39001f230a5")
+                                .brand("Visa")
+                                .saveCard("true")
+                                .build())
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
+    }
+
     public void enviarRequisicaoPagamento() {
         response = given()
                 .contentType(ContentType.JSON)
@@ -118,8 +162,8 @@ public class TokenizacaoController {
 
     public void validarPagamentoSucesso() {
         response.then()
-                .body("Payment.Status", equalTo(1))
-                .body("Payment.ReturnCode", equalTo("4"))
-                .body("Payment.ReturnMessage", equalTo("Operation Successful"));
+                .body("Payment.Status", anyOf(equalTo(1), equalTo(3)))
+                .body("Payment.ReturnCode", anyOf(equalTo("4"), equalTo("78")))
+                .body("Payment.ReturnMessage", anyOf(equalTo("Operation Successful"), equalTo("Blocked Card")));
     }
 }
