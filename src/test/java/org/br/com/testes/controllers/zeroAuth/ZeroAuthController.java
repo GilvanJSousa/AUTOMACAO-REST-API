@@ -4,7 +4,6 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenizacaoManager;
 import org.br.com.testes.model.zeroAuth.ZeroAuthRequest;
-import org.br.com.testes.utils.LogFormatter;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -102,81 +101,27 @@ public class ZeroAuthController {
     }
 
     public void validarCartaoAutorizado() {
-        validarRespostaSucesso();
+        response.then()
+                .statusCode(200)
+                .body("Valid", equalTo(false))
+                .body("ReturnCode", equalTo("35"))
+                .body("ReturnMessage", equalTo("Autorizacao negada"));
     }
 
     public void validarCartaoDebitoAutorizado() {
-        validarRespostaSucessoDebito();
+        response.then()
+                .statusCode(200)
+                .body("Valid", equalTo(true))
+                .body("ReturnCode", equalTo("00"))
+                .body("ReturnMessage", equalTo("Transacao autorizada"));
     }
 
     public void validarCartaoComAvsAutorizado() {
-        validarRespostaSucessoAvsNegada();
-    }
-
-    private void validarRespostaSucesso() {
-        try {
-            response.then()
-                    .statusCode(200)
-                    .body("Valid", equalTo(false))
-                    .body("ReturnCode", equalTo("35"))
-                    .body("ReturnMessage", equalTo("Autorizacao negada"));
-        } catch (AssertionError e) {
-            // Se a validação falhar, verifica se é um erro de autenticação
-            if (response.getBody().asString().contains("MerchantKey is invalid")) {
-                System.out.println("Erro de autenticação: MerchantKey inválida");
-                throw new RuntimeException("Erro de autenticação: " + response.getBody().asString());
-            }
-            // Se a validação falhar, verifica se é um erro de serviço indisponível
-            if (response.getBody().asString().contains("Service Unavailable")) {
-                System.out.println("Serviço indisponível. Aguarde alguns minutos e tente novamente.");
-                throw new RuntimeException("Serviço indisponível: " + response.getBody().asString());
-            }
-            throw e;
-        }
-    }
-
-    private void validarRespostaSucessoDebito() {
-        try {
-            response.then()
-                    .statusCode(200)
-                    .body("Valid", equalTo(true))
-                    .body("ReturnCode", equalTo("00"))
-                    .body("ReturnMessage", equalTo("Transacao autorizada"));
-        } catch (AssertionError e) {
-            // Se a validação falhar, verifica se é um erro de autenticação
-            if (response.getBody().asString().contains("MerchantKey is invalid")) {
-                System.out.println("Erro de autenticação: MerchantKey inválida");
-                throw new RuntimeException("Erro de autenticação: " + response.getBody().asString());
-            }
-            // Se a validação falhar, verifica se é um erro de serviço indisponível
-            if (response.getBody().asString().contains("Service Unavailable")) {
-                System.out.println("Serviço indisponível. Aguarde alguns minutos e tente novamente.");
-                throw new RuntimeException("Serviço indisponível: " + response.getBody().asString());
-            }
-            throw e;
-        }
-    }
-
-    private void validarRespostaSucessoAvsNegada() {
-        try {
-            response.then()
-                    .statusCode(200)
-                    .body("Valid", equalTo(false))
-                    .body("ReturnCode", equalTo("35"))
-                    .body("ReturnMessage", equalTo("Autorizacao negada"));
-        } catch (AssertionError e) {
-            // Se a validação falhar, verifica se é um erro de autenticação
-            if (response.getBody().asString().contains("MerchantKey is invalid")) {
-                System.out.println("Erro de autenticação: MerchantKey inválida");
-                throw new RuntimeException("Erro de autenticação: " + response.getBody().asString());
-            }
-            // Se a validação falhar, verifica se é um erro de serviço indisponível
-            if (response.getBody().asString().contains("Service Unavailable")) {
-                System.out.println("Serviço indisponível. Aguarde alguns minutos e tente novamente.");
-                throw new RuntimeException("Serviço indisponível: " + response.getBody().asString());
-            }
-            throw e;
-        }
+        response.then()
+                .statusCode(200)
+                .body("Valid", equalTo(false))
+                .body("ReturnCode", equalTo("35"))
+                .body("ReturnMessage", equalTo("Autorizacao negada"));
     }
 
     public void validarStatusCode(int statusCode) {
