@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
-        tags = "@Captura or @Cancelamento or @ConsultaTransacao or @TransaçãoCredito or @TransaçãoBoleto or @Antifraude or @TransaçãoDebito",
+        tags = "@Recorrencia",
         monochrome = false,
         dryRun = false,
         plugin = {

@@ -19,11 +19,22 @@ public class RecorrenciaRequest {
     @Data
     @Builder
     public static class Payment {
-        private String type;
-        private Integer amount;
-        private Integer installments;
-        private CreditCard creditCard;
+        private int installments;
         private RecurrentPayment recurrentPayment;
+        private CreditCard creditCard;
+        private String softDescriptor;
+        private String type;
+        private int amount;
+        private String currency;
+        private String country;
+    }
+
+    @Data
+    @Builder
+    public static class RecurrentPayment {
+        private boolean authorizeNow;
+        private String endDate;
+        private String interval;
     }
 
     @Data
@@ -33,14 +44,7 @@ public class RecorrenciaRequest {
         private String holder;
         private String expirationDate;
         private String securityCode;
+        private boolean saveCard;
         private String brand;
-    }
-
-    @Data
-    @Builder
-    public static class RecurrentPayment {
-        private Boolean authorizeNow;
-        private String endDate;
-        private String interval;
     }
 }
