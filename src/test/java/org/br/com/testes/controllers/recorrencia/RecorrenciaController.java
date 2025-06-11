@@ -16,7 +16,9 @@ import static org.hamcrest.Matchers.*;
 public class RecorrenciaController {
     private static final Logger logger = LoggerFactory.getLogger(RecorrenciaController.class);
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
+    private static final String BASE_URL_QUERY = "https://apiquerysandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_RECURRENT = "/1/sales";
+    private static final String ENDPOINT_QUERY_RECURRENT = "/1/RecurrentPayment";
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
@@ -80,13 +82,28 @@ public class RecorrenciaController {
                 .body("Payment.Status", equalTo(1))
                 .body("Payment.ReturnCode", equalTo("4"))
                 .body("Payment.ReturnMessage", equalTo("Operation Successful"));
-
     }
 
     public void validarStatusCode(int statusCode) {
         response.then()
-                .log().all(true)
                 .statusCode(statusCode);
-        LogFormatter.logStep("Validando status code " + statusCode);
+    }
+
+    public void consultarRecorrencia() {
+        String recurrentPaymentId = UsuarioManager.getRecurrentPaymentId();
+        response = given()
+                .contentType(ContentType.JSON)
+                .header("MerchantId", MERCHANT_ID)
+                .header("MerchantKey", MERCHANT_KEY)
+                .baseUri(BASE_URL_QUERY)
+                .when()
+                .get(ENDPOINT_QUERY_RECURRENT + "/" + recurrentPaymentId);
+
+        System.out.println("Consultando recorrência ID: " + recurrentPaymentId);
+    }
+
+    public void validarConsultaRecorrencia() {
+        response.then()
+                .statusCode(200);
     }
 }

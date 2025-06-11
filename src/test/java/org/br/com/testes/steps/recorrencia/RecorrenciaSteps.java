@@ -36,4 +36,21 @@ public class RecorrenciaSteps {
     public void validoOStatusCodePara(int statusCode, String api) {
         recorrenciaController.validarStatusCode(statusCode);
     }
+
+    @Given("que eu tenho um ID de pagamento recorrente válido")
+    public void queEuTenhoUmIDDePagamentoRecorrenteValido() throws Exception {
+        // O ID é obtido após a criação do pagamento recorrente
+        recorrenciaController.prepararRequisicaoRecorrencia();
+        recorrenciaController.enviarRequisicaoRecorrencia();
+    }
+
+    @When("eu envio a requisição de consulta do pagamento recorrente")
+    public void euEnvioARequisicaoDeConsultaDoPagamentoRecorrente() {
+        recorrenciaController.consultarRecorrencia();
+    }
+
+    @Then("a consulta do pagamento recorrente deve ser processada com sucesso")
+    public void aConsultaDoPagamentoRecorrenteDeveSerProcessadaComSucesso() {
+        recorrenciaController.validarConsultaRecorrencia();
+    }
 }

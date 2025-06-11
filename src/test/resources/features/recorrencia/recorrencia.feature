@@ -11,3 +11,10 @@ Feature: Pagamento Recorrente com Cartão de Crédito
     Then o pagamento recorrente deve ser processado com sucesso
     And valido o status code 201 para 'API recorrencia'
 
+  @ConsultaRecorrencia @CT-2002
+  Scenario: Consultar pagamento recorrente
+    Given que eu tenho um ID de pagamento recorrente válido
+    When eu envio a requisição de consulta do pagamento recorrente
+    Then a consulta do pagamento recorrente deve ser processada com sucesso
+    And valido o status code 200 para 'API consulta recorrencia'
+
