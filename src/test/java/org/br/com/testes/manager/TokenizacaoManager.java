@@ -15,4 +15,5 @@ public class TokenizacaoManager {
 	public static void remove() {
 		cardToken.remove();
 	}
+
 }
