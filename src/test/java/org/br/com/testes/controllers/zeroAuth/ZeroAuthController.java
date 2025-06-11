@@ -12,8 +12,8 @@ import static org.hamcrest.Matchers.equalTo;
 public class ZeroAuthController {
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_ZEROAUTH = "/1/zeroauth";
-    private static final String MERCHANT_ID = "a5c4a7c8-1f1e-4f1e-9f1e-1f1e4f1e9f1e";
-    private static final String MERCHANT_KEY = "a5c4a7c8-1f1e-4f1e-9f1e-1f1e4f1e9f1e";
+    private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
+    private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private Response response;
 
     public void realizarValidacaoCartao() {
@@ -69,7 +69,33 @@ public class ZeroAuthController {
         validarRespostaSucesso();
     }
 
+    public void validarCartaoDebitoAutorizado() {
+        validarRespostaSucessoDebito();
+    }
+
     private void validarRespostaSucesso() {
+        try {
+            response.then()
+                    .statusCode(200)
+                    .body("Valid", equalTo(false))
+                    .body("ReturnCode", equalTo("35"))
+                    .body("ReturnMessage", equalTo("Autorizacao negada"));
+        } catch (AssertionError e) {
+            // Se a validação falhar, verifica se é um erro de autenticação
+            if (response.getBody().asString().contains("MerchantKey is invalid")) {
+                System.out.println("Erro de autenticação: MerchantKey inválida");
+                throw new RuntimeException("Erro de autenticação: " + response.getBody().asString());
+            }
+            // Se a validação falhar, verifica se é um erro de serviço indisponível
+            if (response.getBody().asString().contains("Service Unavailable")) {
+                System.out.println("Serviço indisponível. Aguarde alguns minutos e tente novamente.");
+                throw new RuntimeException("Serviço indisponível: " + response.getBody().asString());
+            }
+            throw e;
+        }
+    }
+
+    private void validarRespostaSucessoDebito() {
         try {
             response.then()
                     .statusCode(200)
@@ -77,6 +103,11 @@ public class ZeroAuthController {
                     .body("ReturnCode", equalTo("00"))
                     .body("ReturnMessage", equalTo("Transacao autorizada"));
         } catch (AssertionError e) {
+            // Se a validação falhar, verifica se é um erro de autenticação
+            if (response.getBody().asString().contains("MerchantKey is invalid")) {
+                System.out.println("Erro de autenticação: MerchantKey inválida");
+                throw new RuntimeException("Erro de autenticação: " + response.getBody().asString());
+            }
             // Se a validação falhar, verifica se é um erro de serviço indisponível
             if (response.getBody().asString().contains("Service Unavailable")) {
                 System.out.println("Serviço indisponível. Aguarde alguns minutos e tente novamente.");

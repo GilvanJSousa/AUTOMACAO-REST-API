@@ -32,8 +32,13 @@ public class ZeroAuthSteps {
         zeroAuthController.validarCartaoAutorizado();
     }
 
+    @Then("valido que o cartao de debito foi validado com sucesso")
+    public void validoQueOCartaoDebitoFoiValidadoComSucesso() {
+        zeroAuthController.validarCartaoDebitoAutorizado();
+    }
+
     @And("o status code do {string} ser {int}")
-    public void oStatusCodeDoZeroAuthSer(int statusCode) {
+    public void oStatusCodeDoZeroAuthSer(String api, int statusCode) {
         zeroAuthController.validarStatusCode(statusCode);
     }
 } 
