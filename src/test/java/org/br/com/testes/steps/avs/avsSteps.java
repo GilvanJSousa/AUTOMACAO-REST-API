@@ -36,4 +36,9 @@ public class AvsSteps {
     public void oStatusCodeDoAvsSer(int statusCode) {
         avsController.validarStatusCode(statusCode);
     }
+
+    @And("validar o status code {int} da 'API AVS'")
+    public void validarStatusCodeApiAvs(int statusCode) {
+        avsController.validarStatusCode(statusCode);
+    }
 } 

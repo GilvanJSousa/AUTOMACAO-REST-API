@@ -8,4 +8,4 @@ Feature: Teste de AVS (Address Verification System)
     Given que estou na pagina de pagamento com AVS
     When realizo o pagamento com cartao de credito e AVS
     Then valido que o pagamento foi autorizado com sucesso com AVS
-    And o status code do 'AVS' ser 201
+    And validar o status code 201 da 'API AVS'
