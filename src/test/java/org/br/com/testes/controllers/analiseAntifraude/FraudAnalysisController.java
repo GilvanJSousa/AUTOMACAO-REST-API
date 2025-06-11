@@ -1,4 +1,4 @@
-package org.br.com.testes.controllers.antifraudGateway;
+package org.br.com.testes.controllers.analiseAntifraude;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;

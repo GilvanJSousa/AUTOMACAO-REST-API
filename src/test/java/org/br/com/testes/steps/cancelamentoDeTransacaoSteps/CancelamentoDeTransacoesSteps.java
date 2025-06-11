@@ -1,4 +1,4 @@
-package org.br.com.testes.steps;
+package org.br.com.testes.steps.cancelamentoDeTransacaoSteps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -9,10 +9,10 @@ import io.cucumber.java.en.And;
 import org.br.com.testes.controllers.cancelamentoDeTransacoes.CancelamentoDeTransacoesController;
 import org.br.com.testes.utils.LogFormatter;
 
-public class CancelamentoDeTransacaoSteps {
+public class CancelamentoDeTransacoesSteps {
     private final CancelamentoDeTransacoesController cancelamentoDeTransacaoSteps;
 
-    public CancelamentoDeTransacaoSteps() {
+    public CancelamentoDeTransacoesSteps() {
         this.cancelamentoDeTransacaoSteps = new CancelamentoDeTransacoesController();
     }
 

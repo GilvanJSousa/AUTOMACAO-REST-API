@@ -1,4 +1,4 @@
-package org.br.com.testes.steps;
+package org.br.com.testes.steps.mpCartoes;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;

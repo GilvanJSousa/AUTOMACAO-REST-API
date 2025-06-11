@@ -130,7 +130,6 @@ public class MpCartaoDeCreditoController {
                 .when()
                 .post(ENDPOINT_SALES);
 
-        // Armazenando o PaymentId após a requisição
         UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
         UsuarioManager.setAmount(response.jsonPath().getString("Payment.Amount"));
         UsuarioManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));

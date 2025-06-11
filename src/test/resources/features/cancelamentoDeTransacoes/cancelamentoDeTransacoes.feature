@@ -10,19 +10,19 @@ Feature: Cancelamento de Transacoes
     Then o pagamento completo deve ser processado com sucesso
     And o status code deve ser 201
 
-#  @CT-4001
-#  Scenario: Cancelar transacao por PaymentId
-#    Given que estou na pagina de cancelamento
-#    When realizo o cancelamento da transacao por PaymentId
-#    Then valido que o cancelamento foi realizado com sucesso
-#    And valido a API Cancelar com o status code 200
-#
-#  @CT-4002
-#  Scenario: Cancelar transacao por MerchantOrderId
-#    Given que estou na pagina de cancelamento
-#    When realizo o cancelamento da transacao por MerchantOrderId
-#    Then valido que o cancelamento foi realizado com sucesso
-#    And valido a API Cancelar com o status code 200
+  @CT-4001
+  Scenario: Cancelar transacao por PaymentId
+    Given que estou na pagina de cancelamento
+    When realizo o cancelamento da transacao por PaymentId
+    Then valido que o cancelamento foi realizado com sucesso
+    And valido a API Cancelar com o status code 200
+
+  @CT-4002
+  Scenario: Cancelar transacao por MerchantOrderId
+    Given que estou na pagina de cancelamento
+    When realizo o cancelamento da transacao por MerchantOrderId
+    Then valido que o cancelamento foi realizado com sucesso
+    And valido a API Cancelar com o status code 200
 
   @CT-4003
   Scenario: Cancelar transacao parcial por PaymentId

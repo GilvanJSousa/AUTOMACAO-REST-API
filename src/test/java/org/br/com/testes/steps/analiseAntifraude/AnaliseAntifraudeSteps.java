@@ -1,9 +1,9 @@
-package org.br.com.testes.steps;
+package org.br.com.testes.steps.analiseAntifraude;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
-import org.br.com.testes.controllers.antifraudGateway.FraudAnalysisController;
+import org.br.com.testes.controllers.analiseAntifraude.FraudAnalysisController;
 import org.br.com.testes.utils.LogFormatter;
 
 public class AnaliseAntifraudeSteps {

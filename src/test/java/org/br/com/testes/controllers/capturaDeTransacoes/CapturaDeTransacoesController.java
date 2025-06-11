@@ -1,4 +1,4 @@
-package org.br.com.testes.controllers.cancelamentoDeTransacoes;
+package org.br.com.testes.controllers.capturaDeTransacoes;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -10,17 +10,17 @@ import org.slf4j.LoggerFactory;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
-public class CancelamentoDeTransacoesController {
-    private static final Logger logger = LoggerFactory.getLogger(CancelamentoDeTransacoesController.class);
+public class CapturaDeTransacoesController {
+    private static final Logger logger = LoggerFactory.getLogger(CapturaDeTransacoesController.class);
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_SALES = "/1/sales";
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private Response response;
 
-    public void cancelarTransacaoPorPaymentId() {
+    public void capturarTransacaoPorPaymentId() {
         String paymentId = UsuarioManager.getPaymentId();
-        LogFormatter.logStep("Iniciando cancelamento por PaymentId: " + paymentId);
+        LogFormatter.logStep("Iniciando captura por PaymentId: " + paymentId);
         
         response = given()
                 .contentType("text/json")
@@ -28,52 +28,39 @@ public class CancelamentoDeTransacoesController {
                 .header("MerchantKey", MERCHANT_KEY)
                 .baseUri(BASE_URL)
                 .when()
-                .put(ENDPOINT_SALES + "/" + paymentId + "/void");
-
+                .put(ENDPOINT_SALES + "/" + paymentId + "/capture");
     }
 
-    public void cancelarTransacaoPorMerchantOrderId() {
-        String merchantOrderId = UsuarioManager.getMerchantOrderId();
-        LogFormatter.logStep("Iniciando cancelamento por MerchantOrderId");
-        response = given()
-                .contentType(ContentType.JSON)
-                .header("MerchantId", MERCHANT_ID)
-                .header("MerchantKey", MERCHANT_KEY)
-                .baseUri(BASE_URL)
-                .when()
-                .put(ENDPOINT_SALES + "/orderId/" + merchantOrderId + "/void");
-    }
-
-
-    public void cancelarTransacaoParcialPorPaymentId() {
+    public void capturarTransacaoParcialPorPaymentId() {
         String paymentId = UsuarioManager.getPaymentId();
         String amount = UsuarioManager.getAmount();
-        LogFormatter.logStep("Iniciando cancelamento parcial por PaymentId");
+        LogFormatter.logStep("Iniciando captura parcial por PaymentId");
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
                 .header("MerchantKey", MERCHANT_KEY)
                 .baseUri(BASE_URL)
                 .when()
-                .put(ENDPOINT_SALES + "/" + paymentId + "/void?amount=" + amount);
+                .put(ENDPOINT_SALES + "/" + paymentId + "/capture?amount=" + amount);
     }
 
-    public void validarCancelamento() {
-        LogFormatter.logStep("Validando cancelamento");
+    public void validarCaptura() {
+        LogFormatter.logStep("Validando captura");
         response.then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("Status", equalTo(10))
-                .body("ReturnCode", equalTo("0"));
+                .body("Status", equalTo(2))
+                .body("ReturnCode", equalTo("6"))
+                .body("ReturnMessage", equalTo("Operation Successful"));
     }
 
-    public void validarCancelamentoParcial() {
-        LogFormatter.logStep("Validando cancelamento parcial");
+    public void validarCapturaParcial() {
+        LogFormatter.logStep("Validando captura parcial");
         response.then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("Status", equalTo(10))
-                .body("ReturnCode", equalTo("0"))
+                .body("Status", equalTo(2))
+                .body("ReturnCode", equalTo("6"))
                 .body("ReturnMessage", equalTo("Operation Successful"));
     }
 

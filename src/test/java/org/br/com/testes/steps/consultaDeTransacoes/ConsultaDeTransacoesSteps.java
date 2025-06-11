@@ -1,4 +1,4 @@
-package org.br.com.testes.steps;
+package org.br.com.testes.steps.consultaDeTransacoes;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -9,11 +9,11 @@ import org.br.com.testes.manager.UsuarioManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MpConsultaTransacaoSteps {
+public class ConsultaDeTransacoesSteps {
     private final ConsultaTransacaoController consultaTransacaoController;
-    private static final Logger logger = LoggerFactory.getLogger(MpConsultaTransacaoSteps.class);
+    private static final Logger logger = LoggerFactory.getLogger(ConsultaDeTransacoesSteps.class);
 
-    public MpConsultaTransacaoSteps() {
+    public ConsultaDeTransacoesSteps() {
         consultaTransacaoController = new ConsultaTransacaoController();
     }
 
