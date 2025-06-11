@@ -11,7 +11,6 @@ public class UsuarioManager {
     private static final ThreadLocal<String> amount = new ThreadLocal<>();
     private static final ThreadLocal<String> merchantOrderId = new ThreadLocal<>();
     private static final ThreadLocal<String> recurrentPaymentId = new ThreadLocal<>();
-    private static String cardToken;
 
     public static String getPaymentId() {
         return paymentId.get();
@@ -29,9 +28,6 @@ public class UsuarioManager {
         return recurrentPaymentId.get();
     }
 
-    public static String getCardToken() {
-        return cardToken;
-    }
 
     public static void setPaymentId(String id) {
         paymentId.set(id);
@@ -49,9 +45,6 @@ public class UsuarioManager {
         recurrentPaymentId.set(id);
     }
 
-    public static void setCardToken(String cardToken) {
-        UsuarioManager.cardToken = cardToken;
-    }
 
     public static void remove() {
         paymentId.remove();

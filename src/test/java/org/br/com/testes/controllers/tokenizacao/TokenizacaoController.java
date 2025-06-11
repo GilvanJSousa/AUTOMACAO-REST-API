@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.Getter;
+import org.br.com.testes.manager.TokenizacaoManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.tokenizacao.TokenizacaoRequest;
 
@@ -16,7 +17,7 @@ public class TokenizacaoController {
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
-    @Getter
+
 	private Response response;
 
     public void prepararRequisicaoTokenizacao() throws Exception {
@@ -41,8 +42,8 @@ public class TokenizacaoController {
                 .when()
                 .post(ENDPOINT_CARD);
 
-        UsuarioManager.setCardToken(response.jsonPath().getString("CardToken"));
-        System.out.println("Card Token: " + UsuarioManager.getCardToken());
+        TokenizacaoManager.setCardToken(response.jsonPath().getString("CardToken"));
+        System.out.println("Card Token: " + TokenizacaoManager.getCardToken());
     }
 
     public void validarTokenizacaoSucesso() {
