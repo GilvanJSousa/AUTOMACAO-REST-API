@@ -34,4 +34,21 @@ public class TokenizacaoSteps {
     public void validoOStatusCodeParaAPI(int statusCode, String api) {
         tokenizacaoController.validarStatusCode(statusCode);
     }
+
+    @Given("que tenho o token do cartao")
+    public void queTenhoOTokenDoCartao() throws Exception {
+        // O token já deve ter sido gerado no cenário anterior
+        tokenizacaoController.prepararRequisicaoTokenizacao();
+        tokenizacaoController.enviarRequisicaoTokenizacao();
+    }
+
+    @When("envio a requisicao de consulta do cartao tokenizado")
+    public void envioARequisicaoDeConsultaDoCartaoTokenizado() {
+        tokenizacaoController.consultarCartaoTokenizado();
+    }
+
+    @Then("valido que os dados do cartao foram retornados com sucesso")
+    public void validoQueOsDadosDoCartaoForamRetornadosComSucesso() {
+        tokenizacaoController.validarConsultaCartaoSucesso();
+    }
 }

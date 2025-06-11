@@ -10,3 +10,10 @@ Feature: Tokenizacao de Cartao
     When envio a requisicao de tokenizacao
     Then valido que o cartao foi tokenizado com sucesso
     And valido o status code 201 para 'API de tokenizacao'
+
+  @ConsultarCartaoTokenizado @CT-5002
+  Scenario: Consultar cartao tokenizado com sucesso
+    Given que tenho o token do cartao
+    When envio a requisicao de consulta do cartao tokenizado
+    Then valido que os dados do cartao foram retornados com sucesso
+    And valido o status code 200 para 'API de consulta de cartao tokenizado'

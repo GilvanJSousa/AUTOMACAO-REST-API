@@ -13,12 +13,12 @@ import static org.hamcrest.Matchers.*;
 
 public class TokenizacaoController {
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
+    private static final String BASE_URL_QUERY = "https://apiquerysandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_CARD = "/1/card";
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
-
-	private Response response;
+    private Response response;
 
     public void prepararRequisicaoTokenizacao() throws Exception {
         TokenizacaoRequest request = TokenizacaoRequest.builder()
@@ -58,4 +58,25 @@ public class TokenizacaoController {
         System.out.println("Status Code: " + statusCode);
     }
 
+    public void consultarCartaoTokenizado() {
+        String cardToken = TokenizacaoManager.getCardToken();
+        System.out.println("Consultando cartao com token: " + cardToken);
+        
+        response = given()
+                .contentType(ContentType.JSON)
+                .header("MerchantId", MERCHANT_ID)
+                .header("MerchantKey", MERCHANT_KEY)
+                .baseUri(BASE_URL_QUERY)
+                .when()
+                .get(ENDPOINT_CARD + "/" + cardToken);
+
+        System.out.println("Resposta da consulta: " + response.asString());
+    }
+
+    public void validarConsultaCartaoSucesso() {
+        response.then()
+                .body("CardNumber", notNullValue())
+                .body("Holder", notNullValue())
+                .body("ExpirationDate", notNullValue());
+    }
 }
