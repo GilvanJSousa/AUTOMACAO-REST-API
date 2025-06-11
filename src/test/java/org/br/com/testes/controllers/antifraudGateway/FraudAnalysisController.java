@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.model.antifraudGateway.FraudAnalysisRequest;
+import org.br.com.testes.utils.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ public class FraudAnalysisController {
     private Response response;
 
     public void prepararRequisicaoAntifraude() throws Exception {
-        logger.info("Preparando requisição de antifraude");
+        LogFormatter.logStep("Preparando requisição de antifraude");
         FraudAnalysisRequest request = FraudAnalysisRequest.builder()
                 .merchantOrderId("2014111457673454307")
                 .customer(FraudAnalysisRequest.Customer.builder()
@@ -132,25 +133,24 @@ public class FraudAnalysisController {
                 .build();
 
         requestBody = new ObjectMapper().writeValueAsString(request);
-        logger.debug("Request body preparado: {}", requestBody);
+        LogFormatter.logRequest("POST", BASE_URL + ENDPOINT_SALES, requestBody);
 
         // Enviando a requisição após preparar
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
                 .header("MerchantKey", MERCHANT_KEY)
-                .log().body(true)
                 .baseUri(BASE_URL)
                 .body(requestBody)
                 .when()
                 .post(ENDPOINT_SALES);
+
+        LogFormatter.logResponse(String.valueOf(response.getStatusCode()), response.getBody().asPrettyString());
     }
 
     public void validarStatusCode(int statusCode) {
-        logger.info("Validando status code: {}", statusCode);
+        LogFormatter.logStep("Validando status code: " + statusCode);
         response.then()
-                .log().all(true)
                 .statusCode(statusCode);
-        logger.info("Status code validado com sucesso");
     }
 }

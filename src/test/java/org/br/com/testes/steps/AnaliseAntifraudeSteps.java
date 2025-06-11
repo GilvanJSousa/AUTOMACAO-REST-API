@@ -1,4 +1,4 @@
-package org.br.com.testes.steps.antifraude;
+package org.br.com.testes.steps;
 
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;

@@ -4,6 +4,7 @@ public class UsuarioManager {
 
     private static final ThreadLocal<String> paymentId = new ThreadLocal<>();
     private static final ThreadLocal<String> amount = new ThreadLocal<>();
+    private static final ThreadLocal<String> merchantOrderId = new ThreadLocal<>();
 
     public static String getPaymentId() {
         return paymentId.get();
@@ -11,6 +12,10 @@ public class UsuarioManager {
 
     public static String getAmount() {
         return amount.get();
+    }
+
+    public static String getMerchantOrderId() {
+        return merchantOrderId.get();
     }
 
     public static void setPaymentId(String id) {
@@ -21,10 +26,14 @@ public class UsuarioManager {
         amount.set(value);
     }
 
+    public static void setMerchantOrderId(String id) {
+        merchantOrderId.set(id);
+    }
+
     public static void remove() {
         paymentId.remove();
         amount.remove();
+        merchantOrderId.remove();
     }
-
 
 }

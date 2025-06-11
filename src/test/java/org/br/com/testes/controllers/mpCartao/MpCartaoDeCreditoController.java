@@ -125,7 +125,6 @@ public class MpCartaoDeCreditoController {
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
                 .header("MerchantKey", MERCHANT_KEY)
-                .log().body(true)
                 .baseUri(BASE_URL)
                 .body(requestBody)
                 .when()
@@ -134,8 +133,11 @@ public class MpCartaoDeCreditoController {
         // Armazenando o PaymentId após a requisição
         UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
         UsuarioManager.setAmount(response.jsonPath().getString("Payment.Amount"));
+        UsuarioManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));
+
         System.out.println("Payment ID: " + UsuarioManager.getPaymentId());
         System.out.println("Amount: " + UsuarioManager.getAmount());
+        System.out.println("Merchant Order ID: " + UsuarioManager.getMerchantOrderId());
     }
 
     public void validarPagamentoSimples() {
