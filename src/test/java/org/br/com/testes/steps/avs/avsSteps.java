@@ -1,13 +1,13 @@
 package org.br.com.testes.steps.avs;
 
+import org.br.com.testes.controllers.avs.AvsController;
+import org.br.com.testes.utils.LogFormatter;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import org.br.com.testes.controllers.avs.AvsController;
-import org.br.com.testes.utils.LogFormatter;
-import org.junit.jupiter.api.Assertions;
 
 public class AvsSteps {
     private final AvsController avsController;
@@ -19,6 +19,7 @@ public class AvsSteps {
 
     @Given("que estou na pagina de pagamento com AVS")
     public void queEstouNaPaginaDePagamentoComAvs() {
+        LogFormatter.logStep("Pagina de pagamento com AVS aberta");
     }
 
     @When("realizo o pagamento com cartao de credito e AVS")

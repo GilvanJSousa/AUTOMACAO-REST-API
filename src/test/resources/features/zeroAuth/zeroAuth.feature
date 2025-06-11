@@ -1,4 +1,4 @@
-@zeroAuth
+@all @zeroAuth
 Feature: Teste de ZeroAuth
   Como um usuário do sistema
   Eu quero validar um cartão de crédito

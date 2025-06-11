@@ -1,4 +1,4 @@
-@Captura
+@all @Captura
 Feature: Captura de Transacoes
   Como um usuário do sistema
   Eu quero capturar uma transação

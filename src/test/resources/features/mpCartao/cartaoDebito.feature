@@ -1,4 +1,4 @@
-@TransaçãoDebito
+@all @TransaçãoDebito
 Feature: Pagamento com Cartão de Débito
   Como um usuário do sistema
   Eu quero realizar um pagamento com cartão de débito

@@ -1,33 +1,29 @@
 package org.br.com.testes.model.wallet;
 
+import lombok.Data;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @Builder
 public class WalletRequest {
     private String merchantOrderId;
     private Customer customer;
     private Payment payment;
 
-    @Getter
-    @Setter
+    @Data
     @Builder
     public static class Customer {
         private String name;
-        private String identity;
-        private String identityType;
+        private String identity;      // CPF do comprador
+        private String identityType;  // Tipo do documento (CPF)
     }
 
-    @Getter
-    @Setter
+    @Data
     @Builder
     public static class Payment {
         private String type;
+        private String provider;      // Provider para ambiente sandbox
         private Integer amount;
-        private String provider;
         private Integer installments;
         private String softDescriptor;
         private Boolean capture;
@@ -35,8 +31,7 @@ public class WalletRequest {
         private Wallet wallet;
     }
 
-    @Getter
-    @Setter
+    @Data
     @Builder
     public static class CreditCard {
         private String cardNumber;
@@ -46,13 +41,12 @@ public class WalletRequest {
         private String brand;
     }
 
-    @Getter
-    @Setter
+    @Data
     @Builder
     public static class Wallet {
         private String type;
-        private String eci;
-        private String cavv;
         private String walletKey;
+        private String eci;
+        private String cavv;          // Cardholder Authentication Verification Value
     }
 }

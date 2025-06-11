@@ -1,4 +1,4 @@
-@Antifraude
+@all @Antifraude
 Feature: Analise de Antifraude
   Como um usuário do sistema
   Eu quero realizar uma análise de antifraude em uma transação

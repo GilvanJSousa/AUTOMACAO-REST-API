@@ -1,4 +1,4 @@
-@TransaçãoBoleto
+@all @TransaçãoBoleto
 Feature: Pagamento com Boleto
   Como um usuário do sistema
   Eu quero realizar um pagamento com boleto

@@ -1,4 +1,4 @@
-@ConsultaTransacao
+@all @ConsultaTransacao
 Feature: Consulta de Transação de Cartão de Crédito
   Como um usuário do sistema
   Eu quero consultar uma transação de cartão de crédito

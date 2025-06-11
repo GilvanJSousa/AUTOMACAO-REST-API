@@ -1,4 +1,4 @@
-@Cancelamento
+@all @Cancelamento
 Feature: Cancelamento de Transacoes
   Como um usuário do sistema
   Eu quero cancelar uma transação

@@ -1,4 +1,4 @@
-@Recorrencia
+@all @Recorrencia
 Feature: Pagamento Recorrente com Cartão de Crédito
   Como um usuário do sistema
   Eu quero configurar um pagamento recorrente com cartão de crédito

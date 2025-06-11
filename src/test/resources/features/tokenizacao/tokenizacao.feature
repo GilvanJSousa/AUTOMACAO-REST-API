@@ -1,4 +1,4 @@
-@Tokenizacao
+@all @Tokenizacao
 Feature: Tokenizacao de Cartao
   Como um cliente
   Eu quero tokenizar meu cartao de credito

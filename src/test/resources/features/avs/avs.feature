@@ -1,4 +1,4 @@
-@AVS
+@all @AVS
 Feature: Teste de AVS (Address Verification System)
   Como um usuário do sistema
   Eu quero realizar um pagamento com verificação de endereço

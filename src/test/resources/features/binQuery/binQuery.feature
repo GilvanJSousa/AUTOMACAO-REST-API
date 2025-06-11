@@ -1,4 +1,4 @@
-@binQuery
+@all @binQuery
 Feature: Validação de BIN de cartão
   Como usuário do sistema
   Eu quero validar o BIN de cartões

@@ -1,4 +1,4 @@
-@TransaçãoCredito
+@all @TransaçãoCredito
 Feature: Pagamento com Cartão de Crédito
   Como um usuário do sistema
   Eu quero realizar um pagamento com cartão de crédito
