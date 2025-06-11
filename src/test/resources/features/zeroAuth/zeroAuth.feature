@@ -22,4 +22,11 @@ Feature: Teste de ZeroAuth
     Given que estou na pagina de validacao de cartao
     When realizo a validacao do cartao de debito
     Then valido que o cartao de debito foi validado com sucesso
+    And o status code do 'ZeroAuth' ser 200
+
+  @zeroAuth @zeroAuthAvs
+  Scenario: Validar cartão de crédito com AVS
+    Given que estou na pagina de validacao de cartao
+    When realizo a validacao do cartao com AVS
+    Then valido que o cartao com AVS foi validado com sucesso
     And o status code do 'ZeroAuth' ser 200 

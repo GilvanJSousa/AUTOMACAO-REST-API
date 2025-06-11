@@ -27,6 +27,11 @@ public class ZeroAuthSteps {
         zeroAuthController.realizarValidacaoCartaoDebito();
     }
 
+    @When("realizo a validacao do cartao com AVS")
+    public void realizoAValidacaoDoCartaoComAvs() {
+        zeroAuthController.realizarValidacaoCartaoComAvs();
+    }
+
     @Then("valido que o cartao foi validado com sucesso")
     public void validoQueOCartaoFoiValidadoComSucesso() {
         zeroAuthController.validarCartaoAutorizado();
@@ -35,6 +40,11 @@ public class ZeroAuthSteps {
     @Then("valido que o cartao de debito foi validado com sucesso")
     public void validoQueOCartaoDebitoFoiValidadoComSucesso() {
         zeroAuthController.validarCartaoDebitoAutorizado();
+    }
+
+    @Then("valido que o cartao com AVS foi validado com sucesso")
+    public void validoQueOCartaoComAvsFoiValidadoComSucesso() {
+        zeroAuthController.validarCartaoComAvsAutorizado();
     }
 
     @And("o status code do {string} ser {int}")

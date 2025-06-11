@@ -18,4 +18,16 @@ public class ZeroAuthRequest {
     private String securityCode;
     private String saveCard;
     private String brand;
+    private Avs avs;
+
+    @Data
+    @Builder
+    public static class Avs {
+        private String cpf;
+        private String zipCode;
+        private String street;
+        private String number;
+        private String complement;
+        private String district;
+    }
 } 
