@@ -5,14 +5,17 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import org.br.com.testes.controllers.tokenizacao.TokenizacaoController;
-import org.br.com.testes.utils.LogFormatter;
+import org.br.com.testes.manager.TokenizacaoManager;
+import org.br.com.testes.manager.UsuarioManager;
 import org.junit.jupiter.api.Assertions;
 
 public class TokenizacaoSteps {
     private final TokenizacaoController tokenizacaoController;
+    private final UsuarioManager usuarioManager;
 
     public TokenizacaoSteps() {
         this.tokenizacaoController = new TokenizacaoController();
+        this.usuarioManager = new UsuarioManager();
     }
 
     @Given("que tenho os dados do cartao de credito")
@@ -31,15 +34,13 @@ public class TokenizacaoSteps {
     }
 
     @And("valido o status code {int} para {string}")
-    public void validoOStatusCodeParaAPI(int statusCode, String api) {
+    public void validoOStatusCodePara(int statusCode, String api) {
         tokenizacaoController.validarStatusCode(statusCode);
     }
 
     @Given("que tenho o token do cartao")
-    public void queTenhoOTokenDoCartao() throws Exception {
-        // O token já deve ter sido gerado no cenário anterior
-        tokenizacaoController.prepararRequisicaoTokenizacao();
-        tokenizacaoController.enviarRequisicaoTokenizacao();
+    public void queTenhoOTokenDoCartao() {
+        Assertions.assertNotNull(TokenizacaoManager.getCardToken(), "Token do cartão não encontrado");
     }
 
     @When("envio a requisicao de consulta do cartao tokenizado")
@@ -50,5 +51,20 @@ public class TokenizacaoSteps {
     @Then("valido que os dados do cartao foram retornados com sucesso")
     public void validoQueOsDadosDoCartaoForamRetornadosComSucesso() {
         tokenizacaoController.validarConsultaCartaoSucesso();
+    }
+
+    @Given("que tenho os dados do pagamento")
+    public void queTenhoOsDadosDoPagamento() throws Exception {
+        tokenizacaoController.prepararRequisicaoPagamento();
+    }
+
+    @When("envio a requisicao de pagamento com cartao tokenizado")
+    public void envioARequisicaoDePagamentoComCartaoTokenizado() {
+        tokenizacaoController.enviarRequisicaoPagamento();
+    }
+
+    @Then("valido que o pagamento foi realizado com sucesso")
+    public void validoQueOPagamentoFoiRealizadoComSucesso() {
+        tokenizacaoController.validarPagamentoSucesso();
     }
 }

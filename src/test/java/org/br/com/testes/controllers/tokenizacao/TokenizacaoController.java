@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import lombok.Getter;
 import org.br.com.testes.manager.TokenizacaoManager;
 import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.model.tokenizacao.PagamentoRequest;
 import org.br.com.testes.model.tokenizacao.TokenizacaoRequest;
 
 import static io.restassured.RestAssured.*;
@@ -15,6 +16,7 @@ public class TokenizacaoController {
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
     private static final String BASE_URL_QUERY = "https://apiquerysandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_CARD = "/1/card";
+    private static final String ENDPOINT_SALES = "/1/sales";
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
@@ -69,8 +71,6 @@ public class TokenizacaoController {
                 .baseUri(BASE_URL_QUERY)
                 .when()
                 .get(ENDPOINT_CARD + "/" + cardToken);
-
-        System.out.println("Resposta da consulta: " + response.asString());
     }
 
     public void validarConsultaCartaoSucesso() {
@@ -78,5 +78,48 @@ public class TokenizacaoController {
                 .body("CardNumber", notNullValue())
                 .body("Holder", notNullValue())
                 .body("ExpirationDate", notNullValue());
+    }
+
+    public void prepararRequisicaoPagamento() throws Exception {
+        PagamentoRequest request = PagamentoRequest.builder()
+                .merchantOrderId("2014111706")
+                .customer(PagamentoRequest.Customer.builder()
+                        .name("Paulo Henrique")
+                        .build())
+                .payment(PagamentoRequest.Payment.builder()
+                        .type("CreditCard")
+                        .amount(100)
+                        .provider("Simulado")
+                        .installments(1)
+                        .creditCard(PagamentoRequest.CreditCard.builder()
+                                .cardNumber("4532117080573700")
+                                .holder("Teste Holder")
+                                .expirationDate("12/2025")
+                                .securityCode("123")
+                                .saveCard("true")
+                                .brand("Visa")
+                                .build())
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
+    }
+
+    public void enviarRequisicaoPagamento() {
+        response = given()
+                .contentType(ContentType.JSON)
+                .header("MerchantId", MERCHANT_ID)
+                .header("MerchantKey", MERCHANT_KEY)
+                .baseUri(BASE_URL)
+                .body(requestBody)
+                .when()
+                .post(ENDPOINT_SALES);
+    }
+
+    public void validarPagamentoSucesso() {
+        response.then()
+                .body("Payment.Status", equalTo(1))
+                .body("Payment.ReturnCode", equalTo("4"))
+                .body("Payment.ReturnMessage", equalTo("Operation Successful"));
     }
 }
