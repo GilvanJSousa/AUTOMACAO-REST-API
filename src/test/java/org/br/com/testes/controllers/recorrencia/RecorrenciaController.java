@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.recorrencia.RecorrenciaRequest;
 import org.br.com.testes.model.recorrencia.RecorrenciaRequest.*;
+import org.br.com.testes.model.recorrencia.AlterarDadosCompradorRequest;
+import org.br.com.testes.model.recorrencia.AlterarDadosCompradorRequest.Address;
 import org.br.com.testes.utils.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,8 @@ public class RecorrenciaController {
     private static final String BASE_URL_QUERY = "https://apiquerysandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_RECURRENT = "/1/sales";
     private static final String ENDPOINT_QUERY_RECURRENT = "/1/RecurrentPayment";
+    private static final String ENDPOINT_ALTERAR_COMPRADOR = "/1/RecurrentPayment/{RecurrentPaymentId}/Customer";
+    private static final String ENDPOINT_ALTERAR_INTERVALO = "/1/RecurrentPayment/{id}/Interval";
     private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
     private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
     private String requestBody;
@@ -64,6 +68,7 @@ public class RecorrenciaController {
                 .baseUri(BASE_URL)
                 .body(requestBody)
                 .when()
+                .log().all(true)
                 .post(ENDPOINT_RECURRENT);
 
         UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
@@ -96,14 +101,73 @@ public class RecorrenciaController {
                 .header("MerchantId", MERCHANT_ID)
                 .header("MerchantKey", MERCHANT_KEY)
                 .baseUri(BASE_URL_QUERY)
+                .log().all(true)
                 .when()
                 .get(ENDPOINT_QUERY_RECURRENT + "/" + recurrentPaymentId);
 
         System.out.println("Consultando recorrência ID: " + recurrentPaymentId);
     }
 
-    public void validarConsultaRecorrencia() {
-        response.then()
-                .statusCode(200);
+    public void prepararRequisicaoAlterarDadosComprador() throws Exception {
+        AlterarDadosCompradorRequest request = AlterarDadosCompradorRequest.builder()
+                .name("Customer")
+                .email("customer@teste.com")
+                .birthdate("1999-12-12")
+                .identity("22658954236")
+                .identityType("CPF")
+                .address(Address.builder()
+                        .street("Rua Teste")
+                        .number("174")
+                        .complement("AP 201")
+                        .zipCode("21241140")
+                        .city("Rio de Janeiro")
+                        .state("RJ")
+                        .country("BRA")
+                        .build())
+                .deliveryAddress(Address.builder()
+                        .street("Outra Rua Teste")
+                        .number("123")
+                        .complement("AP 111")
+                        .zipCode("21241111")
+                        .city("Qualquer Lugar")
+                        .state("QL")
+                        .country("BRA")
+                        .district("Teste")
+                        .build())
+                .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
+    }
+
+    public void alterarDadosComprador() {
+        String recurrentPaymentId = UsuarioManager.getRecurrentPaymentId();
+        response = given()
+                .contentType(ContentType.JSON)
+                .header("MerchantId", MERCHANT_ID)
+                .header("MerchantKey", MERCHANT_KEY)
+                .baseUri(BASE_URL)
+                .pathParam("RecurrentPaymentId", recurrentPaymentId)
+                .body(requestBody)
+                .log().all(true)
+                .when()
+                .put(ENDPOINT_ALTERAR_COMPRADOR);
+
+        System.out.println("Alterando dados do comprador para recorrência ID: " + recurrentPaymentId);
+    }
+
+    public void alterarIntervalo() {
+        String recurrentPaymentId = UsuarioManager.getRecurrentPaymentId();
+        response = given()
+                .contentType(ContentType.TEXT)
+                .header("MerchantId", MERCHANT_ID)
+                .header("MerchantKey", MERCHANT_KEY)
+                .baseUri(BASE_URL)
+                .pathParam("id", recurrentPaymentId)
+                .body("6")
+                .log().all(true)
+                .when()
+                .put(ENDPOINT_ALTERAR_INTERVALO);
+
+        System.out.println("Alterando intervalo para recorrência ID: " + recurrentPaymentId);
     }
 }
