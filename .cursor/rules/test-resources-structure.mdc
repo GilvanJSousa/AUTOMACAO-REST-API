@@ -1,0 +1,69 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Estrutura e Boas Práticas: src/test/resources
+
+O diretório [src/test/resources](mdc:src/test/resources) armazena todos os recursos necessários para a execução dos testes automatizados, incluindo:
+
+- Arquivos `.feature` do Cucumber (em `features/`)
+- Arquivos de configuração (`config.properties`, `logback-test.xml`, etc.)
+- Dados de teste, templates e outros recursos
+
+## Padrão de organização
+- Features devem estar em `src/test/resources/features`.
+- Configurações e arquivos auxiliares ficam diretamente em `src/test/resources`.
+
+## Convenções importantes
+- Não use acentos nos nomes dos arquivos.
+- Siga as convenções de nomenclatura do projeto para evitar problemas de compatibilidade.
+- Não utilize `# language: pt` nos arquivos feature; o idioma deve ser configurado globalmente.
+- Prefixos do Cucumber sempre em inglês: `Feature:`, `Scenario:`, `Given`, `When`, `Then`, `And`.
+
+## Justificativa
+- Organização clara facilita manutenção, onboarding e evolução dos testes.
+- Seguir padrões evita erros de execução e problemas de compatibilidade entre ambientes.
+
+## Referências externas
+- [Documentação oficial da API Cielo E-commerce](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api)
+
+Consulte o link acima para garantir que os arquivos de recursos (features, dados de teste, configs) estejam em conformidade com os fluxos e requisitos documentados pela Cielo, facilitando a criação de cenários realistas e completos.
+
+## Exemplos práticos de features e recursos alinhados à API Cielo
+
+### Exemplo de arquivo .feature para pagamento com cartão de crédito
+
+```gherkin
+Feature: Pagamento com cartao de credito
+  Como usuario
+  Eu quero realizar um pagamento com cartao de credito
+  Para efetuar compras online
+
+  @ATJ-123 @all
+  Scenario: Realizar pagamento com cartao valido
+    Given que estou com os dados do cartao valido
+    When realizo um pagamento com cartao de credito valido
+    Then valido que o pagamento foi aprovado
+
+  Scenario: Tentar pagamento com cartao invalido
+    Given que estou com os dados do cartao invalido
+    When realizo um pagamento com cartao de credito invalido
+    Then valido mensagem de erro para cartao invalido
+```
+
+### Exemplo de arquivo de configuração para ambiente sandbox
+
+```
+# config.properties
+cielo.api.url=https://apisandbox.cieloecommerce.cielo.com.br/1/sales/
+cielo.api.query.url=https://apiquerysandbox.cieloecommerce.cielo.com.br/1/sales/
+cielo.merchant.id=SEU_MERCHANT_ID
+ecielo.merchant.key=SEU_MERCHANT_KEY
+```
+
+> Consulte sempre a [documentação oficial da API Cielo](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api) para exemplos completos de payloads, respostas e regras de negócio.
+
+
+
+

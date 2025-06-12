@@ -1,0 +1,100 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Estrutura e Boas Práticas: src/test/java
+
+O diretório [src/test/java](mdc:src/test/java) contém todo o código-fonte dos testes automatizados, organizado por pacotes Java. Aqui ficam:
+
+- Steps definitions (implementações dos steps do Cucumber)
+- Page Objects (Elements, Logic, Steps)
+- Classes utilitárias e de suporte aos testes
+
+## Padrão de organização
+- Cada feature deve ter seu próprio pacote dentro de `pages`.
+- Não criar pacotes separados para steps, elements ou logic.
+- Exemplo: `org/br/com/web/pages/login/LoginElements.java`, `LoginLogic.java`, `LoginSteps.java`
+
+## Steps: Evite Duplicidade e Reaproveite com Critério
+- **Nunca duplique steps**: Steps com nomes idênticos em diferentes classes dificultam manutenção e geram inconsistências.
+- **Reaproveite steps** apenas quando o comportamento for idêntico e genérico entre features.
+- **Crie steps específicos** (com nome/contexto da feature) quando houver qualquer variação de lógica, dados ou fluxo de negócio.
+- **Exemplo correto**:
+  - Genérico: `@Given("que estou logado como admin")`
+  - Específico: `@Given("que estou na pagina de cadastro de usuario")`
+- **Justificativa**: Garante rastreabilidade, facilita manutenção e evita efeitos colaterais ao evoluir features.
+
+## Importante
+- Siga as convenções de nomenclatura e estrutura definidas nas regras do projeto para garantir consistência e fácil manutenção.
+- Consulte sempre as regras de steps e page objects para evitar duplicidade e promover reaproveitamento responsável.
+
+## Referências externas
+- [Documentação oficial da API Cielo E-commerce](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api)
+
+Acesse o link acima para detalhes sobre endpoints, exemplos de integração, ambientes (sandbox/produção) e melhores práticas de uso da API Cielo. Utilize essas informações para garantir que os testes automatizados estejam alinhados com a documentação oficial e cubram os principais fluxos de negócio.
+
+## Exemplos práticos de integração com a API Cielo
+
+### 1. Criação de pagamento com cartão de crédito (endpoint transacional)
+
+- **Endpoint:** `POST /1/sales/`
+- **Exemplo de uso em teste automatizado:**
+  - Validar criação de transação com dados válidos de cartão
+  - Validar resposta de erro para cartão inválido
+
+```java
+// Exemplo de step para criar pagamento
+@When("realizo um pagamento com cartao de credito valido")
+public void realizoPagamentoCartaoCreditoValido() {
+    // Chamar lógica que executa POST para /1/sales/ com dados válidos
+}
+
+// Exemplo de step para validar erro
+@Then("valido mensagem de erro para cartao invalido")
+public void validoMensagemErroCartaoInvalido() {
+    // Chamar lógica que executa POST para /1/sales/ com dados inválidos e valida resposta de erro
+}
+```
+
+### 2. Consulta de transação por PaymentId (endpoint de consulta)
+
+- **Endpoint:** `GET /1/sales/{paymentId}`
+- **Exemplo de uso em teste automatizado:**
+  - Validar que a transação criada pode ser consultada e retorna os dados esperados
+
+```java
+@When("consulto a transacao pelo paymentId")
+public void consultoTransacaoPorPaymentId() {
+    // Chamar lógica que executa GET para /1/sales/{paymentId}
+}
+
+@Then("valido os dados da transacao retornada")
+public void validoDadosTransacaoRetornada() {
+    // Validar campos obrigatórios na resposta
+}
+```
+
+### 3. Cancelamento de transação
+
+- **Endpoint:** `PUT /1/sales/{paymentId}/void`
+- **Exemplo de uso em teste automatizado:**
+  - Validar que uma transação pode ser cancelada e o status é atualizado corretamente
+
+```java
+@When("cancelo a transacao pelo paymentId")
+public void canceloTransacaoPorPaymentId() {
+    // Chamar lógica que executa PUT para /1/sales/{paymentId}/void
+}
+
+@Then("valido que o status da transacao foi atualizado para cancelado")
+public void validoStatusTransacaoCancelada() {
+    // Validar status na resposta
+}
+```
+
+> Consulte sempre a [documentação oficial da API Cielo](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api) para detalhes de payload, exemplos de resposta e regras de negócio.
+
+
+
+
