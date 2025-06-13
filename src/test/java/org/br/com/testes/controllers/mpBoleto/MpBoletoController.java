@@ -1,6 +1,7 @@
 package org.br.com.testes.controllers.mpBoleto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.BoletoManager;
@@ -17,8 +18,9 @@ public class MpBoletoController {
     private static final Logger logger = LoggerFactory.getLogger(MpBoletoController.class);
     private static final String BASE_URL = "https://apisandbox.cieloecommerce.cielo.com.br";
     private static final String ENDPOINT_SALES = "/1/sales";
-    private static final String MERCHANT_ID = "1dbf6ac5-0bb2-4fdb-a6a2-663f6e9554c3";
-    private static final String MERCHANT_KEY = "DPECNPURVQHOKMIPZLWREWERXXKVRWXYUCRKGOBA";
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String MERCHANT_ID = dotenv.get("MERCHANT_ID");
+    private static final String MERCHANT_KEY = dotenv.get("MERCHANT_KEY");
     private String requestBody;
     private Response response;
 
