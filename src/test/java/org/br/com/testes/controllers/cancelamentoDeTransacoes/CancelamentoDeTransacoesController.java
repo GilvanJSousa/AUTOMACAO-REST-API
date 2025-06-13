@@ -2,7 +2,7 @@ package org.br.com.testes.controllers.cancelamentoDeTransacoes;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.utils.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class CancelamentoDeTransacoesController {
     private Response response;
 
     public void cancelarTransacaoPorPaymentId() {
-        String paymentId = UsuarioManager.getPaymentId();
+        String paymentId = CartaoDeCreditoManager.getPaymentId();
         LogFormatter.logStep("Iniciando cancelamento por PaymentId: " + paymentId);
         
         response = given()
@@ -33,7 +33,7 @@ public class CancelamentoDeTransacoesController {
     }
 
     public void cancelarTransacaoPorMerchantOrderId() {
-        String merchantOrderId = UsuarioManager.getMerchantOrderId();
+        String merchantOrderId = CartaoDeCreditoManager.getMerchantOrderId();
         LogFormatter.logStep("Iniciando cancelamento por MerchantOrderId");
         response = given()
                 .contentType(ContentType.JSON)
@@ -46,8 +46,8 @@ public class CancelamentoDeTransacoesController {
 
 
     public void cancelarTransacaoParcialPorPaymentId() {
-        String paymentId = UsuarioManager.getPaymentId();
-        String amount = UsuarioManager.getAmount();
+        String paymentId = CartaoDeCreditoManager.getPaymentId();
+        String amount = CartaoDeCreditoManager.getAmount();
         LogFormatter.logStep("Iniciando cancelamento parcial por PaymentId");
         response = given()
                 .contentType(ContentType.JSON)

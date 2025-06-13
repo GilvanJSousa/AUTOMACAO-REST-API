@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UsuarioManager {
+public class CartaoDeCreditoManager {
 
     private static final ThreadLocal<String> paymentId = new ThreadLocal<>();
     private static final ThreadLocal<String> amount = new ThreadLocal<>();
@@ -27,7 +27,6 @@ public class UsuarioManager {
     public static String getRecurrentPaymentId() {
         return recurrentPaymentId.get();
     }
-
 
     public static void setPaymentId(String id) {
         paymentId.set(id);

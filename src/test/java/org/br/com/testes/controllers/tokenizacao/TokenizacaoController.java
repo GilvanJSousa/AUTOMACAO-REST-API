@@ -3,9 +3,7 @@ package org.br.com.testes.controllers.tokenizacao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import lombok.Getter;
 import org.br.com.testes.manager.TokenizacaoManager;
-import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.tokenizacao.PagamentoRequest;
 import org.br.com.testes.model.tokenizacao.TokenizacaoRequest;
 

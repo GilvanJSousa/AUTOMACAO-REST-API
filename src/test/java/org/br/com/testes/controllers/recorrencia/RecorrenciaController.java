@@ -3,12 +3,11 @@ package org.br.com.testes.controllers.recorrencia;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.model.recorrencia.RecorrenciaRequest;
 import org.br.com.testes.model.recorrencia.RecorrenciaRequest.*;
 import org.br.com.testes.model.recorrencia.AlterarDadosCompradorRequest;
 import org.br.com.testes.model.recorrencia.AlterarDadosCompradorRequest.Address;
-import org.br.com.testes.utils.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,15 +70,15 @@ public class RecorrenciaController {
                 .log().all(true)
                 .post(ENDPOINT_RECURRENT);
 
-        UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
-        UsuarioManager.setAmount(response.jsonPath().getString("Payment.Amount"));
-        UsuarioManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));
-        UsuarioManager.setRecurrentPaymentId(response.jsonPath().getString("Payment.RecurrentPayment.RecurrentPaymentId"));
+        CartaoDeCreditoManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
+        CartaoDeCreditoManager.setAmount(response.jsonPath().getString("Payment.Amount"));
+        CartaoDeCreditoManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));
+        CartaoDeCreditoManager.setRecurrentPaymentId(response.jsonPath().getString("Payment.RecurrentPayment.RecurrentPaymentId"));
 
-        System.out.println("PaymentId: " + UsuarioManager.getPaymentId());
-        System.out.println("Amount: " + UsuarioManager.getAmount());
-        System.out.println("MerchantOrderId: " + UsuarioManager.getMerchantOrderId());
-        System.out.println("RecurrentPaymentId: " + UsuarioManager.getRecurrentPaymentId());
+        System.out.println("PaymentId: " + CartaoDeCreditoManager.getPaymentId());
+        System.out.println("Amount: " + CartaoDeCreditoManager.getAmount());
+        System.out.println("MerchantOrderId: " + CartaoDeCreditoManager.getMerchantOrderId());
+        System.out.println("RecurrentPaymentId: " + CartaoDeCreditoManager.getRecurrentPaymentId());
     }
 
     public void validarRecorrencia() {
@@ -95,7 +94,7 @@ public class RecorrenciaController {
     }
 
     public void consultarRecorrencia() {
-        String recurrentPaymentId = UsuarioManager.getRecurrentPaymentId();
+        String recurrentPaymentId = CartaoDeCreditoManager.getRecurrentPaymentId();
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -140,7 +139,7 @@ public class RecorrenciaController {
     }
 
     public void alterarDadosComprador() {
-        String recurrentPaymentId = UsuarioManager.getRecurrentPaymentId();
+        String recurrentPaymentId = CartaoDeCreditoManager.getRecurrentPaymentId();
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -156,7 +155,7 @@ public class RecorrenciaController {
     }
 
     public void alterarIntervalo() {
-        String recurrentPaymentId = UsuarioManager.getRecurrentPaymentId();
+        String recurrentPaymentId = CartaoDeCreditoManager.getRecurrentPaymentId();
         response = given()
                 .contentType(ContentType.TEXT)
                 .header("MerchantId", MERCHANT_ID)

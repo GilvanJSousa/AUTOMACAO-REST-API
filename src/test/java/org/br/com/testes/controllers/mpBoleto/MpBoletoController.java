@@ -3,9 +3,8 @@ package org.br.com.testes.controllers.mpBoleto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.model.mpBoleto.MpBoletoRequest;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,10 +68,10 @@ public class MpBoletoController {
                 .post(ENDPOINT_SALES);
 
         // Armazenando o PaymentId após a requisição
-        UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
-        UsuarioManager.setAmount(response.jsonPath().getString("Payment.Amount"));
-        System.out.println("Payment ID: " + UsuarioManager.getPaymentId());
-        System.out.println("Payment Amount: " + UsuarioManager.getAmount());
+        CartaoDeCreditoManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
+        CartaoDeCreditoManager.setAmount(response.jsonPath().getString("Payment.Amount"));
+        System.out.println("Payment ID: " + CartaoDeCreditoManager.getPaymentId());
+        System.out.println("Payment Amount: " + CartaoDeCreditoManager.getAmount());
     }
 
     public void validarPagamentoProcessadoComSucesso() {

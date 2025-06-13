@@ -5,7 +5,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import org.br.com.testes.controllers.consultaCapturaCancelamento.ConsultaTransacaoController;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +19,14 @@ public class ConsultaDeTransacoesSteps {
 
     @Given("que eu tenho um PaymentId válido")
     public void queEuTenhoUmPaymentIdValido() {
-        logger.info("Verificando PaymentId válido: {}", UsuarioManager.getPaymentId());
+        logger.info("Verificando PaymentId válido: {}", CartaoDeCreditoManager.getPaymentId());
         // O PaymentId será obtido da transação anterior (CT-1001, CT-1002 ou CT-1003)
-        // Não é necessário setar manualmente, pois o UsuarioManager já terá o valor
+        // Não é necessário setar manualmente, pois o CartaoDeCreditoManager já terá o valor
     }
 
     @When("eu envio a requisição de consulta")
     public void euEnvioARequisicaoDeConsulta() {
-        logger.info("Enviando requisição de consulta para o PaymentId: {}", UsuarioManager.getPaymentId());
+        logger.info("Enviando requisição de consulta para o PaymentId: {}", CartaoDeCreditoManager.getPaymentId());
         consultaTransacaoController.consultarTransacao();
     }
 
@@ -44,15 +44,15 @@ public class ConsultaDeTransacoesSteps {
 
     @Given("que eu tenho um PaymentId válido e um valor parcial")
     public void queEuTenhoUmPaymentIdVálidoEUmValorParcial() {
-        logger.info("Verificando PaymentId válido para consulta parcial: {}", UsuarioManager.getPaymentId());
+        logger.info("Verificando PaymentId válido para consulta parcial: {}", CartaoDeCreditoManager.getPaymentId());
         // O PaymentId será obtido da transação anterior
-        // O valor parcial será obtido do UsuarioManager
-        logger.info("Valor parcial para consulta: {}", UsuarioManager.getAmount());
+        // O valor parcial será obtido do CartaoDeCreditoManager
+        logger.info("Valor parcial para consulta: {}", CartaoDeCreditoManager.getAmount());
     }
 
     @When("eu envio a requisição de consulta parcial")
     public void euEnvioARequisiçãoDeConsultaParcial() {
-        logger.info("Enviando requisição de consulta parcial para o PaymentId: {}", UsuarioManager.getPaymentId());
+        logger.info("Enviando requisição de consulta parcial para o PaymentId: {}", CartaoDeCreditoManager.getPaymentId());
         consultaTransacaoController.consultarTransacao();
     }
 

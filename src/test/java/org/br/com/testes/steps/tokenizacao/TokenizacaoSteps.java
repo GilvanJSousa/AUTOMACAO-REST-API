@@ -5,17 +5,17 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import org.br.com.testes.controllers.tokenizacao.TokenizacaoController;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.manager.TokenizacaoManager;
-import org.br.com.testes.manager.UsuarioManager;
 import org.junit.jupiter.api.Assertions;
 
 public class TokenizacaoSteps {
     private final TokenizacaoController tokenizacaoController;
-    private final UsuarioManager usuarioManager;
+    private final CartaoDeCreditoManager cartaoDeCreditoManager;
 
     public TokenizacaoSteps() {
         this.tokenizacaoController = new TokenizacaoController();
-        this.usuarioManager = new UsuarioManager();
+        this.cartaoDeCreditoManager = new CartaoDeCreditoManager();
     }
 
     @Given("que tenho os dados do cartao de credito")

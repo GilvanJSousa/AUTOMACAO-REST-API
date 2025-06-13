@@ -3,7 +3,7 @@ package org.br.com.testes.controllers.mpCartao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.model.mpCartao.*;
 
 import static io.restassured.RestAssured.*;
@@ -130,13 +130,13 @@ public class MpCartaoDeCreditoController {
                 .when()
                 .post(ENDPOINT_SALES);
 
-        UsuarioManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
-        UsuarioManager.setAmount(response.jsonPath().getString("Payment.Amount"));
-        UsuarioManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));
+        CartaoDeCreditoManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
+        CartaoDeCreditoManager.setAmount(response.jsonPath().getString("Payment.Amount"));
+        CartaoDeCreditoManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));
 
-        System.out.println("Payment ID: " + UsuarioManager.getPaymentId());
-        System.out.println("Amount: " + UsuarioManager.getAmount());
-        System.out.println("Merchant Order ID: " + UsuarioManager.getMerchantOrderId());
+        System.out.println("Payment ID: " + CartaoDeCreditoManager.getPaymentId());
+        System.out.println("Amount: " + CartaoDeCreditoManager.getAmount());
+        System.out.println("Merchant Order ID: " + CartaoDeCreditoManager.getMerchantOrderId());
     }
 
     public void validarPagamentoSimples() {
@@ -167,7 +167,6 @@ public class MpCartaoDeCreditoController {
 
     public void validarStatusCode(int statusCode) {
         response.then()
-                .log().all(true)
                 .statusCode(statusCode);
     }
 }

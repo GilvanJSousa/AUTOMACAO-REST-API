@@ -17,18 +17,18 @@ public class MpCartaoDeDebitoSteps {
     }
 
     @Given("que eu tenho um cartão de débito válido")
-    public void queEuTenhoUmCartaoDeDebitoValido() {
+    public void queEuTenhoUmCartaoDeDebitoValido() throws Exception {
         mpCartaoDeDebitoController.prepararRequisicaoCartaoDebito();
 
     }
 
     @Given("que eu tenho um cartão de débito válido para autenticação")
-    public void queEuTenhoUmCartaoDeDebitoValidoParaAutenticacao() {
+    public void queEuTenhoUmCartaoDeDebitoValidoParaAutenticacao() throws Exception {
         mpCartaoDeDebitoController.prepararRequisicaoCartaoDebitoAutenticado();
     }
 
     @Given("que eu tenho um cartão de débito válido com dados completos")
-    public void queEuTenhoUmCartaoDeDebitoValidoComDadosCompletos() {
+    public void queEuTenhoUmCartaoDeDebitoValidoComDadosCompletos() throws Exception {
         mpCartaoDeDebitoController.prepararRequisicaoCartaoDebitoCompleto();
 
     }

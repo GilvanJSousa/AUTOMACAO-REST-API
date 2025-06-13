@@ -2,7 +2,7 @@ package org.br.com.testes.controllers.consultaCapturaCancelamento;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public class ConsultaTransacaoController {
     private Response response;
 
     public void consultarTransacao() {
-        logger.info("Iniciando consulta de transação para PaymentId: {}", UsuarioManager.getPaymentId());
+        logger.info("Iniciando consulta de transação para PaymentId: {}", CartaoDeCreditoManager.getPaymentId());
         response = given()
                 .contentType(ContentType.JSON)
                 .header("MerchantId", MERCHANT_ID)
@@ -26,7 +26,7 @@ public class ConsultaTransacaoController {
                 .log().all(true)
                 .baseUri(BASE_URL)
                 .when()
-                .get(ENDPOINT_SALES + "/" + UsuarioManager.getPaymentId());
+                .get(ENDPOINT_SALES + "/" + CartaoDeCreditoManager.getPaymentId());
         logger.info("Consulta de transação realizada com sucesso");
     }
 
@@ -36,7 +36,7 @@ public class ConsultaTransacaoController {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("Payment.Status", equalTo(1))
-                .body("Payment.Amount", equalTo(Integer.parseInt(UsuarioManager.getAmount())));
+                .body("Payment.Amount", equalTo(Integer.parseInt(CartaoDeCreditoManager.getAmount())));
         logger.info("Validação da consulta realizada com sucesso");
     }
 
@@ -46,7 +46,7 @@ public class ConsultaTransacaoController {
                 .statusCode(200)
                 .contentType(ContentType.JSON)
                 .body("Payment.Status", equalTo(1))
-                .body("Payment.Amount", equalTo(Integer.parseInt(UsuarioManager.getAmount())))
+                .body("Payment.Amount", equalTo(Integer.parseInt(CartaoDeCreditoManager.getAmount())))
                 .body("Payment.IsSplitted", equalTo(true));
         logger.info("Validação da consulta parcial realizada com sucesso");
     }

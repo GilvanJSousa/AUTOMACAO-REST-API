@@ -2,7 +2,7 @@ package org.br.com.testes.controllers.capturaDeTransacoes;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.utils.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class CapturaDeTransacoesController {
     private Response response;
 
     public void capturarTransacaoPorPaymentId() {
-        String paymentId = UsuarioManager.getPaymentId();
+        String paymentId = CartaoDeCreditoManager.getPaymentId();
         LogFormatter.logStep("Iniciando captura por PaymentId: " + paymentId);
         
         response = given()
@@ -32,8 +32,8 @@ public class CapturaDeTransacoesController {
     }
 
     public void capturarTransacaoParcialPorPaymentId() {
-        String paymentId = UsuarioManager.getPaymentId();
-        String amount = UsuarioManager.getAmount();
+        String paymentId = CartaoDeCreditoManager.getPaymentId();
+        String amount = CartaoDeCreditoManager.getAmount();
         LogFormatter.logStep("Iniciando captura parcial por PaymentId");
         response = given()
                 .contentType(ContentType.JSON)
