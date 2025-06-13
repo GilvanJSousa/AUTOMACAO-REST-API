@@ -3,6 +3,7 @@ package org.br.com.testes.controllers.mpBoleto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.br.com.testes.manager.BoletoManager;
 import org.br.com.testes.manager.CartaoDeCreditoManager;
 import org.br.com.testes.model.mpBoleto.MpBoletoRequest;
 import org.slf4j.Logger;
@@ -67,11 +68,14 @@ public class MpBoletoController {
                 .when()
                 .post(ENDPOINT_SALES);
 
-        // Armazenando o PaymentId após a requisição
+        BoletoManager.setBarCodeNumber(response.jsonPath().getString("Payment.BarCodeNumber"));
+        BoletoManager.setDigitableLine(response.jsonPath().getString("Payment.DigitableLine"));
         CartaoDeCreditoManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
         CartaoDeCreditoManager.setAmount(response.jsonPath().getString("Payment.Amount"));
-        System.out.println("Payment ID: " + CartaoDeCreditoManager.getPaymentId());
+        System.out.println("Bar Code Number: " + BoletoManager.getBarCodeNumber());
+        System.out.println("Digitable Line: " + BoletoManager.getDigitableLine());
         System.out.println("Payment Amount: " + CartaoDeCreditoManager.getAmount());
+        System.out.println("Payment ID: " + CartaoDeCreditoManager.getPaymentId());
     }
 
     public void validarPagamentoProcessadoComSucesso() {
