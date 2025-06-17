@@ -2,16 +2,13 @@ package org.br.com.testes.steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import org.br.com.testes.controllers.usuarios.UsuarioController;
-import org.br.com.testes.utils.FakerApiData;
+
 
 public class UsuarioSteps {
 
     private final UsuarioController usuarioController;
-    String nome = FakerApiData.getName();
-    String email = FakerApiData.getEmail();
-    String password = FakerApiData.getPassword();
+
 
     public UsuarioSteps(){
         this.usuarioController = new UsuarioController();
@@ -19,25 +16,16 @@ public class UsuarioSteps {
 
     @Given("que cadastro um usuario valido para os testes")
     public void queCadastroUmUsuarioValidoParaOsTestes() {
-        usuarioController.cadastrarNovoUsuario(
-                nome,
-                email,
-                password,
-                "true"
-        );
+        usuarioController.cadastrarNovoUsuario();
     }
 
     @Given("envio a solicitação de cadastro na loja")
     public void envioASolicitacaoDeCompraNaLoja() {
-        usuarioController.cadastrarNovoUsuario(
-                nome,
-                email,
-                password,
-                "true");
+        usuarioController.cadastrarNovoUsuario();
     }
 
     @Given("envio a solicitação de GET com id")
-    public void envioASolicitaçãoDeGETComId() {
+    public void envioASolicitaoDeGETComId() {
         usuarioController.consultarUsuarioPorId();
     }
 

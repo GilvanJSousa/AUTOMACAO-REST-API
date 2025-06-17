@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
-        tags = "@FuncionalideUsuario",
+        tags = "@CT-1001",
         monochrome = false,
         dryRun = false,
         plugin = {
@@ -17,7 +17,7 @@ import org.junit.runner.RunWith;
                 "html:target/cucumber-reports/cucumber.html",
                 "json:target/cucumber-reports/cucumber.json"
         },
-        publish = true,
+        publish = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         stepNotifications = false
 )

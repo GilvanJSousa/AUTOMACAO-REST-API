@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static org.br.com.testes.utils.FakerApiData.gerarUsuarioFake;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,12 +30,12 @@ public class UsuarioController {
     }
 
     // CADASTRAR USUARIOS
-    public void cadastrarNovoUsuario(String nome, String email, String password, String administrador) {
+    public void cadastrarNovoUsuario() {
         UsuarioResquest usuarioRequest = UsuarioResquest.builder()
-                .nome(nome)
-                .email(email)
-                .password(password)
-                .administrador(administrador)
+                .nome(gerarUsuarioFake().getNome())
+                .email(gerarUsuarioFake().getEmail())
+                .password(gerarUsuarioFake().getSenha())
+                .administrador(gerarUsuarioFake().getAdministrador())
                 .build();
 
         response = given()
