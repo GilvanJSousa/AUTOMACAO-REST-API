@@ -4,19 +4,18 @@ Este projeto contém testes automatizados para a API da Cielo E-commerce, utiliz
 
 ## 🚀 Tecnologias Utilizadas
 
-- Java 11
-- Maven
-- RestAssured
+- Java 21
 - Cucumber
-- Lombok
 - JUnit
-- Jackson
+- RestAssured
+- Lombok
+- Maven
 
 ## 📋 Pré-requisitos
 
-- JDK 11 ou superior
+- Java JDK 21
 - Maven
-- IDE (recomendado: IntelliJ IDEA)
+- Node.js (para rodar o Serverest localmente)
 - Credenciais de Sandbox da Cielo (MerchantId e MerchantKey)
 
 ## 🔧 Configuração do Ambiente
