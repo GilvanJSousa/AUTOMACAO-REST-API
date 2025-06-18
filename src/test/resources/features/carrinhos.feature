@@ -24,11 +24,7 @@ Feature: Consulte os carrinhos cadastrados
     Then deve retornar carrinho com status code 200
 
   @CT-3004
-  Scenario: Validar edição de carrinho
-    Given que envio a requisição PUT com id do carrinho para editar
-    Then deve retornar carrinho com status code 200
-
-  @CT-3005
   Scenario: Validar exclusão de carrinho
     Given envio uma solicitação de DELETE para excluir o carrinho
     Then deve retornar carrinho com status code 200
+

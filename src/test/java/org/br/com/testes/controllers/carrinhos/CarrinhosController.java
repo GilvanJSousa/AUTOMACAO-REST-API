@@ -108,6 +108,21 @@ public class CarrinhosController {
                 .extract().response();
     }
 
+    public void concluirCompra() {
+        String token = TokenManager.getToken();
+        response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", token)
+                .baseUri(BASE_URL)
+                .when()
+                .delete(ENDPOINT_CARRINHOS + "/concluir-compra")
+                .then()
+                .extract().response();
+
+        System.out.println("Compra concluída com sucesso.");
+        remove();
+    }
+
     public void editarCarrinho() {
         String token = TokenManager.getToken();
         String idCarrinho = getId();
@@ -149,21 +164,6 @@ public class CarrinhosController {
                 .extract().response();
 
         System.out.println("Carrinho atualizado com sucesso. ID: " + idCarrinho);
-    }
-
-    public void concluirCompra() {
-        String token = TokenManager.getToken();
-        response = given()
-                .contentType(ContentType.JSON)
-                .header("Authorization", token)
-                .baseUri(BASE_URL)
-                .when()
-                .delete(ENDPOINT_CARRINHOS + "/concluir-compra")
-                .then()
-                .extract().response();
-
-        System.out.println("Compra concluída com sucesso.");
-        remove();
     }
 
     public void validarStatusCodeEMensagem(int statusCode, String mensagem) {
