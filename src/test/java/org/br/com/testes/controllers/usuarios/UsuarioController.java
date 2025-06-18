@@ -169,6 +169,14 @@ public class UsuarioController {
         assertTrue("O email já está cadastrado.", response.jsonPath().getString("message").contains("Este email já está sendo usado"));
     }
 
-
+    public void validarStatusCodeEMensagem(int statusCode, String mensagem) {
+        this.response.then()
+                .statusCode(statusCode)
+                .extract().response();
+        
+        String mensagemResposta = response.jsonPath().getString("message");
+        assertTrue("A mensagem da resposta não contém o texto esperado. Resposta: " + mensagemResposta, 
+                mensagemResposta.toLowerCase().contains(mensagem.toLowerCase()));
+    }
 
 }

@@ -43,6 +43,6 @@ Feature: Validar funcionalidades de usuario
   Scenario: Validar cadastro com email ja utilizado
     Given que cadastro um usuario valido para os testes
     And envio a solicitação de cadastro de usuario com email ja cadastrado
-    Then valido a resposta da API retornar o status code 400 e mensagem 'Este email já esta sendo usado'
+    Then valido a resposta da API retornar o status code 400 e mensagem 'Este email já está sendo usado'
 
 
