@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
         tags = "@FuncionalidadesCarrinhos",
-        monochrome = false,
+        monochrome = true,
         dryRun = false,
         plugin = {
                 "pretty",
