@@ -36,6 +36,11 @@ public class CarrinhosSteps {
         carrinhosController.concluirCompra();
     }
 
+    @Given("envio uma solicitação de DELETE para cancelar a compra")
+    public void envioUmaSolicitacaoDeDeleteParaCancelarACompra() {
+        carrinhosController.cancelarCompra();
+    }
+
     @Then("deve retornar carrinho com status code {int} e mensagem {string}")
     public void deveRetornarCarrinhoComStatusCodeEMensagem(int statusCode, String mensagem) {
         carrinhosController.validarStatusCodeEMensagem(statusCode, mensagem);

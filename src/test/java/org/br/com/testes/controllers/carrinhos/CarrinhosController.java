@@ -123,6 +123,21 @@ public class CarrinhosController {
         remove();
     }
 
+    public void cancelarCompra() {
+        String token = TokenManager.getToken();
+        response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", token)
+                .baseUri(BASE_URL)
+                .when()
+                .delete(ENDPOINT_CARRINHOS + "/cancelar-compra")
+                .then()
+                .extract().response();
+
+        System.out.println("Compra cancelada com sucesso e estoque reabastecido.");
+        remove();
+    }
+
     public void editarCarrinho() {
         String token = TokenManager.getToken();
         String idCarrinho = getId();

@@ -28,3 +28,9 @@ Feature: Consulte os carrinhos cadastrados
     Given envio uma solicitação de DELETE para excluir o carrinho
     Then deve retornar carrinho com status code 200
 
+  @CT-3005
+  Scenario: Validar cancelamento de compra e reabastecimento de estoque
+    Given que cadastro um carrinho válido para os testes
+    And envio uma solicitação de DELETE para cancelar a compra
+    Then deve retornar carrinho com status code 200 e mensagem "Registro excluído com sucesso. Estoque dos produtos reabastecido"
+
