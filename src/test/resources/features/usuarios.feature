@@ -6,13 +6,13 @@ Feature: Validar funcionalidades de usuario
   @CT-1001
   Scenario: Cadastrar usuário válido para os testes
     Given que cadastro um usuario valido para os testes
-    Then deve retornar usuario com status code 200
+    Then deve retornar usuario com status code 201 e mensagem 'Cadastro realizado com sucesso'
 
 
   @CT-1002
   Scenario: Reallizar login com usuario cadastrado
     Given envio a requisição de login com usuario cadastrado
-    Then deve retornar usuario com status code 200
+    Then deve retornar usuario com status code 200 e mesagem 'Login realizado com sucesso'
 
 # Alteração de usuario
   @CT-1003

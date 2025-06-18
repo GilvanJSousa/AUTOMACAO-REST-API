@@ -69,4 +69,14 @@ public class UsuarioSteps {
     public void validoARespostaDaAPIRetornarOStatusCodeEMensagemEsteEmailJáEstaSendoUsado(int statusCode, String mensagem) {
         usuarioController.validarStatusCodeEMensagem(statusCode, mensagem);
     }
+
+    @Then("deve retornar usuario com status code {int} e mesagem {string}")
+    public void deveRetornarUsuarioComStatusCodeEMesagemLoginRealizadoComSucesso(int statusCode, String mensagem) {
+        usuarioController.validarStatusCodeEMensagem(statusCode, mensagem);
+    }
+
+    @Then("deve retornar usuario com status code {int} e mensagem {string}")
+    public void deveRetornarUsuarioComStatusCodeEMensagemCadastroRealizadoComSucesso(int statusCode, String mensagem) {
+        usuarioController.validarStatusCodeEMensagem(statusCode, mensagem);
+    }
 }
