@@ -4,6 +4,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.ProdutosManager;
 import org.br.com.testes.manager.TokenManager;
+import org.br.com.testes.model.produtos.ListaProdutosResponse;
+import org.br.com.testes.model.produtos.ProdutosResponse;
 import org.br.com.testes.model.produtos.ProdutosResquest;
 import org.br.com.testes.utils.FakerApiData;
 
@@ -43,8 +45,10 @@ public class ProdutosController {
                 .then()
                 .extract().response();
 
-        String id = setId(response.jsonPath().getString("_id"));
-        System.out.println("Produto cadastrado com sucesso. ID: " + id);
+        this.produtoResponse = response.as(ProdutosResponse.class);
+        String idProduto = setId(this.produtoResponse.getId());
+        // Atualize a mensagem de log para incluir a mensagem da resposta, se disponível:
+        System.out.println("Produto cadastrado com sucesso. ID: " + idProduto + (this.produtoResponse.getMessage() != null ? ", Mensagem: " + this.produtoResponse.getMessage() : ""));
     }
 
     public void buscarProdutoPorId() {
@@ -59,6 +63,10 @@ public class ProdutosController {
                 .get(ENDPOINT_PRODUTOS + "/" + idProduto)
                 .then()
                 .extract().response();
+
+        this.produtoResponse = response.as(ProdutosResponse.class);
+        // Opcional: Adicione um log para verificar se o produto foi carregado
+        // System.out.println("Produto buscado: " + this.produtoResponse.getNome());
     }
 
     public void listarProdutos() {
@@ -71,6 +79,12 @@ public class ProdutosController {
                 .get(ENDPOINT_PRODUTOS)
                 .then()
                 .extract().response();
+
+        this.listaProdutosResponse = response.as(ListaProdutosResponse.class);
+        // Opcional: Adicione um log para verificar
+        // if (this.listaProdutosResponse != null && this.listaProdutosResponse.getProdutos() != null) {
+        //     System.out.println("Produtos listados: " + this.listaProdutosResponse.getProdutos().size());
+        // }
     }
 
     public void editarProduto() {
@@ -94,7 +108,9 @@ public class ProdutosController {
                 .then()
                 .extract().response();
 
-        System.out.println("Produto atualizado com sucesso. ID: " + idProduto);
+        this.produtoResponse = response.as(ProdutosResponse.class);
+        // Atualize a mensagem de log:
+        System.out.println("Produto atualizado com sucesso. ID: " + getId() + (this.produtoResponse.getMessage() != null ? ", Mensagem: " + this.produtoResponse.getMessage() : ""));
     }
 
     public void excluirProduto() {
@@ -110,7 +126,9 @@ public class ProdutosController {
                 .then()
                 .extract().response();
 
-        System.out.println("Produto com ID " + idProduto + " excluído com sucesso.");
+        this.produtoResponse = response.as(ProdutosResponse.class);
+        // Atualize a mensagem de log:
+        System.out.println("Produto com ID " + getId() + " excluído com sucesso." + (this.produtoResponse.getMessage() != null ? " Mensagem: " + this.produtoResponse.getMessage() : ""));
         remove();
     }
 

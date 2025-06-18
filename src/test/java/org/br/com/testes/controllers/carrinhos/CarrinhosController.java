@@ -4,6 +4,8 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.model.carrinhos.CarrinhosRequest;
+import org.br.com.testes.model.carrinhos.CarrinhosResponse;
+import org.br.com.testes.model.carrinhos.ListaCarrinhosResponse;
 import org.br.com.testes.model.produtos.ProdutosResquest;
 import org.br.com.testes.utils.FakerApiData;
 
@@ -78,8 +80,9 @@ public class CarrinhosController {
         // Log da resposta para debug
         System.out.println("Resposta do cadastro: " + response.getBody().asString());
 
-        String id = setId(response.jsonPath().getString("_id"));
-        System.out.println("Carrinho cadastrado com sucesso. ID: " + id);
+        this.carrinhoResponse = response.as(CarrinhosResponse.class);
+        String idCarrinho = setId(this.carrinhoResponse.getId());
+        System.out.println("Carrinho cadastrado com sucesso. ID: " + idCarrinho + (this.carrinhoResponse.getMessage() != null ? ", Mensagem: " + this.carrinhoResponse.getMessage() : ""));
     }
 
     public void buscarCarrinhoPorId() {
@@ -94,6 +97,8 @@ public class CarrinhosController {
                 .get(ENDPOINT_CARRINHOS + "/" + idCarrinho)
                 .then()
                 .extract().response();
+
+        this.carrinhoResponse = response.as(CarrinhosResponse.class);
     }
 
     public void listarCarrinhos() {
@@ -106,6 +111,8 @@ public class CarrinhosController {
                 .get(ENDPOINT_CARRINHOS)
                 .then()
                 .extract().response();
+
+        this.listaCarrinhosResponse = response.as(ListaCarrinhosResponse.class);
     }
 
     public void concluirCompra() {
@@ -119,7 +126,8 @@ public class CarrinhosController {
                 .then()
                 .extract().response();
 
-        System.out.println("Compra concluída com sucesso.");
+        this.carrinhoResponse = response.as(CarrinhosResponse.class);
+        System.out.println("Compra concluída com sucesso." + (this.carrinhoResponse.getMessage() != null ? " Mensagem: " + this.carrinhoResponse.getMessage() : ""));
         remove();
     }
 
@@ -134,7 +142,8 @@ public class CarrinhosController {
                 .then()
                 .extract().response();
 
-        System.out.println("Compra cancelada com sucesso e estoque reabastecido.");
+        this.carrinhoResponse = response.as(CarrinhosResponse.class);
+        System.out.println("Compra cancelada com sucesso e estoque reabastecido." + (this.carrinhoResponse.getMessage() != null ? " Mensagem: " + this.carrinhoResponse.getMessage() : ""));
         remove();
     }
 
@@ -178,7 +187,8 @@ public class CarrinhosController {
                 .then()
                 .extract().response();
 
-        System.out.println("Carrinho atualizado com sucesso. ID: " + idCarrinho);
+        this.carrinhoResponse = response.as(CarrinhosResponse.class);
+        System.out.println("Carrinho atualizado com sucesso. ID: " + getId() + (this.carrinhoResponse.getMessage() != null ? ", Mensagem: " + this.carrinhoResponse.getMessage() : ""));
     }
 
     public void validarStatusCodeEMensagem(int statusCode, String mensagem) {
