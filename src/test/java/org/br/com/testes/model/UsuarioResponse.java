@@ -1,6 +1,6 @@
 package org.br.com.testes.model;
 
-public record UsuarioResponse(
-    String message,
-    String _id
-) {} 
+public class UsuarioResponse {
+    private String message;
+    private String _id;
+}

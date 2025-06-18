@@ -21,14 +21,13 @@ public class GerarToken {
 
     public void gerarTokenBearer() {
         System.out.println("Gerando token Bearer");
-        String email = UsuarioManager.getEmailUsuario();
-        String password = UsuarioManager.getSenhaUsuario();
+        String email = UsuarioManager.getEmail();
+        String password = UsuarioManager.setPassword();
 
         GerarTokenResquest gerarTokenResquest = GerarTokenResquest.builder()
                 .email(email)
                 .senha(password)
                 .build();
-
 
         String token =
                 given()

@@ -27,7 +27,7 @@ public class FakerApiData {
         return FakerApiData.builder()
                 .nome(faker.name().fullName())
                 .email(faker.internet().emailAddress())
-                .senha("pwd123")
+                .senha("@password" + faker.number().randomDigit())
                 .administrador("true")
                 .build();
     }

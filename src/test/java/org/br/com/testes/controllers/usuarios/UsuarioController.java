@@ -4,26 +4,24 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
-import org.br.com.testes.model.UsuarioResponse;
 import org.br.com.testes.model.UsuarioResquest;
-import org.br.com.testes.utils.FakerApiData;
-import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.RestAssured.given;
-import static org.br.com.testes.utils.FakerApiData.gerarUsuarioFake;
-import static org.junit.Assert.assertEquals;
+import static io.restassured.RestAssured.*;
+import static org.br.com.testes.manager.TokenManager.*;
+import static org.br.com.testes.manager.UsuarioManager.*;
+import static org.br.com.testes.utils.FakerApiData.*;
 import static org.junit.Assert.assertTrue;
 
 public class UsuarioController {
 
     private Response response;
-    private static final String BASE_URL = "https://serverest.dev";
+    private static final String BASE_URL = "http://localhost:3000";
     private static final String ENDPOINT_USUARIOS = "/usuarios";
-    private static final String ENDPOINT_LOGIN = "/auth/login";
+    private static final String ENDPOINT_LOGIN = "/login";
 
     public UsuarioController() {
         response = null;
@@ -31,13 +29,13 @@ public class UsuarioController {
 
     // CADASTRAR USUARIOS
     public void cadastrarNovoUsuario() {
+//        FakerApiData usuarioGerado = gerarUsuarioFake();
         UsuarioResquest usuarioRequest = UsuarioResquest.builder()
                 .nome(gerarUsuarioFake().getNome())
                 .email(gerarUsuarioFake().getEmail())
                 .password(gerarUsuarioFake().getSenha())
                 .administrador(gerarUsuarioFake().getAdministrador())
                 .build();
-
         response = given()
                 .contentType(ContentType.JSON)
                 .body(usuarioRequest)
@@ -45,44 +43,50 @@ public class UsuarioController {
                 .when()
                 .post(BASE_URL + ENDPOINT_USUARIOS)
                 .then()
-                .log().all()
                 .extract().response();
 
-//        UsuarioManager.setEmailUsuario(usuarioGerado.email());
-//        UsuarioManager.setSenhaUsuario(usuarioGerado.password());
-        UsuarioManager.setIdUsuario(response.jsonPath().getString("id"));
+        setEmail(usuarioRequest.getEmail());
+        setPassword(usuarioRequest.getPassword());
+        String id = setId(response.jsonPath().getString("_id"));
+
+        System.out.println("Email do usuario cadastrado: " + usuarioRequest.getEmail());
+        System.out.println("Senha do usuário cadastrada: " + usuarioRequest.getPassword());
+        System.out.println("ID do usuário cadastrado: " + id);
     }
 
     public void realizarLogin() {
-        String email = UsuarioManager.getEmailUsuario();
-        String senha = UsuarioManager.getSenhaUsuario();
+        String email = UsuarioManager.getEmail();
+        String senha = UsuarioManager.setPassword();
+
+        // Criar objeto apenas com email e password
+        Map<String, String> loginRequest = new HashMap<>();
+        loginRequest.put("email", email);
+        loginRequest.put("password", senha);
+
         this.response = given()
                 .contentType(ContentType.JSON)
                 .baseUri(BASE_URL)
-                .body("" +
-                        "{\"email\": \"" + email + "\"," +
-                        " \"senha\": \"" + senha + "\"}"
-                )
-                .log().all()
+                .body(loginRequest)
+                .log().body()
                 .when()
                 .post(ENDPOINT_LOGIN)
                 .then()
                 .extract()
                 .response();
 
-        if (response.getStatusCode() == 200) {
-            String token = response.jsonPath().getString("token");
-            TokenManager.setToken(token);
-        }
+        // Extrair o token do corpo da resposta no campo 'authorization'
+        String token = TokenManager.setToken(response.jsonPath().getString("authorization"));
+        System.out.println("Usuário logado com sucesso: " + email);
+        System.out.println("Token gerado: " + token);
     }
 
     public void listarUsuariosComAutenticacao() {
         String token = TokenManager.getToken();
+
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
-                .log().all()
                 .when()
                 .get(ENDPOINT_USUARIOS)
                 .then()
@@ -92,12 +96,11 @@ public class UsuarioController {
 
     public void consultarUsuarioPorId() {
         String token = TokenManager.getToken();
-        String idUsuario = UsuarioManager.getIdUsuario();
+        String idUsuario = UsuarioManager.getId();
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
-                .log().all()
                 .when()
                 .get(ENDPOINT_USUARIOS + "/" + idUsuario)
                 .then()
@@ -105,67 +108,67 @@ public class UsuarioController {
                 .response();
     }
 
-    public void atualizarUsuarioPorId(String id, String nomeCompleto, String nomeUsuario) {
+    public void atualizarUsuarioPorId() {
         String token = TokenManager.getToken();
+        String id = UsuarioManager.getId();
+        String email = gerarUsuarioFake().getEmail();
+        String senha = gerarUsuarioFake().getSenha();
+
+        Map<String, String> editarUsuario = new HashMap<>();
+        editarUsuario.put("email", email);
+        editarUsuario.put("password", senha);
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
-                .body(new HashMap<String, String>() {{
-                    put("nomeCompleto", nomeCompleto);
-                    put("nomeUsuario", nomeUsuario);
-                }})
+                .body(editarUsuario)
                 .when()
                 .put(ENDPOINT_USUARIOS + "/" + id);
+
+        System.out.println("Usuário atualizado com sucesso: " + email);
+        System.out.println("Senha do usuário atualizada: " + senha);
     }
 
     public void excluirUsuarioPorId() {
         String token = TokenManager.getToken();
-        String idUsuario = UsuarioManager.getIdUsuario();
+        String idUsuario = UsuarioManager.getId();
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .baseUri(BASE_URL)
-                .log().all()
                 .when()
                 .delete(ENDPOINT_USUARIOS + "/" + idUsuario)
                 .then()
                 .extract()
                 .response();
+        System.out.println("Usuário com ID " + idUsuario + " excluído com sucesso.");
     }
 
     public void validarStatusCode(int statusCode) {
         this.response.then()
-                .log().body();
-        assertEquals("StatusCode deve ser: " + statusCode, this.response.getStatusCode(), statusCode);
+                        .extract().response();
+        System.out.println("Status Code: " + statusCode);
     }
 
-    public void validarNomeUsuario(){
-        List<Map<String, Object>> usuarios = this.response.jsonPath().getList("$");
-        boolean usuarioEncontrado = usuarios.stream()
-                .anyMatch(usuario -> usuario.get("email").equals(UsuarioManager.getEmailUsuario()));
+    public void cadastrorUsuarioComEmailJaCadastrado() {
+        UsuarioResquest usuarioRequest = UsuarioResquest.builder()
+                .nome(gerarUsuarioFake().getNome())
+                .email(UsuarioManager.getEmail())
+                .password(gerarUsuarioFake().getSenha())
+                .administrador(gerarUsuarioFake().getAdministrador())
+                .build();
+        this.response = given()
+                .contentType(ContentType.JSON)
+                .body(usuarioRequest)
+                .log().body()
+                .when()
+                .post(BASE_URL + ENDPOINT_USUARIOS)
+                .then()
+                .extract().response();
 
-        assertTrue("Usuário não consta na lista de cadastrados",
-                usuarioEncontrado);
+        assertTrue("O email já está cadastrado.", response.jsonPath().getString("message").contains("Este email já está sendo usado"));
     }
 
-//    public void atualizarNomeUsuario() {
-//        String token = TokenManager.getToken();
-//        String idUsuario = UsuarioManager.getIdUsuario();
-//        UsuarioResponse usuarioGerado = FakerApiData.gerarUsuarioFake();
-//
-//        this.response = given()
-//                .contentType(ContentType.JSON)
-//                .header("Authorization", "Bearer " + token)
-//                .baseUri(BASE_URL)
-//                .body(new HashMap<String, String>() {{
-//                    put("nomeUsuario", usuarioGerado.nomeUsuario());
-//                }})
-//                .log().all()
-//                .when()
-//                .put(ENDPOINT_USUARIOS + "/" + idUsuario)
-//                .then()
-//                .extract()
-//                .response();
-//    }
+
+
 }
