@@ -1,8 +1,10 @@
 @FuncionalideUsuario
 Feature: Validar funcionalidades de usuario
+    Como um usuário do sistema
+    Eu quero cadastrar, editar, listar e excluir usuários
+    Para que eu possa gerenciar os usuários do sistema
 
 
- Cadastrar usuario
   @CT-1001
   Scenario: Cadastrar usuário válido para os testes
     Given que cadastro um usuario valido para os testes

@@ -4,7 +4,6 @@ import com.github.javafaker.Faker;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.apachecommons.CommonsLog;
-import org.br.com.testes.model.UsuarioResponse;
 
 import java.util.Locale;
 
@@ -19,6 +18,10 @@ public class FakerApiData {
     private String senha;
     private String administrador;
 
+    private Integer preco;
+    private String descricao;
+    private Integer quantidade;
+
     /**
      * Gera um usuário com dados aleatórios
      * @return FakerApiData com dados fictícios
@@ -29,6 +32,15 @@ public class FakerApiData {
                 .email(faker.internet().emailAddress())
                 .senha("@password" + faker.number().randomDigit())
                 .administrador("true")
+                .build();
+    }
+
+    public static FakerApiData gerarProdutoFake() {
+        return FakerApiData.builder()
+                .nome(faker.commerce().productName())
+                .preco(faker.number().numberBetween(1, 1000))
+                .descricao(faker.commerce().department())
+                .quantidade(faker.number().numberBetween(1, 1000))
                 .build();
     }
 }

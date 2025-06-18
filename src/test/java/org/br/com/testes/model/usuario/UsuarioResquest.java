@@ -1,4 +1,4 @@
-package org.br.com.testes.model;
+package org.br.com.testes.model.usuario;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

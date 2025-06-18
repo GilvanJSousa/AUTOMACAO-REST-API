@@ -4,14 +4,12 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
-import org.br.com.testes.model.UsuarioResquest;
+import org.br.com.testes.model.usuario.UsuarioResquest;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
-import static org.br.com.testes.manager.TokenManager.*;
 import static org.br.com.testes.manager.UsuarioManager.*;
 import static org.br.com.testes.utils.FakerApiData.*;
 import static org.junit.Assert.assertTrue;
@@ -36,10 +34,10 @@ public class UsuarioController {
                 .password(gerarUsuarioFake().getSenha())
                 .administrador(gerarUsuarioFake().getAdministrador())
                 .build();
+
         response = given()
                 .contentType(ContentType.JSON)
                 .body(usuarioRequest)
-                .log().body()
                 .when()
                 .post(BASE_URL + ENDPOINT_USUARIOS)
                 .then()
@@ -97,6 +95,7 @@ public class UsuarioController {
     public void consultarUsuarioPorId() {
         String token = TokenManager.getToken();
         String idUsuario = UsuarioManager.getId();
+
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
@@ -117,6 +116,7 @@ public class UsuarioController {
         Map<String, String> editarUsuario = new HashMap<>();
         editarUsuario.put("email", email);
         editarUsuario.put("password", senha);
+
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
@@ -132,6 +132,7 @@ public class UsuarioController {
     public void excluirUsuarioPorId() {
         String token = TokenManager.getToken();
         String idUsuario = UsuarioManager.getId();
+
         this.response = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
@@ -141,6 +142,7 @@ public class UsuarioController {
                 .then()
                 .extract()
                 .response();
+
         System.out.println("Usuário com ID " + idUsuario + " excluído com sucesso.");
     }
 
@@ -157,6 +159,7 @@ public class UsuarioController {
                 .password(gerarUsuarioFake().getSenha())
                 .administrador(gerarUsuarioFake().getAdministrador())
                 .build();
+
         this.response = given()
                 .contentType(ContentType.JSON)
                 .body(usuarioRequest)
