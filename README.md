@@ -1,122 +1,160 @@
-# Automação de Testes API REST
+# Automação de Testes API REST - Serverest
 
-![](.gitbucket/images/banner.png)
+Este projeto contém testes automatizados para a API Serverest, uma API REST para simulação de um e-commerce. A API está disponível em http://localhost:3000/ e oferece endpoints para gerenciamento de usuários, produtos e carrinhos de compras.
 
-# O Projeto
-Este projeto de automação de testes tem como objetivo validar a funcionalidade de APIs REST, reduzindo o esforço manual e ganhando velocidade a cada ciclo de testes.
+## 🚀 Tecnologias Utilizadas
 
-# Sumário
+- Java 8+
+- Cucumber
+- JUnit
+- RestAssured
+- Lombok
+- Maven
 
-- [1- Configurando o Ambiente](#1--configurando-o-ambiente)
-- [2- Clonando o Projeto](#2--clonando-o-projeto)
-- [3- Estrutura do Projeto](#3--estrutura-do-projeto)
-- [4- Tecnologias Utilizadas](#4--tecnologias-utilizadas)
-- [5- Executando os Testes](#5--executando-os-testes)
+## 📋 Pré-requisitos
 
----
+- Java JDK 8 ou superior
+- Maven
+- Node.js (para rodar o Serverest localmente)
 
-<h1><a name="1--configurando-o-ambiente"></a>1- Configurando o Ambiente</h1>
+## 🔧 Instalação
 
-Para executar este projeto, você precisará do seguinte:
-
-### 1.1- Java Development Kit (JDK)
-- Recomendamos o Java 8 ou superior
-- **Instalação:** Faça o download no [site oficial da Oracle](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html)
-- **Configuração:**
-    - Defina a variável de ambiente `JAVA_HOME` para o diretório de instalação do JDK
-    - Adicione `%JAVA_HOME%\bin` (Windows) ou `$JAVA_HOME/bin` (Linux/macOS) à sua variável de ambiente `PATH`
-
-### 1.2- Maven
-- Utilizado para gerenciamento de dependências e build do projeto
-- **Instalação:** Faça o download no [site oficial do Maven](https://maven.apache.org/download.cgi)
-- **Configuração:**
-    - Defina a variável de ambiente `MAVEN_HOME` para o diretório de instalação do Maven
-    - Adicione `%MAVEN_HOME%\bin` (Windows) ou `$MAVEN_HOME/bin` (Linux/macOS) à sua variável de ambiente `PATH`
-
-### 1.3- IntelliJ IDEA
-- Recomendamos o [IntelliJ IDEA Community Edition](https://www.jetbrains.com/pt-br/idea/download)
-- **Instalação:** Baixe e instale a partir do site oficial
-
-### 1.4- Git
-- Para controle de versão
-- **Instalação:** Faça o download no [site oficial do Git](https://git-scm.com/downloads)
-
----
-
-<h1><a name="2--clonando-o-projeto"></a>2- Clonando o Projeto</h1>
-
-1. Abra seu terminal ou Git Bash
-2. Navegue até o diretório onde deseja clonar o projeto
-3. Execute o comando:
-    ```bash
-    git clone <URL_DO_SEU_REPOSITORIO>
-    ```
-
----
-
-<h1><a name="3--estrutura-do-projeto"></a>3- Estrutura do Projeto</h1>
-
-A estrutura de arquivos está organizada da seguinte maneira:
-
-```
-src/
-└── test/
-    ├── java/
-    │   └── org/
-    │       └── br/
-    │           └── com/
-    │               └── testes/
-    │                   ├── controllers/    # Controladores para gerenciar requisições HTTP
-    │                   │   └── usuarios/   # Controladores específicos de usuários
-    │                   ├── manager/        # Gerenciadores de recursos e configurações
-    │                   ├── model/          # Classes de modelo de dados
-    │                   ├── steps/          # Passos de teste e definições
-    │                   ├── utils/          # Utilitários e helpers
-    │                   └── tokens/         # Gerenciamento de tokens e autenticação
-    └── resources/
-        └── features/    # Arquivos de feature do Cucumber
+1. Clone o repositório:
+```bash
+git clone https://github.com/seu-usuario/automacao-rest-api.git
+cd automacao-rest-api
 ```
 
-### Descrição dos Diretórios
+2. Instale as dependências do Maven:
+```bash
+mvn clean install
+```
 
-#### src/test/java
-- **controllers/**: Contém as classes responsáveis por gerenciar as requisições HTTP e interações com a API
-- **manager/**: Classes para gerenciamento de recursos, configurações e estados do teste
-- **model/**: Classes que representam os modelos de dados utilizados nos testes
-- **steps/**: Implementações dos passos de teste usando Cucumber
-- **utils/**: Classes utilitárias e helpers para suporte aos testes
-- **tokens/**: Gerenciamento de tokens de autenticação e autorização
+3. Instale e inicie o Serverest:
+```bash
+npm install -g serverest@latest
+serverest
+```
 
-#### src/test/resources
-- **features/**: Arquivos de feature do Cucumber que descrevem os cenários de teste
+## 🏃‍♂️ Executando os Testes
 
----
+### Executar todos os testes
+```bash
+mvn test
+```
 
-<h1><a name="4--tecnologias-utilizadas"></a>4- Tecnologias Utilizadas</h1>
+### Executar testes específicos por tag
+```bash
+mvn test -Dcucumber.filter.tags="@FuncionalideUsuario"
+mvn test -Dcucumber.filter.tags="@FuncionalideProdutos"
+mvn test -Dcucumber.filter.tags="@FuncionalidadesCarrinhos"
+```
 
-- Java: Linguagem de programação principal
-- JUnit 5: Framework para escrita e execução de testes
-- REST Assured: Biblioteca para testes de API REST
-- Maven: Ferramenta de automação de build e gerenciamento de dependências
-- Cucumber: Framework para testes BDD (Behavior Driven Development)
-- Lombok: Redução de código boilerplate
-- Faker: Geração de dados fake para testes
+## 📝 Estrutura do Projeto
 
----
+```
+src/test/
+├── java/org/br/com/testes/
+│   ├── controllers/         # Controladores para cada entidade
+│   │   ├── usuarios/       # Controlador de usuários
+│   │   ├── produtos/       # Controlador de produtos
+│   │   └── carrinhos/      # Controlador de carrinhos
+│   ├── manager/            # Gerenciadores de estado
+│   │   ├── TokenManager    # Gerenciamento de tokens
+│   │   ├── UsuarioManager  # Gerenciamento de usuários
+│   │   ├── ProdutosManager # Gerenciamento de produtos
+│   │   └── CarrinhosManager # Gerenciamento de carrinhos
+│   ├── model/              # Modelos de dados
+│   │   ├── usuario/        # Modelos de usuário
+│   │   ├── produtos/       # Modelos de produto
+│   │   └── carrinhos/      # Modelos de carrinho
+│   ├── steps/              # Implementações dos steps do Cucumber
+│   └── utils/              # Utilitários (FakerApiData, etc)
+└── resources/
+    └── features/           # Arquivos .feature do Cucumber
+        ├── usuarios.feature
+        ├── produtos.feature
+        └── carrinhos.feature
+```
 
-<h1><a name="5--executando-os-testes"></a>5- Executando os Testes</h1>
+## 🔍 Funcionalidades Testadas
 
-Para executar os testes:
+### Usuários (@FuncionalideUsuario)
+- Cadastro de usuário (CT-1001)
+- Login (CT-1002)
+- Busca por ID (CT-1003)
+- Listagem (CT-1004)
+- Edição (CT-1005)
+- Exclusão (CT-1006)
+- Validação de email duplicado (CT-1007)
 
-1. Abra o terminal na raiz do projeto
-2. Execute o comando Maven:
-    ```bash
-    mvn clean test
-    ```
+### Produtos (@FuncionalideProdutos)
+- Cadastro de produto (CT-2001)
+- Busca por ID (CT-2002)
+- Listagem (CT-2003)
+- Edição (CT-2004)
+- Exclusão (CT-2005)
 
-Você também pode executar os testes diretamente pela sua IDE (IntelliJ, Eclipse, etc.). Geralmente, clicando com o botão direito no arquivo de teste ou na classe e selecionando "Run Test".
+### Carrinhos (@FuncionalidadesCarrinhos)
+- Cadastro de carrinho (CT-3001)
+- Busca por ID (CT-3002)
+- Listagem (CT-3003)
+- Exclusão (CT-3004)
+- Cancelamento de compra e reabastecimento de estoque (CT-3005)
 
----
+## 📊 Relatórios
 
-**Próximos Passos:**
-À medida que o projeto evoluir, este README será atualizado com mais detalhes sobre a arquitetura, novos tipos de teste e configurações adicionais.
+Os relatórios dos testes são gerados em:
+- HTML: `target/cucumber-reports/cucumber.html`
+- JSON: `target/cucumber-reports/cucumber.json`
+
+## 🔗 Documentação da API
+
+A API Serverest está disponível em:
+- Local: http://localhost:3000
+- Online: https://serverest.dev
+
+### Endpoints Principais
+
+#### Usuários
+- POST /usuarios - Cadastrar usuário
+- POST /login - Login
+- GET /usuarios - Listar usuários
+- GET /usuarios/{id} - Buscar usuário
+- PUT /usuarios/{id} - Editar usuário
+- DELETE /usuarios/{id} - Excluir usuário
+
+#### Produtos
+- POST /produtos - Cadastrar produto
+- GET /produtos - Listar produtos
+- GET /produtos/{id} - Buscar produto
+- PUT /produtos/{id} - Editar produto
+- DELETE /produtos/{id} - Excluir produto
+
+#### Carrinhos
+- POST /carrinhos - Cadastrar carrinho
+- GET /carrinhos - Listar carrinhos
+- GET /carrinhos/{id} - Buscar carrinho
+- PUT /carrinhos/{id} - Editar carrinho
+- DELETE /carrinhos/concluir-compra - Concluir compra
+- DELETE /carrinhos/cancelar-compra - Cancelar compra
+
+## 🔐 Autenticação
+
+A API utiliza autenticação via token Bearer. O token é obtido através do endpoint de login e deve ser incluído no header `Authorization` de todas as requisições que necessitam de autenticação.
+
+Exemplo de uso do token:
+```java
+given()
+    .header("Authorization", "Bearer " + token)
+    .contentType(ContentType.JSON)
+    .when()
+    .get("/endpoint")
+```
+
+## 📦 Dados de Teste
+
+O projeto utiliza a biblioteca Faker para gerar dados aleatórios para os testes:
+- Usuários: nome, email, senha
+- Produtos: nome, preço, descrição, quantidade
+- Carrinhos: produtos e quantidades
