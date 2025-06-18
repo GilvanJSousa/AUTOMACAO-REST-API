@@ -1,4 +1,4 @@
-@FuncionalidadesCarrinhos
+@All @FuncionalidadesCarrinhos
 Feature: Consulte os carrinhos cadastrados
     Como um usuário do sistema
     Eu quero consultar os carrinhos cadastrados
