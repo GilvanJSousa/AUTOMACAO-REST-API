@@ -1,6 +1,6 @@
 # Automação de Testes API REST - Serverest
 
-Este projeto contém testes automatizados para a API Serverest, uma API REST para simulação de um e-commerce. A API está disponível em http://localhost:3000/ e oferece endpoints para gerenciamento de usuários, produtos e carrinhos de compras.
+Este projeto contém testes automatizados para a API Serverest, uma API REST para simulação de um e-commerce. A API está disponível em http://localhost:3000/ e oferece endpoints para gerenciamento de usuários, produtos e carrinhos de compras. 
 
 ## 🚀 Tecnologias Utilizadas
 
