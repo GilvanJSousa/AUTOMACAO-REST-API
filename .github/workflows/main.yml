@@ -2,10 +2,12 @@ name: Java CI with Maven and ServeRest
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - 'feat/**' # Trigger for branches starting with feat/
   pull_request:
-    branches: [ main ]
-  workflow_dispatch: # Allows manual triggering
+    branches: [ main ] # Keep PR trigger for main branch
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   build-and-test:
