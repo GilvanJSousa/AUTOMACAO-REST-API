@@ -1,4 +1,4 @@
-@all @FuncionalideProdutos
+@All @FuncionalideProdutos
 Feature: Consulte produtos cadastrados
     Como um usuário do sistema
     Eu quero consultar produtos cadastrados

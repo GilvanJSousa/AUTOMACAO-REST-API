@@ -1,4 +1,4 @@
-@all @FuncionalideUsuario
+@All @FuncionalideUsuario
 Feature: Validar funcionalidades de usuario
     Como um usuário do sistema
     Eu quero cadastrar, editar, listar e excluir usuários
