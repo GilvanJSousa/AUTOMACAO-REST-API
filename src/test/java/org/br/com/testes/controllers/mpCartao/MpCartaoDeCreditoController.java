@@ -130,6 +130,8 @@ public class MpCartaoDeCreditoController {
                 .when()
                 .post(ENDPOINT_SALES);
 
+        System.out.println("Resposta da API: " + response.getBody().asString());
+
         CartaoDeCreditoManager.setPaymentId(response.jsonPath().getString("Payment.PaymentId"));
         CartaoDeCreditoManager.setAmount(response.jsonPath().getString("Payment.Amount"));
         CartaoDeCreditoManager.setMerchantOrderId(response.jsonPath().getString("MerchantOrderId"));
