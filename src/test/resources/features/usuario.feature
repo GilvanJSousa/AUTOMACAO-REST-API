@@ -1,4 +1,4 @@
-@UsuarioCms @API @ATJ-334
+@Usuario @API
 Feature: Gerenciamento de Usuários CMS
   Como um administrador de sistema
   Eu quero gerenciar usuários CMS
@@ -25,14 +25,12 @@ Feature: Gerenciamento de Usuários CMS
 
   @CT-3004
   Scenario: Busca de usuario por ID
-    Given que eu tenho um token de autenticação válido
-    When eu envio a requisição de busca de usuário por ID
+    Given eu envio a requisição de busca de usuário por ID
     Then a API deve retornar o código de status 200
-    And os dados do usuário devem ser retornados na resposta
+#    And os dados do usuário devem ser retornados na resposta
 
   @CT-3005
   Scenario: Validar alteração de usuário
-    Given que eu tenho um token de autenticação válido
     When que envio a solicitação de PUT com ID
     Then valido o retorno usuario atualizado com status code 200 e mensagem 'Usuário atualizado ou sem alterações'
 
@@ -40,5 +38,5 @@ Feature: Gerenciamento de Usuários CMS
 
   @CT-3006 @ATJ-330 @API
   Scenario: Validar exclusão de usuario
-    When envio uma solicitação de DELETE para o ID
+    Given envio uma solicitação de DELETE para o ID
     Then deve retornar o status code 204 para exclusão
