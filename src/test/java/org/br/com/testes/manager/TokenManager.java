@@ -3,11 +3,17 @@ package org.br.com.testes.manager;
 import lombok.Getter;
 
 public class TokenManager {
-    @Getter
-	private static String token;
+	private static final ThreadLocal<String> token = new ThreadLocal<>();
 
-	public static void setToken(String token) {
-        TokenManager.token = token;
+	public static String getToken() {
+        return token.get();
     }
 
+	public static void setToken(String tk) {
+        token.set(tk);
+    }
+
+	public static void remove() {
+        token.remove();
+    }
 }

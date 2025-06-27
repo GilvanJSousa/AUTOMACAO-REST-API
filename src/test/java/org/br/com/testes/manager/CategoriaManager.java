@@ -8,9 +8,8 @@ public class CategoriaManager {
 		return categoriaId.get();
 	}
 
-	public static String setCategoriaId(String id) {
+	public static void setCategoriaId(String id) {
 		categoriaId.set(id);
-		return id;
 	}
 
 	public static void remove() {

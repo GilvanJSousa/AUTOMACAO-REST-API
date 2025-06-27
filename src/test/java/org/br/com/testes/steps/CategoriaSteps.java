@@ -15,12 +15,11 @@ public class CategoriaSteps {
 
 	@Given("que envio uma requisição de cadastro de categoria")
 	public void queEnvioUmaRequisicaoDeCadastroDeArtigo() throws Exception {
-		categoriaController.prepararRequisicaoCategoria();
 		categoriaController.cadastrarNovaCategoria();
 	}
 
 	@Then("a API Categoria deve retornar o código de status {int}")
-	public void aAPIDeveRetornarOCodigoDeStatus(int statusCode) throws InterruptedException {
+	public void aAPIDeveRetornarOCodigoDeStatus(int statusCode) {
 		categoriaController.validarStatusCodeCategoria(statusCode);
 	}
 

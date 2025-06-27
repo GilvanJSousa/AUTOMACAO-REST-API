@@ -16,14 +16,14 @@ public class CategoriaController {
 	private static Response response;
 	private static final String BASE_URL = "http://localhost:3000";
 	private static final String ENDPOINT_CATEGORIA = "/categorias";
-	private String requestBody;
 
 	public CategoriaController() {
 		response = null;
 	}
 
-	public void prepararRequisicaoCategoria() throws Exception {
-		// Gera dados únicos para evitar conflitos
+	public void cadastrarNovaCategoria() {
+
+		String token = TokenManager.getToken();
 		Map<String, String> dadosCategoria = JavaFaker.categoriaJavaFake();
 		
 		CategoriaRequest request = CategoriaRequest.builder()
@@ -31,29 +31,23 @@ public class CategoriaController {
 				.descricao(dadosCategoria.get("descricao"))
 				.build();
 
-		requestBody = new ObjectMapper().writeValueAsString(request);
-	}
-
-	public void cadastrarNovaCategoria() {
-		String token = TokenManager.getToken();
-		
 		response = given()
 				.contentType(ContentType.JSON)
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
-				.body(requestBody)
+				.body(request)
 				.when()
 				.post(ENDPOINT_CATEGORIA);
 
-		String categoriaId = CategoriaManager.setCategoriaId(response.jsonPath().getString("id"));
+		String categoriaId = response.jsonPath().getString("id");
+		CategoriaManager.setCategoriaId(categoriaId);
 		System.out.println("Categoria ID: " + categoriaId);
 	}
 
-	public void validarStatusCodeCategoria(int statusCode) throws InterruptedException {
+	public void validarStatusCodeCategoria(int statusCode) {
 		response.then()
 				.statusCode(statusCode);
 		System.out.println("Status Code: " + statusCode);
-		Thread.sleep(5000);
 	}
 
 	public void listarCategorias() {
