@@ -24,18 +24,14 @@ public class CategoriaController {
 	public void cadastrarNovaCategoria() {
 
 		String token = TokenManager.getToken();
-		Map<String, String> dadosCategoria = JavaFaker.categoriaJavaFake();
 		
-		CategoriaRequest request = CategoriaRequest.builder()
-				.nome(dadosCategoria.get("nome"))
-				.descricao(dadosCategoria.get("descricao"))
-				.build();
+		Map<String, String> categoriaRequest = JavaFaker.categoriaJavaFake();
 
 		response = given()
 				.contentType(ContentType.JSON)
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
-				.body(request)
+				.body(categoriaRequest)
 				.when()
 				.post(ENDPOINT_CATEGORIA);
 
