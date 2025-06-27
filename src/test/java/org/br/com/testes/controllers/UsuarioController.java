@@ -6,11 +6,11 @@ import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.UsuarioRequest;
 import org.br.com.testes.utils.FakerApiData;
+import org.br.com.testes.utils.JavaFaker;
 
 
-import static io.restassured.RestAssured.given;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static io.restassured.RestAssured.*;
+import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,7 @@ public class UsuarioController {
 
 
 	public void cadastrarNovoUsuario() {
-		UsuarioRequest usuarioGerado = FakerApiData.gerarUsuarioRequest();
+		UsuarioRequest usuarioGerado = JavaFaker.UsuarioJavaFake();
 		this.response = given()
 				.contentType(ContentType.JSON)
 				.baseUri(BASE_URL)
@@ -91,19 +91,13 @@ public class UsuarioController {
 		String token = TokenManager.getToken();
 		String userId = UsuarioManager.getIdUsuario();
 
-		FakerApiData fakeData = new FakerApiData();
-		String novoNomeCompleto = fakeData.getFullName();
-		String novoNomeUsuario = fakeData.getFirstName();
-
-		Map<String, String> corpoRequisicao = new HashMap<>();
-		corpoRequisicao.put("nomeCompleto", novoNomeCompleto);
-		corpoRequisicao.put("nomeUsuario", novoNomeUsuario);
+		Map<String, String> novosDados = JavaFaker.DadosAtualizacaoJavaFake();
 
 		this.response = given()
 				.contentType(ContentType.JSON)
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
-				.body(corpoRequisicao)
+				.body(novosDados)
 				.log().all()
 				.when()
 				.put(ENDPOINT_USUARIOS + "/" + userId);

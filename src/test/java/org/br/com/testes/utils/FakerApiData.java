@@ -47,7 +47,8 @@ public class FakerApiData {
 		generateFakeData();
 	}
 
-	public static UsuarioRequest gerarUsuarioRequest() {
+
+	public static UsuarioRequest gerarUsuarioRequestSimples() {
 		FakerApiData fakeData = new FakerApiData();
 		return UsuarioRequest.builder()
 				.nomeCompleto(fakeData.getFullName())
