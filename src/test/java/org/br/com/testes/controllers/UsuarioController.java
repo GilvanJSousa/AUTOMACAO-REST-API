@@ -5,14 +5,11 @@ import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.UsuarioRequest;
-import org.br.com.testes.utils.FakerApiData;
 import org.br.com.testes.utils.JavaFaker;
-
 
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +30,6 @@ public class UsuarioController {
 				.contentType(ContentType.JSON)
 				.baseUri(BASE_URL)
 				.body(usuarioGerado)
-				.log().body()
 				.when()
 				.post(ENDPOINT_USUARIOS);
 
@@ -98,7 +94,6 @@ public class UsuarioController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.body(novosDados)
-				.log().all()
 				.when()
 				.put(ENDPOINT_USUARIOS + "/" + userId);
 	}

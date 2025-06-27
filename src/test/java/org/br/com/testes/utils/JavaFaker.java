@@ -64,6 +64,27 @@ public class JavaFaker {
 	}
 
 	/**
+	 * Gera dados de atualizacao contendo apenas nomeUsuario e senha.
+	 * Utiliza o firstName do usuario fornecido para o nomeUsuario.
+	 * Utilizado para requisições de atualizacao parcial de usuario.
+	 *
+	 * @param usuario UsuarioRequest do qual extrair o firstName
+	 * @return Map contendo apenas os campos nomeUsuario e senha para atualizacao
+	 */
+	public static Map<String, String> dadosAtualizacaoJavaFake(UsuarioRequest usuario) {
+		Map<String, String> dadosAtualizacao = new HashMap<>();
+		
+		// Extrai o firstName do nomeCompleto do usuario
+		String fullName = usuario.getNomeCompleto();
+		String[] nameParts = fullName.split(" ");
+		String firstName = nameParts[0];
+		
+		dadosAtualizacao.put("nomeUsuario", firstName);
+		dadosAtualizacao.put("senha", gerarSenhaValida());
+		return dadosAtualizacao;
+	}
+
+	/**
 	 * Gera uma senha válida que atende aos requisitos da API.
 	 * Requisitos: pelo menos 8 caracteres, uma letra maiúscula e um número.
 	 *
@@ -80,5 +101,27 @@ public class JavaFaker {
 				.email(faker.internet().emailAddress())
 				.senha(gerarSenhaValida())
 				.build();
+	}
+
+	/**
+	 * Gera dados únicos para categoria usando JavaFaker.
+	 * Evita conflitos de nome ao gerar nomes aleatórios.
+	 *
+	 * @return Map contendo nome e descricao únicos para categoria
+	 */
+	public static Map<String, String> categoriaJavaFake() {
+		Map<String, String> categoria = new HashMap<>();
+		
+		// Gera nome único baseado em categoria + timestamp
+		String categoriaBase = faker.commerce().department();
+		String nomeUnico = categoriaBase + "_" + System.currentTimeMillis();
+		
+		// Gera descrição baseada no nome da categoria
+		String descricao = "Artigos sobre " + categoriaBase.toLowerCase();
+		
+		categoria.put("nome", nomeUnico);
+		categoria.put("descricao", descricao);
+		
+		return categoria;
 	}
 }
