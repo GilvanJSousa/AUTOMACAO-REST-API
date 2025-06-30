@@ -13,7 +13,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.*;
 
 public class CategoriaController {
-	private static Response response;
+	private Response response;
 	private static final String BASE_URL = "http://localhost:3000";
 	private static final String ENDPOINT_CATEGORIA = "/categorias";
 
@@ -43,7 +43,6 @@ public class CategoriaController {
 	public void validarStatusCodeCategoria(int statusCode) {
 		response.then()
 				.statusCode(statusCode);
-		System.out.println("Status Code: " + statusCode);
 	}
 
 	public void listarCategorias() {
@@ -78,7 +77,7 @@ public class CategoriaController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.body(novaCategoria)
-				.log().body()
+				.log().all()
 				.when()
 				.put(ENDPOINT_CATEGORIA + "/" + categoriaId);
 	}
@@ -87,11 +86,22 @@ public class CategoriaController {
 		String token = TokenManager.getToken();
 		String categoriaId = CategoriaManager.getCategoriaId();
 
+		if (categoriaId == null || categoriaId.isEmpty()) {
+			throw new RuntimeException("ID da categoria não encontrado. Certifique-se de que uma categoria foi criada antes da exclusão.");
+		}
+
+		System.out.println("Tentando excluir categoria com ID: " + categoriaId);
+		System.out.println("Token utilizado: " + token);
+
 		response = given()
-				.contentType(ContentType.JSON)
+				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
+				.log().all()
 				.when()
 				.delete(ENDPOINT_CATEGORIA + "/" + categoriaId);
+		
+		System.out.println("Status Code retornado: " + response.getStatusCode());
+		System.out.println("Response Body: " + response.getBody().asString());
 	}
 }

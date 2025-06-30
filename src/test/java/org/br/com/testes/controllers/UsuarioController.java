@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.UsuarioRequest;
+import org.br.com.testes.utils.FakerApiData;
 import org.br.com.testes.utils.JavaFaker;
 
 import static io.restassured.RestAssured.*;
@@ -23,9 +24,8 @@ public class UsuarioController {
 		response = null;
 	}
 
-
 	public void cadastrarNovoUsuario() {
-		UsuarioRequest usuarioGerado = JavaFaker.UsuarioJavaFake();
+		UsuarioRequest usuarioGerado = FakerApiData.gerarUsuarioRequestSimples();
 		this.response = given()
 				.contentType(ContentType.JSON)
 				.baseUri(BASE_URL)
@@ -60,7 +60,6 @@ public class UsuarioController {
 		UsuarioManager.setIdUsuario(response.jsonPath().getString("user.id"));
 		System.out.println("ID do usuário: " + UsuarioManager.getIdUsuario());
 	}
-
 
 	public void listarUsuariosComAutenticacao() {
 		String token = TokenManager.getToken();

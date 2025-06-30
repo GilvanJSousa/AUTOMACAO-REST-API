@@ -42,4 +42,9 @@ public class CategoriaSteps {
 	public void euEnvioARequisicaoDeDELETEParaOID() {
 		categoriaController.excluirCategoriaPorId();
 	}
+
+	@Then("a API categoria deve retornar o status code {int} para exclusão")
+	public void aApiCategoriaDeveRetornarOStatusCodeParaExclusao(int statusCode) {
+		categoriaController.validarStatusCodeCategoria(statusCode);
+	}
 }

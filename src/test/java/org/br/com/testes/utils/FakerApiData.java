@@ -14,9 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 public class FakerApiData {
@@ -47,6 +45,36 @@ public class FakerApiData {
 		generateFakeData();
 	}
 
+	public static UsuarioRequest UsuarioJavaFake() {
+		FakerApiData fakeData = new FakerApiData();
+		String  fullName = fakeData.getFullName();
+		String[] nameParts = fullName.split(" ");
+
+		String firstName = nameParts[0];
+		String lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : firstName;
+
+		String email = gerarEmailPersonalizado(firstName, lastName);
+
+		return UsuarioRequest.builder()
+				.nomeCompleto(fullName)
+				.nomeUsuario(firstName)
+				.email(email)
+				.senha(fakeData.getPassword())
+				.build();
+	}
+
+	/**
+	 * Gera um email personalizado usando firstName e lastName.
+	 * Formato: firstName.lastName@exemplo.com
+	 *
+	 * @param firstName Primeiro nome
+	 * @param lastName Sobrenome
+	 * @return Email personalizado
+	 */
+	private static String gerarEmailPersonalizado(String firstName, String lastName) {
+		String emailBase = firstName.toLowerCase() + "." + lastName.toLowerCase();
+		return emailBase + "@exemplo.com";
+	}
 
 	public static UsuarioRequest gerarUsuarioRequestSimples() {
 		FakerApiData fakeData = new FakerApiData();
@@ -56,6 +84,48 @@ public class FakerApiData {
 				.email(fakeData.getEmailAddress())
 				.senha(fakeData.getPassword())
 				.build();
+	}
+
+	/**
+	 * Gera dados de atualizacao contendo apenas nomeUsuario e senha.
+	 * Utilizado para requisições de atualizacao parcial de usuario.
+	 * 
+	 * @deprecated Use JavaFaker.DadosAtualizacaoJavaFake() instead
+	 * @return Map contendo apenas os campos nomeUsuario e senha para atualizacao
+	 */
+	@Deprecated
+	public static Map<String, String> DadosAtualizacaoJavaFake() {
+		FakerApiData fakeData = new FakerApiData();
+		Map<String, String> dadosAtualizacao = new HashMap<>();
+		dadosAtualizacao.put("nomeUsuario", fakeData.getFirstName());
+		dadosAtualizacao.put("senha", gerarSenhaValida());
+		return dadosAtualizacao;
+	}
+
+	/**
+	 * Gera uma senha válida que atende aos requisitos da API.
+	 * Requisitos: pelo menos 8 caracteres, uma letra maiúscula e um número.
+	 *
+	 * @return uma senha válida
+	 */
+	private static String gerarSenhaValida() {
+		FakerApiData fakeData = new FakerApiData();
+		String senhaBase = fakeData.getPassword();
+		
+		// Garante que a senha tenha pelo menos 8 caracteres
+		if (senhaBase.length() < 6) {
+			senhaBase = senhaBase + "123456";
+		}
+		
+		// Adiciona letra maiúscula e número se não existirem
+		if (!senhaBase.matches(".*[A-Z].*")) {
+			senhaBase = senhaBase + "A";
+		}
+		if (!senhaBase.matches(".*\\d.*")) {
+			senhaBase = senhaBase + "1";
+		}
+		
+		return senhaBase;
 	}
 
 	private void generateFakeData() {
