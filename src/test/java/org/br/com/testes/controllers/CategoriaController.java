@@ -37,6 +37,7 @@ public class CategoriaController {
 
 		String categoriaId = response.jsonPath().getString("id");
 		CategoriaManager.setCategoriaId(categoriaId);
+		System.out.println("Categoria ID: " + categoriaId);
 	}
 
 	public void validarStatusCodeCategoria(int statusCode) {

@@ -52,6 +52,7 @@ public class ArtigosController {
 		if (response.getStatusCode() == 201) {
 			String artigoId = response.jsonPath().getString("id");
 			ArtigosManager.setArtigoId(artigoId);
+			System.out.println("Artigo ID: " + artigoId);
 		}
 		
 		ArtigosManager.setResponse(response);
@@ -185,6 +186,7 @@ public class ArtigosController {
 			String nomeCategoria = categoriaRequest.get("nome");
 			ArtigosManager.setCategoriaId(categoriaId);
 			ArtigosManager.setNomeCategoria(nomeCategoria);
+			System.out.println("Categoria ID: " + categoriaId);
 		}
 	}
 
@@ -200,5 +202,6 @@ public class ArtigosController {
 		
 		ArtigosManager.setAutorId(userId);
 		ArtigosManager.setNomeAutor(nomeAutor);
+		System.out.println("Autor ID: " + userId);
 	}
 }

@@ -41,6 +41,7 @@ public class UsuarioController {
 		UsuarioManager.setNomeCompletoUsuario(usuarioGerado.getNomeCompleto());
 		UsuarioManager.setNomeUsuario(usuarioGerado.getNomeUsuario());
 		UsuarioManager.setIdUsuario(userId);
+		System.out.println("Usuario ID: " + userId);
 	}
 
 	public void realizarLogin() {
