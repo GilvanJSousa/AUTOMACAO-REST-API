@@ -17,13 +17,8 @@ public class ArtigosSteps {
 
 	@Given("que envio uma requisição de cadastro de Artigos")
 	public void queEnvioUmaRequisicaoDeCadastroDeArtigos() throws Exception {
-		// Cadastrar o artigo (categoria e autor já foram criados no Background)
-		artigosController.cadastrarArtigo();
-	}
-
-	@Given("que envio uma requisição de cadastro de Artigos adicional")
-	public void queEnvioUmaRequisicaoDeCadastroDeArtigosAdicional() {
 		LogFormatter.logStep("Enviando requisição de cadastro de artigo");
+		// Cadastrar o artigo (categoria e autor já foram criados no Background)
 		artigosController.cadastrarArtigo();
 	}
 

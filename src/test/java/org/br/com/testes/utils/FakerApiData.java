@@ -71,10 +71,16 @@ public class FakerApiData {
 
 	public static UsuarioRequest gerarUsuarioRequestSimples() {
 		FakerApiData fakeData = new FakerApiData();
+		
+		// Gerar dados únicos para evitar conflitos
+		String timestamp = String.valueOf(System.currentTimeMillis());
+		String emailUnico = "usuario_" + timestamp + "@email.com";
+		String nomeUsuarioUnico = "Usuario_" + timestamp;
+		
 		return UsuarioRequest.builder()
-				.nomeCompleto("Usuario")
-				.nomeUsuario("Usuario")
-				.email("usuario@email.com")
+				.nomeCompleto("Usuario Teste")
+				.nomeUsuario(nomeUsuarioUnico)
+				.email(emailUnico)
 				.senha(fakeData.getPassword())
 				.build();
 	}

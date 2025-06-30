@@ -12,8 +12,8 @@ public class CategoriaManager {
 		categoriaId.set(id);
 	}
 
-//	public static void remove() {
-//		categoriaId.remove();
-//	}
+	public static void remove() {
+		categoriaId.remove();
+	}
 
 }

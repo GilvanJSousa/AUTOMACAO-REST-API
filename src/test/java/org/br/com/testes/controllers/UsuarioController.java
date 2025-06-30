@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
+import org.br.com.testes.model.LoginRequest;
 import org.br.com.testes.model.UsuarioRequest;
 import org.br.com.testes.utils.FakerApiData;
 import org.br.com.testes.utils.JavaFaker;
@@ -26,45 +27,54 @@ public class UsuarioController {
 
 	public void cadastrarNovoUsuario() {
 		UsuarioRequest usuarioGerado = FakerApiData.gerarUsuarioRequestSimples();
+		
 		this.response = given()
 				.contentType(ContentType.JSON)
 				.baseUri(BASE_URL)
 				.body(usuarioGerado)
+				.log().all()
 				.when()
 				.post(ENDPOINT_USUARIOS);
 
+
+		String userId = response.jsonPath().getString("id");
 		UsuarioManager.setEmailUsuario(usuarioGerado.getEmail());
 		UsuarioManager.setSenhaUsuario(usuarioGerado.getSenha());
 		UsuarioManager.setNomeCompletoUsuario(usuarioGerado.getNomeCompleto());
 		UsuarioManager.setNomeUsuario(usuarioGerado.getNomeUsuario());
-		UsuarioManager.setIdUsuario(response.jsonPath().getString("id"));
+		UsuarioManager.setIdUsuario(userId);
 
 	}
 
 	public void realizarLogin() {
 		String email = UsuarioManager.getEmailUsuario();
 		String senha = UsuarioManager.getSenhaUsuario();
-		UsuarioRequest usuarioRequest = UsuarioRequest.builder()
+		
+		System.out.println("=== DADOS DE LOGIN ===");
+		System.out.println("Email: " + email);
+		System.out.println("Senha: " + senha);
+		
+		LoginRequest loginRequest = LoginRequest.builder()
 				.email(email)
 				.senha(senha)
 				.build();
 
+		System.out.println("=== REQUISIÇÃO DE LOGIN ===");
 		this.response = given()
 				.contentType(ContentType.JSON)
 				.baseUri(BASE_URL)
-				.body(usuarioRequest)
+				.body(loginRequest)
+				.log().all()
 				.when()
 				.post(ENDPOINT_LOGIN);
 
+
 		String token = response.jsonPath().getString("token");
 		String userId = response.jsonPath().getString("user.id");
-		
+		System.out.println("Token encontrado: " + token);
+		System.out.println("User ID encontrado: " + userId);
 		TokenManager.setToken(token);
 		TokenManager.setUserId(userId);
-		
-		System.out.println("Token: " + TokenManager.getToken());
-		System.out.println("ID do usuário: " + userId);
-		
 		UsuarioManager.setIdUsuario(userId);
 	}
 
