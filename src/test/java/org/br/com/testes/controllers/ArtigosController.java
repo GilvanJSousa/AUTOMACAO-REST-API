@@ -17,34 +17,6 @@ public class ArtigosController {
 	public ArtigosController() {
 	}
 
-	public void testarConectividadeAPI() {
-		System.out.println("Testando conectividade básica com a API...");
-		
-		Response testResponse = given()
-				.baseUri(BASE_URL)
-				.when()
-				.get("/");
-		
-		System.out.println("GET / - Status Code: " + testResponse.getStatusCode());
-		System.out.println("GET / - Response: " + testResponse.getBody().asString());
-	}
-
-	public void testarEndpointArtigos() {
-		String token = TokenManager.getToken();
-		
-		System.out.println("Testando se o endpoint /artigos existe...");
-		
-		Response testResponse = given()
-				.header("accept", "application/json")
-				.header("Authorization", "Bearer " + token)
-				.baseUri(BASE_URL)
-				.when()
-				.get(ENDPOINT_ARTIGOS);
-		
-		System.out.println("GET /artigos - Status Code: " + testResponse.getStatusCode());
-		System.out.println("GET /artigos - Response: " + testResponse.getBody().asString());
-	}
-
 	public void cadastrarArtigo() {
 		String token = TokenManager.getToken();
 		String userId = TokenManager.getUserId();

@@ -15,10 +15,6 @@ public class ArtigosSteps {
 
 	@Given("que envio uma requisição de cadastro de Artigos")
 	public void queEnvioUmaRequisicaoDeCadastroDeArtigos() throws Exception {
-		// Primeiro testa a conectividade básica
-		artigosController.testarConectividadeAPI();
-		// Depois testa se o endpoint existe
-		artigosController.testarEndpointArtigos();
 		// Cria a categoria antes do artigo
 		artigosController.criarCategoriaAntesDoArtigo();
 		// Cria o autor antes do artigo
