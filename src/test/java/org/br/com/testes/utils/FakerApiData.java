@@ -47,18 +47,11 @@ public class FakerApiData {
 
 	public static UsuarioRequest UsuarioJavaFake() {
 		FakerApiData fakeData = new FakerApiData();
-		String  fullName = fakeData.getFullName();
-		String[] nameParts = fullName.split(" ");
-
-		String firstName = nameParts[0];
-		String lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : firstName;
-
-		String email = gerarEmailPersonalizado(firstName, lastName);
-
+		
 		return UsuarioRequest.builder()
-				.nomeCompleto(fullName)
-				.nomeUsuario(firstName)
-				.email(email)
+				.nomeCompleto("Usuario")
+				.nomeUsuario("Usuario")
+				.email("usuario@email.com")
 				.senha(fakeData.getPassword())
 				.build();
 	}
@@ -79,9 +72,9 @@ public class FakerApiData {
 	public static UsuarioRequest gerarUsuarioRequestSimples() {
 		FakerApiData fakeData = new FakerApiData();
 		return UsuarioRequest.builder()
-				.nomeCompleto(fakeData.getFullName())
-				.nomeUsuario(fakeData.getFirstName())
-				.email(fakeData.getEmailAddress())
+				.nomeCompleto("Usuario")
+				.nomeUsuario("Usuario")
+				.email("usuario@email.com")
 				.senha(fakeData.getPassword())
 				.build();
 	}

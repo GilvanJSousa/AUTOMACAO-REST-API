@@ -8,6 +8,10 @@ public class UsuarioManager {
 
 	private static ThreadLocal<String> idUsuario = new ThreadLocal<String>();
 
+	private static ThreadLocal<String> nomeCompletoUsuario = new ThreadLocal<String>();
+
+	private static ThreadLocal<String> nomeUsuario = new ThreadLocal<String>();
+
 	public static String getEmailUsuario(){
 		return emailUsuario.get();
 	}
@@ -32,10 +36,28 @@ public class UsuarioManager {
 		idUsuario.set(tk);
 	}
 
+	public static String getNomeCompletoUsuario(){
+		return nomeCompletoUsuario.get();
+	}
+
+	public static void setNomeCompletoUsuario(String nome){
+		nomeCompletoUsuario.set(nome);
+	}
+
+	public static String getNomeUsuario(){
+		return nomeUsuario.get();
+	}
+
+	public static void setNomeUsuario(String nome){
+		nomeUsuario.set(nome);
+	}
+
 	public static void remove(){
 		emailUsuario.remove();
 		senhaUsuario.remove();
 		idUsuario.remove();
+		nomeCompletoUsuario.remove();
+		nomeUsuario.remove();
 	}
 
 }

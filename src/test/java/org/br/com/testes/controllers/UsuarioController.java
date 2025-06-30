@@ -35,6 +35,8 @@ public class UsuarioController {
 
 		UsuarioManager.setEmailUsuario(usuarioGerado.getEmail());
 		UsuarioManager.setSenhaUsuario(usuarioGerado.getSenha());
+		UsuarioManager.setNomeCompletoUsuario(usuarioGerado.getNomeCompleto());
+		UsuarioManager.setNomeUsuario(usuarioGerado.getNomeUsuario());
 		UsuarioManager.setIdUsuario(response.jsonPath().getString("id"));
 
 	}

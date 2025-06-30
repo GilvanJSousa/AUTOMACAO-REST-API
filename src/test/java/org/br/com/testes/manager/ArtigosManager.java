@@ -11,6 +11,8 @@ public class ArtigosManager {
 	private static final ThreadLocal<String> artigoId = new ThreadLocal<String>();
 	private static final ThreadLocal<String> autorId = new ThreadLocal<String>();
 	private static final ThreadLocal<String> categoriaId = new ThreadLocal<String>();
+	private static final ThreadLocal<String> nomeCategoria = new ThreadLocal<String>();
+	private static final ThreadLocal<String> nomeAutor = new ThreadLocal<String>();
 	private static final ThreadLocal<Response> response = new ThreadLocal<Response>();
 
 	public static String getArtigoId() {
@@ -23,6 +25,14 @@ public class ArtigosManager {
 
 	public static String getCategoriaId() {
 		return categoriaId.get();
+	}
+
+	public static String getNomeCategoria() {
+		return nomeCategoria.get();
+	}
+
+	public static String getNomeAutor() {
+		return nomeAutor.get();
 	}
 
 	public static Response getResponse() {
@@ -41,6 +51,14 @@ public class ArtigosManager {
 		categoriaId.set(id);
 	}
 
+	public static void setNomeCategoria(String nome) {
+		nomeCategoria.set(nome);
+	}
+
+	public static void setNomeAutor(String nome) {
+		nomeAutor.set(nome);
+	}
+
 	public static void setResponse(Response resp) {
 		response.set(resp);
 	}
@@ -49,6 +67,8 @@ public class ArtigosManager {
 		artigoId.remove();
 		autorId.remove();
 		categoriaId.remove();
+		nomeCategoria.remove();
+		nomeAutor.remove();
 		response.remove();
 	}
 }

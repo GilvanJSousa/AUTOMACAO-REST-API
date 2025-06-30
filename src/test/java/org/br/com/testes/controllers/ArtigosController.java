@@ -4,6 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.ArtigosManager;
 import org.br.com.testes.manager.TokenManager;
+import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.utils.JavaFaker;
 
 import java.util.Map;
@@ -19,54 +20,28 @@ public class ArtigosController {
 
 	public void cadastrarArtigo() {
 		String token = TokenManager.getToken();
-		String userId = TokenManager.getUserId();
 		
-		// Buscar o nome do usuário logado
-		System.out.println("Buscando dados do usuário logado...");
-		Response userResponse = given()
-				.contentType(ContentType.JSON)
-				.header("accept", "application/json")
-				.header("Authorization", "Bearer " + token)
-				.baseUri(BASE_URL)
-				.when()
-				.get("/usuarios/" + userId);
+		// Usar dados dos managers que foram criados no Background
+		String nomeCategoria = ArtigosManager.getNomeCategoria();
 		
-		String nomeUsuario = "Usuario"; // fallback
-		if (userResponse.getStatusCode() == 200) {
-			// Usar nomeUsuario como prioridade (funcionou nos testes)
-			nomeUsuario = userResponse.jsonPath().getString("nomeUsuario");
-			if (nomeUsuario == null || nomeUsuario.trim().isEmpty()) {
-				nomeUsuario = "Usuario";
-			}
-			System.out.println("Nome do usuário logado: " + nomeUsuario);
-		} else {
-			System.out.println("Erro ao buscar usuário. Status: " + userResponse.getStatusCode());
+		// Se não houver dados nos managers, usar fallbacks
+		if (nomeCategoria == null || nomeCategoria.isEmpty()) {
+			nomeCategoria = "Tecnologia";
 		}
 		
-		// Buscar o nome da categoria criada
-		String nomeCategoria = "Tecnologia"; // fallback
-		String categoriaId = ArtigosManager.getCategoriaId();
-		if (categoriaId != null && !categoriaId.equals("categoria-existente")) {
-			Response categoriaResponse = given()
-					.contentType(ContentType.JSON)
-					.header("accept", "application/json")
-					.header("Authorization", "Bearer " + token)
-					.baseUri(BASE_URL)
-					.when()
-					.get("/categorias/" + categoriaId);
-			
-			if (categoriaResponse.getStatusCode() == 200) {
-				nomeCategoria = categoriaResponse.jsonPath().getString("nome");
-				System.out.println("Nome da categoria: " + nomeCategoria);
-			}
-		}
+		// Usar nome literal "Usuario" conforme o cURL de exemplo da API
+		String nomeAutor = "Usuario";
 		
-		// Gerar dados do artigo com nomes reais
-		Map<String, String> artigoRequest = JavaFaker.artigosJavaFake(nomeUsuario, nomeCategoria);
+		System.out.println("Nome do autor (fixo): " + nomeAutor);
+		
+		// Gerar dados do artigo com nome literal do autor
+		Map<String, String> artigoRequest = JavaFaker.artigosTesteFixo(nomeAutor, nomeCategoria);
 		
 		System.out.println("Tentando cadastrar artigo...");
-		System.out.println("Endpoint: " + BASE_URL + "/artigos");
+		System.out.println("Endpoint: " + BASE_URL + ENDPOINT_ARTIGOS);
 		System.out.println("Token: " + token);
+		System.out.println("Nome do Autor: " + nomeAutor);
+		System.out.println("Nome da Categoria: " + nomeCategoria);
 		System.out.println("Body: " + artigoRequest);
 		
 		Response response = given()
@@ -77,7 +52,7 @@ public class ArtigosController {
 				.body(artigoRequest)
 				.log().all()
 				.when()
-				.post("/artigos");
+				.post(ENDPOINT_ARTIGOS);
 		
 		System.out.println("Status Code retornado: " + response.getStatusCode());
 		System.out.println("Response Body: " + response.getBody().asString());
@@ -104,12 +79,25 @@ public class ArtigosController {
 
 	public void listarArtigos() {
 		String token = TokenManager.getToken();
+		String categoriaId = ArtigosManager.getCategoriaId();
+		String autorId = TokenManager.getUserId(); // Usar o ID do usuário logado como autorId
+		
+		// Construir query parameters conforme o curl
+		String queryParams = "?page=1&limit=10";
+		if (categoriaId != null && !categoriaId.isEmpty()) {
+			queryParams += "&categoriaId=" + categoriaId;
+		}
+		if (autorId != null && !autorId.isEmpty()) {
+			queryParams += "&autorId=" + autorId;
+		}
+		
 		Response response = given()
 				.contentType(ContentType.JSON)
+				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.when()
-				.get(ENDPOINT_ARTIGOS);
+				.get(ENDPOINT_ARTIGOS + queryParams);
 		
 		ArtigosManager.setResponse(response);
 	}
@@ -117,8 +105,14 @@ public class ArtigosController {
 	public void buscarArtigoPorId() {
 		String token = TokenManager.getToken();
 		String artigoId = ArtigosManager.getArtigoId();
+		
+		if (artigoId == null || artigoId.isEmpty()) {
+			throw new RuntimeException("ID do artigo não encontrado. Certifique-se de que um artigo foi criado antes da busca.");
+		}
+		
 		Response response = given()
 				.contentType(ContentType.JSON)
+				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.when()
@@ -130,53 +124,20 @@ public class ArtigosController {
 	public void atualizarArtigoPorId() {
 		String token = TokenManager.getToken();
 		String artigoId = ArtigosManager.getArtigoId();
-
-		// Buscar dados atuais do artigo para manter consistência
-		String nomeUsuario = "Usuario"; // fallback
-		String nomeCategoria = "Tecnologia"; // fallback
 		
-		// Buscar nome do usuário logado
-		String userId = TokenManager.getUserId();
-		if (userId != null) {
-			Response userResponse = given()
-					.contentType(ContentType.JSON)
-					.header("accept", "application/json")
-					.header("Authorization", "Bearer " + token)
-					.baseUri(BASE_URL)
-					.when()
-					.get("/usuarios/" + userId);
-			
-			if (userResponse.getStatusCode() == 200) {
-				nomeUsuario = userResponse.jsonPath().getString("nomeUsuario");
-				if (nomeUsuario == null || nomeUsuario.trim().isEmpty()) {
-					nomeUsuario = "Usuario";
-				}
-			}
-		}
-		
-		// Buscar nome da categoria
-		String categoriaId = ArtigosManager.getCategoriaId();
-		if (categoriaId != null && !categoriaId.equals("categoria-existente")) {
-			Response categoriaResponse = given()
-					.contentType(ContentType.JSON)
-					.header("accept", "application/json")
-					.header("Authorization", "Bearer " + token)
-					.baseUri(BASE_URL)
-					.when()
-					.get("/categorias/" + categoriaId);
-			
-			if (categoriaResponse.getStatusCode() == 200) {
-				nomeCategoria = categoriaResponse.jsonPath().getString("nome");
-			}
+		if (artigoId == null || artigoId.isEmpty()) {
+			throw new RuntimeException("ID do artigo não encontrado. Certifique-se de que um artigo foi criado antes da atualização.");
 		}
 
-		Map<String, String> novoArtigo = JavaFaker.artigosJavaFake(nomeUsuario, nomeCategoria);
+		// Usar dados fixos para atualização conforme o curl
+		Map<String, String> dadosAtualizacao = JavaFaker.dadosAtualizacaoArtigo();
 
 		Response response = given()
 				.contentType(ContentType.JSON)
+				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
-				.body(novoArtigo)
+				.body(dadosAtualizacao)
 				.log().all()
 				.when()
 				.put(ENDPOINT_ARTIGOS + "/" + artigoId);
@@ -196,6 +157,7 @@ public class ArtigosController {
 		System.out.println("Token utilizado: " + token);
 
 		Response response = given()
+				.contentType(ContentType.JSON)
 				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
@@ -203,36 +165,28 @@ public class ArtigosController {
 				.when()
 				.delete(ENDPOINT_ARTIGOS + "/" + artigoId);
 		
-		System.out.println("Status Code retornado: " + response.getStatusCode());
-		System.out.println("Response Body: " + response.getBody().asString());
+		System.out.println("Status Code da exclusão: " + response.getStatusCode());
+		System.out.println("Response Body da exclusão: " + response.getBody().asString());
 		
 		ArtigosManager.setResponse(response);
 	}
 
-	public void criarAutorAntesDoArtigo() {
-		String token = TokenManager.getToken();
-		
-		// Como não existe endpoint /autores, vamos usar o usuário logado como autor
-		System.out.println("Usando usuário logado como autor...");
-		
-		// O autorId será o ID do usuário logado
-		String autorId = org.br.com.testes.manager.UsuarioManager.getIdUsuario();
-		ArtigosManager.setAutorId(autorId);
-		System.out.println("Autor ID (usuário logado): " + autorId);
+	public void validarStatusCodeExclusao(int statusCodeEsperado) {
+		Response response = ArtigosManager.getResponse();
+		if (response != null) {
+			response.then().statusCode(statusCodeEsperado);
+		} else {
+			throw new RuntimeException("Nenhuma resposta encontrada para validação da exclusão");
+		}
 	}
 
 	public void criarCategoriaAntesDoArtigo() {
 		String token = TokenManager.getToken();
-		
-		// Criar categoria com nome único
-		Map<String, String> categoriaRequest = Map.of(
-			"nome", "Tecnologia_" + System.currentTimeMillis(),
-			"descricao", "Artigos sobre tecnologia"
-		);
+		Map<String, String> categoriaRequest = JavaFaker.categoriaJavaFake();
 		
 		System.out.println("Criando categoria antes do artigo...");
 		
-		Response categoriaResponse = given()
+		Response response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
@@ -242,18 +196,30 @@ public class ArtigosController {
 				.when()
 				.post("/categorias");
 		
-		System.out.println("Categoria - Status Code: " + categoriaResponse.getStatusCode());
-		System.out.println("Categoria - Response: " + categoriaResponse.getBody().asString());
+		System.out.println("Categoria - Status Code: " + response.getStatusCode());
+		System.out.println("Categoria - Response: " + response.getBody().asString());
 		
-		// Tratar erro de JSON
-		if (categoriaResponse.getStatusCode() == 201) {
-			String categoriaId = categoriaResponse.jsonPath().getString("id");
+		if (response.getStatusCode() == 201) {
+			String categoriaId = response.jsonPath().getString("id");
+			String nomeCategoria = categoriaRequest.get("nome");
 			ArtigosManager.setCategoriaId(categoriaId);
+			ArtigosManager.setNomeCategoria(nomeCategoria);
 			System.out.println("Categoria criada com ID: " + categoriaId);
+			System.out.println("Nome da categoria: " + nomeCategoria);
 		} else {
-			System.out.println("Erro ao criar categoria. Status: " + categoriaResponse.getStatusCode());
-			// Se não conseguir criar, usar uma categoria existente
-			ArtigosManager.setCategoriaId("categoria-existente");
+			System.out.println("Erro ao criar categoria. Status: " + response.getStatusCode());
 		}
+	}
+
+	public void prepararAutorParaArtigos() {
+		String userId = TokenManager.getUserId();
+		String nomeAutor = "Usuario"; // Usar nome literal conforme cURL da API
+		
+		System.out.println("Usando usuário logado como autor...");
+		System.out.println("Autor ID (usuário logado): " + userId);
+		System.out.println("Nome do autor: " + nomeAutor);
+		
+		ArtigosManager.setAutorId(userId);
+		ArtigosManager.setNomeAutor(nomeAutor);
 	}
 }

@@ -202,21 +202,50 @@ public class JavaFaker {
 	}
 
 	/**
-	 * Gera dados de teste exatamente como o curl fornecido.
-	 * Usado para debug e validação do endpoint.
+	 * Gera dados fixos para teste de artigo conforme o curl fornecido.
+	 * Usa dados que funcionam com a API.
 	 *
-	 * @return Map com dados fixos para teste
+	 * @return Map contendo titulo, conteudo, nomeAutor, nomeCategoria e dataPublicacao
 	 */
 	public static Map<String, String> artigosTesteFixo() {
-		Map<String, String> artigos = new HashMap<>();
+		Map<String, String> artigo = new HashMap<>();
+		artigo.put("titulo", "Introdução aos Testes Automatizados");
+		artigo.put("conteudo", "Exemplos de ferramentas de testes automatizados...");
+		artigo.put("nomeAutor", "João Silva"); // Nome mais realista
+		artigo.put("nomeCategoria", "Tecnologia");
+		artigo.put("dataPublicacao", "2025-06-30T13:15:04.733Z");
+		return artigo;
+	}
 
-		artigos.put("titulo", "Introdução aos Testes Automatizados I");
-		artigos.put("conteudo", "Exemplos de ferramentas de testes automatizados... I");
-		artigos.put("nomeAutor", "Enzo da Mata");
-		artigos.put("nomeCategoria", "Tecnologia III");
-		artigos.put("dataPublicacao", "2025-06-30T13:15:04.733Z");
+	/**
+	 * Gera dados para teste de artigo usando nomes específicos.
+	 * Usa dados que funcionam com a API.
+	 *
+	 * @param nomeAutor Nome do autor do artigo
+	 * @param nomeCategoria Nome da categoria do artigo
+	 * @return Map contendo titulo, conteudo, nomeAutor, nomeCategoria e dataPublicacao
+	 */
+	public static Map<String, String> artigosTesteFixo(String nomeAutor, String nomeCategoria) {
+		Map<String, String> artigo = new HashMap<>();
+		artigo.put("titulo", "Introdução aos Testes Automatizados");
+		artigo.put("conteudo", "Exemplos de ferramentas de testes automatizados...");
+		artigo.put("nomeAutor", nomeAutor);
+		artigo.put("nomeCategoria", nomeCategoria);
+		artigo.put("dataPublicacao", "2025-06-30T13:15:04.733Z");
+		return artigo;
+	}
 
-		return artigos;
+	/**
+	 * Gera dados para atualização de artigo conforme o curl fornecido.
+	 * Usa apenas titulo e conteudo para atualização.
+	 *
+	 * @return Map contendo titulo e conteudo para atualização
+	 */
+	public static Map<String, String> dadosAtualizacaoArtigo() {
+		Map<String, String> dadosAtualizacao = new HashMap<>();
+		dadosAtualizacao.put("titulo", "string");
+		dadosAtualizacao.put("conteudo", "string");
+		return dadosAtualizacao;
 	}
 
 	/**
