@@ -1,4 +1,4 @@
-@Usuario @API
+@usuario @all
 Feature: Gerenciamento de Usuários CMS
   Como um administrador de sistema
   Eu quero gerenciar usuários CMS

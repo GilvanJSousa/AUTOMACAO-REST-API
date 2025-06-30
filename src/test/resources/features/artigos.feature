@@ -1,4 +1,4 @@
-@artigos
+@artigos @all
 Feature: Validar Operações relacionadas a artigos
   Como usuario do sistema
   Eu quero gerenciar artigos

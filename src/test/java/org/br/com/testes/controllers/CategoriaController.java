@@ -1,15 +1,12 @@
 package org.br.com.testes.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.CategoriaManager;
 import org.br.com.testes.manager.TokenManager;
-import org.br.com.testes.model.CategoriaRequest;
 import org.br.com.testes.utils.JavaFaker;
-
 import java.util.Map;
-
 import static io.restassured.RestAssured.*;
 
 public class CategoriaController {
@@ -22,9 +19,8 @@ public class CategoriaController {
 	}
 
 	public void cadastrarNovaCategoria() {
-
 		String token = TokenManager.getToken();
-		
+
 		Map<String, String> categoriaRequest = JavaFaker.categoriaJavaFake();
 
 		response = given()
@@ -47,6 +43,7 @@ public class CategoriaController {
 
 	public void listarCategorias() {
 		String token = TokenManager.getToken();
+		
 		response = given()
 				.contentType(ContentType.JSON)
 				.header("Authorization", "Bearer " + token)
@@ -57,7 +54,8 @@ public class CategoriaController {
 
 	public void buscarCategoriaPorId() {
 		String token = TokenManager.getToken();
-		String  categoriaId = CategoriaManager.getCategoriaId();
+		String categoriaId = CategoriaManager.getCategoriaId();
+		
 		response = given()
 				.contentType(ContentType.JSON)
 				.header("Authorization", "Bearer " + token)
@@ -84,10 +82,6 @@ public class CategoriaController {
 	public void excluirCategoriaPorId() {
 		String token = TokenManager.getToken();
 		String categoriaId = CategoriaManager.getCategoriaId();
-
-		if (categoriaId == null || categoriaId.isEmpty()) {
-			throw new RuntimeException("ID da categoria não encontrado. Certifique-se de que uma categoria foi criada antes da exclusão.");
-		}
 
 		response = given()
 				.header("accept", "*/*")

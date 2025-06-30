@@ -77,11 +77,14 @@ public class FakerApiData {
 		String emailUnico = "usuario_" + timestamp + "@email.com";
 		String nomeUsuarioUnico = "Usuario_" + timestamp;
 		
+		// Garantir que a senha seja válida
+		String senhaValida = gerarSenhaValida();
+		
 		return UsuarioRequest.builder()
 				.nomeCompleto("Usuario Teste")
 				.nomeUsuario(nomeUsuarioUnico)
 				.email(emailUnico)
-				.senha(fakeData.getPassword())
+				.senha(senhaValida)
 				.build();
 	}
 
@@ -107,21 +110,28 @@ public class FakerApiData {
 	 *
 	 * @return uma senha válida
 	 */
-	private static String gerarSenhaValida() {
+	public static String gerarSenhaValida() {
 		FakerApiData fakeData = new FakerApiData();
 		String senhaBase = fakeData.getPassword();
 		
 		// Garante que a senha tenha pelo menos 8 caracteres
-		if (senhaBase.length() < 6) {
+		if (senhaBase.length() < 8) {
 			senhaBase = senhaBase + "123456";
 		}
 		
-		// Adiciona letra maiúscula e número se não existirem
+		// Adiciona letra maiúscula se não existir
 		if (!senhaBase.matches(".*[A-Z].*")) {
 			senhaBase = senhaBase + "A";
 		}
+		
+		// Adiciona número se não existir
 		if (!senhaBase.matches(".*\\d.*")) {
 			senhaBase = senhaBase + "1";
+		}
+		
+		// Garante que a senha tenha pelo menos 8 caracteres
+		if (senhaBase.length() < 8) {
+			senhaBase = senhaBase + "123";
 		}
 		
 		return senhaBase;
