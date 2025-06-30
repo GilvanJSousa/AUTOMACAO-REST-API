@@ -37,18 +37,8 @@ public class ArtigosController {
 		// Usar nome literal "Usuario" conforme o cURL de exemplo da API
 		String nomeAutor = "Usuario";
 		
-		System.out.println("=== CADASTRO DE ARTIGO ===");
-		System.out.println("Nome do autor (fixo): " + nomeAutor);
-		
 		// Gerar dados do artigo com nome literal do autor
 		Map<String, String> artigoRequest = JavaFaker.artigosTesteFixo(nomeAutor, nomeCategoria);
-		
-		System.out.println("Tentando cadastrar artigo...");
-		System.out.println("Endpoint: " + BASE_URL + ENDPOINT_ARTIGOS);
-		System.out.println("Token: " + token);
-		System.out.println("Nome do Autor: " + nomeAutor);
-		System.out.println("Nome da Categoria: " + nomeCategoria);
-		System.out.println("Body: " + artigoRequest);
 		
 		Response response = given()
 				.contentType(ContentType.JSON)
@@ -56,20 +46,12 @@ public class ArtigosController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.body(artigoRequest)
-				.log().all()
 				.when()
 				.post(ENDPOINT_ARTIGOS);
-		
-		System.out.println("Status Code retornado: " + response.getStatusCode());
-		System.out.println("Response Body: " + response.getBody().asString());
 		
 		if (response.getStatusCode() == 201) {
 			String artigoId = response.jsonPath().getString("id");
 			ArtigosManager.setArtigoId(artigoId);
-			System.out.println("Artigo criado com sucesso. ID: " + artigoId);
-		} else {
-			System.out.println("Erro ao criar artigo. Status: " + response.getStatusCode());
-			System.out.println("Response: " + response.getBody().asString());
 		}
 		
 		ArtigosManager.setResponse(response);
@@ -145,7 +127,6 @@ public class ArtigosController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.body(dadosAtualizacao)
-				.log().all()
 				.when()
 				.put(ENDPOINT_ARTIGOS + "/" + artigoId);
 		
@@ -160,20 +141,13 @@ public class ArtigosController {
 			throw new RuntimeException("ID do artigo não encontrado. Certifique-se de que um artigo foi criado antes da exclusão.");
 		}
 
-		System.out.println("Tentando excluir artigo com ID: " + artigoId);
-		System.out.println("Token utilizado: " + token);
-
 		Response response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
-				.log().all()
 				.when()
 				.delete(ENDPOINT_ARTIGOS + "/" + artigoId);
-		
-		System.out.println("Status Code da exclusão: " + response.getStatusCode());
-		System.out.println("Response Body da exclusão: " + response.getBody().asString());
 		
 		ArtigosManager.setResponse(response);
 	}
@@ -197,34 +171,20 @@ public class ArtigosController {
 		
 		Map<String, String> categoriaRequest = JavaFaker.categoriaJavaFake();
 		
-		System.out.println("=== CRIAÇÃO DE CATEGORIA ===");
-		System.out.println("Criando categoria antes do artigo...");
-		System.out.println("Token: " + token);
-		System.out.println("Body: " + categoriaRequest);
-		
 		Response response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.body(categoriaRequest)
-				.log().all()
 				.when()
 				.post("/categorias");
-		
-		System.out.println("Categoria - Status Code: " + response.getStatusCode());
-		System.out.println("Categoria - Response: " + response.getBody().asString());
 		
 		if (response.getStatusCode() == 201) {
 			String categoriaId = response.jsonPath().getString("id");
 			String nomeCategoria = categoriaRequest.get("nome");
 			ArtigosManager.setCategoriaId(categoriaId);
 			ArtigosManager.setNomeCategoria(nomeCategoria);
-			System.out.println("Categoria criada com ID: " + categoriaId);
-			System.out.println("Nome da categoria: " + nomeCategoria);
-		} else {
-			System.out.println("Erro ao criar categoria. Status: " + response.getStatusCode());
-			System.out.println("Response: " + response.getBody().asString());
 		}
 	}
 
@@ -237,11 +197,6 @@ public class ArtigosController {
 		}
 		
 		String nomeAutor = "Usuario"; // Usar nome literal conforme cURL da API
-		
-		System.out.println("=== PREPARAÇÃO DO AUTOR ===");
-		System.out.println("Usando usuário logado como autor...");
-		System.out.println("Autor ID (usuário logado): " + userId);
-		System.out.println("Nome do autor: " + nomeAutor);
 		
 		ArtigosManager.setAutorId(userId);
 		ArtigosManager.setNomeAutor(nomeAutor);

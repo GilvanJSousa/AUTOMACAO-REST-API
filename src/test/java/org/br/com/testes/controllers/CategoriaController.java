@@ -37,7 +37,6 @@ public class CategoriaController {
 
 		String categoriaId = response.jsonPath().getString("id");
 		CategoriaManager.setCategoriaId(categoriaId);
-		System.out.println("Categoria ID: " + categoriaId);
 	}
 
 	public void validarStatusCodeCategoria(int statusCode) {
@@ -77,7 +76,6 @@ public class CategoriaController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.body(novaCategoria)
-				.log().all()
 				.when()
 				.put(ENDPOINT_CATEGORIA + "/" + categoriaId);
 	}
@@ -90,18 +88,11 @@ public class CategoriaController {
 			throw new RuntimeException("ID da categoria não encontrado. Certifique-se de que uma categoria foi criada antes da exclusão.");
 		}
 
-		System.out.println("Tentando excluir categoria com ID: " + categoriaId);
-		System.out.println("Token utilizado: " + token);
-
 		response = given()
 				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
-				.log().all()
 				.when()
 				.delete(ENDPOINT_CATEGORIA + "/" + categoriaId);
-		
-		System.out.println("Status Code retornado: " + response.getStatusCode());
-		System.out.println("Response Body: " + response.getBody().asString());
 	}
 }
