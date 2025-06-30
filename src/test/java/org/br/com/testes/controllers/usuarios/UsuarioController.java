@@ -78,6 +78,28 @@ public class UsuarioController {
         System.out.println("Token gerado: " + token);
     }
 
+    public void realizarLoginInvalido() {
+        String email = "email@Invalido.com";
+        String senha = UsuarioManager.setPassword();
+
+        // Criar objeto apenas com email e password
+        Map<String, String> loginRequest = new HashMap<>();
+        loginRequest.put("email", email);
+        loginRequest.put("password", senha);
+
+        this.response = given()
+                .contentType(ContentType.JSON)
+                .baseUri(BASE_URL)
+                .body(loginRequest)
+                .log().body()
+                .when()
+                .post(ENDPOINT_LOGIN)
+                .then()
+                .extract()
+                .response();
+
+    }
+
     public void listarUsuariosComAutenticacao() {
         String token = TokenManager.getToken();
 
@@ -107,6 +129,20 @@ public class UsuarioController {
                 .response();
     }
 
+    public void consultarUsuarioIdInvalido() {
+        String token = TokenManager.getToken();
+        String idUsuario = "0uxuPY0cbMQhpEz1";
+
+        this.response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .baseUri(BASE_URL)
+                .when()
+                .get(ENDPOINT_USUARIOS + "/" + idUsuario)
+                .then()
+                .extract()
+                .response();
+    }
     public void atualizarUsuarioPorId() {
         String token = TokenManager.getToken();
         String id = UsuarioManager.getId();
@@ -123,6 +159,7 @@ public class UsuarioController {
                 .baseUri(BASE_URL)
                 .body(editarUsuario)
                 .when()
+                .log().all()
                 .put(ENDPOINT_USUARIOS + "/" + id);
 
         System.out.println("Usuário atualizado com sucesso: " + email);

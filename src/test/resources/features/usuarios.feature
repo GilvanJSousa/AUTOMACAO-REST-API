@@ -12,7 +12,7 @@ Feature: Validar funcionalidades de usuario
 
 
   @CT-1002
-  Scenario: Reallizar login com usuario cadastrado
+  Scenario: Realizar login com usuario cadastrado
     Given envio a requisição de login com usuario cadastrado
     Then deve retornar usuario com status code 200 e mesagem 'Login realizado com sucesso'
 
@@ -47,4 +47,13 @@ Feature: Validar funcionalidades de usuario
     And envio a solicitação de cadastro de usuario com email ja cadastrado
     Then valido a resposta da API retornar o status code 400 e mensagem 'Este email já está sendo usado'
 
+  @CT-1008
+  Scenario: Validar Email ou senha invalida
+    Given envio a requisição de login com usuario cadastrado e email invalido
+    Then deve retornar usuario com status code 401 e mesagem 'Email e/ou senha inválidos'
+
+  @CT-1009
+  Scenario: Validar Usuario não encontrado
+    Given que envio a solicitação de GET com id invalido
+    Then deve retornar usuario com status code 400 e mesagem 'Usuário não encontrado'
 

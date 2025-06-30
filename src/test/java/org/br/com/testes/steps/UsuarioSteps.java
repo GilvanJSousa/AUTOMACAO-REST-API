@@ -25,10 +25,21 @@ public class UsuarioSteps {
         usuarioController.realizarLogin();
     }
 
+    @Given("envio a requisição de login com usuario cadastrado e email invalido")
+    public void envioARequisiçãoDeLoginComUsuarioCadastradoEEmailInvalido() {
+        usuarioController.realizarLoginInvalido();
+    }
+
     @Given("que envio a solicitação de GET com id")
     public void queEnvioASolicitacaoDePUTComId() {
         usuarioController.consultarUsuarioPorId();
     }
+
+    @Given("que envio a solicitação de GET com id invalido")
+    public void queEnvioASolicitacaoDePUTComIdInvalido() {
+        usuarioController.consultarUsuarioIdInvalido();
+    }
+
     @Given("que envio a requisição PUT com id para editar o usuario")
     public void queEnvioARequisicaoPUTComId() {
         usuarioController.atualizarUsuarioPorId();
