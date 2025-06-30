@@ -55,10 +55,15 @@ public class UsuarioController {
 				.post(ENDPOINT_LOGIN);
 
 		String token = response.jsonPath().getString("token");
+		String userId = response.jsonPath().getString("user.id");
+		
 		TokenManager.setToken(token);
+		TokenManager.setUserId(userId);
+		
 		System.out.println("Token: " + TokenManager.getToken());
-		UsuarioManager.setIdUsuario(response.jsonPath().getString("user.id"));
-		System.out.println("ID do usuário: " + UsuarioManager.getIdUsuario());
+		System.out.println("ID do usuário: " + userId);
+		
+		UsuarioManager.setIdUsuario(userId);
 	}
 
 	public void listarUsuariosComAutenticacao() {

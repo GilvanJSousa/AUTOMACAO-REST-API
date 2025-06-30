@@ -4,7 +4,7 @@ Feature: Validar Operações relacionadas a categoria
   Eu
   Quero
 
-  Background: Criar um novo usuário CMS com sucesso
+  Background: Criar um novo usuário e efetuar login CMS com sucesso
     Given que envio uma requisição de registro de usuario CMS
     When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
@@ -19,7 +19,6 @@ Feature: Validar Operações relacionadas a categoria
   Scenario: Listar Categorias
     When eu envio a requisição de listar Categorias com autenticação
     Then a API Categoria deve retornar o código de status 200
-#    And os dados do usuário devem ser retornados na resposta
 
   @CT-2003
   Scenario: Buscar categoria por ID
