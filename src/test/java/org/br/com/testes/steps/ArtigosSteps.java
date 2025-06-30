@@ -1,5 +1,6 @@
 package org.br.com.testes.steps;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -15,11 +16,28 @@ public class ArtigosSteps {
 
 	@Given("que envio uma requisição de cadastro de Artigos")
 	public void queEnvioUmaRequisicaoDeCadastroDeArtigos() throws Exception {
-		// Cria a categoria antes do artigo
+		// Cadastrar o artigo (categoria e autor já foram criados no Background)
+		artigosController.cadastrarArtigo();
+	}
+
+	@Given("que envio uma requisição de cadastro de Artigos adicional")
+	public void queEnvioUmaRequisicaoDeCadastroDeArtigosAdicional() throws Exception {
+		// Cadastrar um artigo adicional (categoria e autor já foram criados no Background)
+		artigosController.cadastrarArtigo();
+	}
+
+	@And("crio uma categoria para os artigos")
+	public void crioUmaCategoriaParaOsArtigos() {
 		artigosController.criarCategoriaAntesDoArtigo();
-		// Cria o autor antes do artigo
+	}
+
+	@And("preparo o autor para os artigos")
+	public void preparoOAutorParaOsArtigos() {
 		artigosController.criarAutorAntesDoArtigo();
-		// Por fim tenta cadastrar o artigo
+	}
+
+	@And("crio um artigo para os testes")
+	public void crioUmArtigoParaOsTestes() {
 		artigosController.cadastrarArtigo();
 	}
 
