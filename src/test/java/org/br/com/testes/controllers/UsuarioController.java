@@ -65,6 +65,7 @@ public class UsuarioController {
 		TokenManager.setToken(token);
 		TokenManager.setUserId(userId);
 		UsuarioManager.setIdUsuario(userId);
+		System.out.println("Token: " + token);
 	}
 
 	public void listarUsuariosComAutenticacao() {

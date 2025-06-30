@@ -48,31 +48,26 @@ public class ArtigosSteps {
 
 	@When("eu envio a requisição de listar Artigos com autenticação")
 	public void euEnvioARequisicaoDeListarArtigosComAutenticacao() {
-		LogFormatter.logStep("Enviando requisição para listar artigos");
 		artigosController.listarArtigos();
 	}
 
 	@Given("eu envio a requisição de busca de artigos por ID")
 	public void euEnvioARequisicaoDeBuscaDeArtigosPorID() {
-		LogFormatter.logStep("Enviando requisição para buscar artigo por ID");
 		artigosController.buscarArtigoPorId();
 	}
 
 	@Given("eu envio a requisição PUT Artigos com ID")
 	public void euEnvioARequisicaoPUTArtigosComID() {
-		LogFormatter.logStep("Enviando requisição PUT para atualizar artigo");
 		artigosController.atualizarArtigoPorId();
 	}
 
 	@Given("eu envio a requisição DELETE Artigos com ID")
 	public void euEnvioARequisicaoDeDELETEParaOID() {
-		LogFormatter.logStep("Enviando requisição DELETE para excluir artigo");
 		artigosController.excluirArtigoPorId();
 	}
 
 	@Then("a API Artigos deve retornar o status code {int} para exclusão")
 	public void aApiArtigosDeveRetornarOStatusCodeParaExclusao(int statusCode) {
-		LogFormatter.logStep("Validando status code da exclusão: " + statusCode);
 		artigosController.validarStatusCodeExclusao(statusCode);
 	}
 }
