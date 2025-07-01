@@ -69,22 +69,40 @@ public class FakerApiData {
 		return emailBase + "@exemplo.com";
 	}
 
+	public String getDomain() {
+		if (emailAddress != null && emailAddress.contains("@")) {
+			return emailAddress.substring(emailAddress.indexOf("@") + 1);
+		}
+		return "exemplo.com";
+	}
+
 	public static UsuarioRequest gerarUsuarioRequestSimples() {
 		FakerApiData fakeData = new FakerApiData();
-		
-		// Gerar dados únicos para evitar conflitos
-		String timestamp = String.valueOf(System.currentTimeMillis());
-		String emailUnico = "usuario_" + timestamp + "@email.com";
-		String nomeUsuarioUnico = "Usuario_" + timestamp;
-		
-		// Garantir que a senha seja válida
-		String senhaValida = gerarSenhaValida();
-		
+
+		// Gerar nome completo realista
+		String nomeCompleto = fakeData.getFullName();
+
+		// Extrair primeiro e último nome (remover acentos e caracteres especiais)
+		String nomeSemAcentos = nomeCompleto.replaceAll("[^a-zA-Z ]", "");
+		String[] nomes = nomeSemAcentos.split(" ");
+		String primeiroNome = nomes.length > 0 ? nomes[0].toLowerCase() : "usuario";
+		String ultimoNome = nomes.length > 1 ? nomes[nomes.length - 1].toLowerCase() : "teste";
+
+		// Montar nomeUsuario e email conforme solicitado
+		String nomeUsuario = primeiroNome + "_" + ultimoNome;
+		String dominio = fakeData.getDomain();
+		String email = ultimoNome + "." + primeiroNome + "@" + dominio;
+
+		// Senha: P@ssword + dois dígitos aleatórios
+		java.util.Random random = new java.util.Random();
+		int numeroAleatorio = random.nextInt(100); // 0 a 99
+		String senha = String.format("P@ssword%02d", numeroAleatorio);
+
 		return UsuarioRequest.builder()
-				.nomeCompleto("Usuario Teste")
-				.nomeUsuario(nomeUsuarioUnico)
-				.email(emailUnico)
-				.senha(senhaValida)
+				.nomeCompleto(nomeCompleto)
+				.nomeUsuario(nomeUsuario)
+				.email(email)
+				.senha(senha)
 				.build();
 	}
 

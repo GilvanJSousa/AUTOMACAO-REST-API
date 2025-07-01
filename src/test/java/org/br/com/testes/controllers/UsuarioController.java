@@ -40,6 +40,7 @@ public class UsuarioController {
 					.contentType(ContentType.JSON)
 					.baseUri(BASE_URL)
 					.body(usuarioGerado)
+					.log().body()
 					.when()
 					.post(ENDPOINT_USUARIOS);
 
@@ -90,8 +91,8 @@ public class UsuarioController {
 		String senha = UsuarioManager.getSenhaUsuario();
 		
 		LoginRequest loginRequest = LoginRequest.builder()
-				.email("usuario_1751371948726@email.com")
-				.senha(":;rtt0aAL\"")
+				.email(email)
+				.senha(senha)
 				.build();
 
 		// Retry logic para garantir que o token seja gerado
