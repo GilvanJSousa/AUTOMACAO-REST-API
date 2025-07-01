@@ -35,7 +35,6 @@ public class CategoriaSteps {
 
 	@When("eu envio a requisição de listar Categorias com autenticação")
 	public void euEnvioARequisicaoDeListarCategoriasComAutenticacao() {
-		LogFormatter.logStep("Enviando requisição para listar categorias");
 		categoriaController.listarCategorias();
 	}
 
@@ -61,5 +60,10 @@ public class CategoriaSteps {
 	public void aApiCategoriaDeveRetornarOStatusCodeParaExclusao(int statusCode) {
 		LogFormatter.logStep("Validando status code da exclusão: " + statusCode);
 		categoriaController.validarStatusCodeCategoria(statusCode);
+	}
+
+	@Given("envio uma solicitação de DELETE para o categoria {string}")
+	public void envioUmaSolicitacaoDeDELETEParaOCategoria(String arg0) {
+		categoriaController.excluirCategoriaEmMassa(arg0);
 	}
 }

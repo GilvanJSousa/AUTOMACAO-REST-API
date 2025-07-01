@@ -70,4 +70,9 @@ public class ArtigosSteps {
 	public void aApiArtigosDeveRetornarOStatusCodeParaExclusao(int statusCode) {
 		artigosController.validarStatusCodeExclusao(statusCode);
 	}
+
+	@Given("envio uma solicitação de DELETE para o Artigos {string}")
+	public void envioUmaSolicitacaoDeDELETEParaOArtigos(String arg0) {
+		artigosController.excluirArtigosEmMassa(arg0);
+	}
 }

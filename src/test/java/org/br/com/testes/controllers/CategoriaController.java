@@ -49,7 +49,10 @@ public class CategoriaController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.when()
-				.get(ENDPOINT_CATEGORIA);
+				.get(ENDPOINT_CATEGORIA)
+				.then()
+				.log().all()
+				.extract().response();
 	}
 
 	public void buscarCategoriaPorId() {
@@ -89,5 +92,18 @@ public class CategoriaController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_CATEGORIA + "/" + categoriaId);
+	}
+
+	public void excluirCategoriaEmMassa(String id) {
+
+		String token = TokenManager.getToken();
+
+		response = given()
+				.header("accept", "*/*")
+				.header("Authorization", "Bearer " + token)
+				.baseUri(BASE_URL)
+				.when()
+				.delete(ENDPOINT_CATEGORIA + "/" + id);
+
 	}
 }

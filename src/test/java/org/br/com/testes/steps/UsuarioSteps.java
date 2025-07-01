@@ -75,4 +75,8 @@ public class UsuarioSteps {
 		usuarioController.validarStatusCode(statusCode);
 	}
 
+	@Given("envio uma solicitação de DELETE para o {string}")
+	public void envioUmaSolicitacaoDeDELETEParaO(String arg0) {
+		usuarioController.massasParaExcluir(arg0);
+	}
 }

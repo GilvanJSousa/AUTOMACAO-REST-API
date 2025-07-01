@@ -12,10 +12,12 @@ import java.util.Map;
 import static io.restassured.RestAssured.*;
 
 public class ArtigosController {
+	private Response response;
 	private static final String BASE_URL = "http://localhost:3000";
 	private static final String ENDPOINT_ARTIGOS = "/artigos";
 
 	public ArtigosController() {
+		response = null;
 	}
 
 	public void cadastrarArtigo() {
@@ -40,7 +42,7 @@ public class ArtigosController {
 		// Gerar dados do artigo com nome literal do autor
 		Map<String, String> artigoRequest = JavaFaker.artigosTesteFixo(nomeAutor, nomeCategoria);
 		
-		Response response = given()
+		response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
@@ -81,13 +83,16 @@ public class ArtigosController {
 			queryParams += "&autorId=" + autorId;
 		}
 		
-		Response response = given()
+		response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.when()
-				.get(ENDPOINT_ARTIGOS + queryParams);
+				.get(ENDPOINT_ARTIGOS + queryParams)
+				.then()
+				.log().all()
+				.extract().response();
 		
 		ArtigosManager.setResponse(response);
 	}
@@ -100,7 +105,7 @@ public class ArtigosController {
 			throw new RuntimeException("ID do artigo não encontrado. Certifique-se de que um artigo foi criado antes da busca.");
 		}
 		
-		Response response = given()
+		response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)
@@ -122,7 +127,7 @@ public class ArtigosController {
 		// Usar dados fixos para atualização conforme o curl
 		Map<String, String> dadosAtualizacao = JavaFaker.dadosAtualizacaoArtigo();
 
-		Response response = given()
+		response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
@@ -142,7 +147,7 @@ public class ArtigosController {
 			throw new RuntimeException("ID do artigo não encontrado. Certifique-se de que um artigo foi criado antes da exclusão.");
 		}
 
-		Response response = given()
+		response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "*/*")
 				.header("Authorization", "Bearer " + token)
@@ -151,6 +156,18 @@ public class ArtigosController {
 				.delete(ENDPOINT_ARTIGOS + "/" + artigoId);
 		
 		ArtigosManager.setResponse(response);
+	}
+
+	public void excluirArtigosEmMassa(String id) {
+		String token = TokenManager.getToken();
+
+		response = given()
+				.contentType(ContentType.JSON)
+				.header("accept", "*/*")
+				.header("Authorization", "Bearer " + token)
+				.baseUri(BASE_URL)
+				.when()
+				.delete(ENDPOINT_ARTIGOS + "/" + id);
 	}
 
 	public void validarStatusCodeExclusao(int statusCodeEsperado) {
@@ -172,7 +189,7 @@ public class ArtigosController {
 		
 		Map<String, String> categoriaRequest = JavaFaker.categoriaJavaFake();
 		
-		Response response = given()
+		response = given()
 				.contentType(ContentType.JSON)
 				.header("accept", "application/json")
 				.header("Authorization", "Bearer " + token)

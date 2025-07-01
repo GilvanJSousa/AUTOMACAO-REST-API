@@ -34,3 +34,4 @@ Feature: Validar Operações relacionadas a categoria
   Scenario: Validar exclusão de categoria
     Given eu envio a requisição de DELETE para o ID
     Then a API categoria deve retornar o status code 204 para exclusão
+

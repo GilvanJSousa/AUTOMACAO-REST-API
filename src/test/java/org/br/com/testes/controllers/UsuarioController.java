@@ -90,8 +90,8 @@ public class UsuarioController {
 		String senha = UsuarioManager.getSenhaUsuario();
 		
 		LoginRequest loginRequest = LoginRequest.builder()
-				.email(email)
-				.senha(senha)
+				.email("usuario_1751371948726@email.com")
+				.senha(":;rtt0aAL\"")
 				.build();
 
 		// Retry logic para garantir que o token seja gerado
@@ -107,6 +107,7 @@ public class UsuarioController {
 					.contentType(ContentType.JSON)
 					.baseUri(BASE_URL)
 					.body(loginRequest)
+					.log().body()
 					.when()
 					.post(ENDPOINT_LOGIN);
 
@@ -162,7 +163,10 @@ public class UsuarioController {
 				.header("Authorization", "Bearer " + token)
 				.baseUri(BASE_URL)
 				.when()
-				.get(ENDPOINT_USUARIOS);
+				.get(ENDPOINT_USUARIOS)
+				.then()
+				.log().all()
+				.extract().response();
 	}
 
 	public void consultarUsuarioPorId() {
@@ -216,4 +220,43 @@ public class UsuarioController {
 				usuarioEncontrado);
 	}
 
+	public void exclusaoDeMassas(String email, String senha) {
+		LoginRequest loginRequest = LoginRequest.builder()
+				.email(email)
+				.senha(senha)
+				.build();
+
+		this.response = given()
+				.contentType(ContentType.JSON)
+				.baseUri(BASE_URL)
+				.body(loginRequest)
+				.when()
+				.post(ENDPOINT_LOGIN);
+
+		// Validação do status code do login
+		if (response.getStatusCode() != 200) {
+			System.out.println("Falha no login. Status: " + response.getStatusCode());
+			System.out.println("Response: " + response.getBody().asString());
+			throw new RuntimeException("Login falhou para o email: " + email);
+		}
+
+		String token = response.jsonPath().getString("token");
+		if (token == null || token.isEmpty()) {
+			throw new RuntimeException("Token não foi retornado no login para o email: " + email);
+		}
+		TokenManager.setToken(token);
+		System.out.println("Token: " + token);
+	}
+
+	public void massasParaExcluir(String idUsuario) {
+		String token = TokenManager.getToken();
+
+		this.response = given()
+				.contentType(ContentType.JSON)
+				.header("Authorization", "Bearer " + token)
+				.baseUri(BASE_URL)
+				.when()
+				.delete(ENDPOINT_USUARIOS + "/" + idUsuario);
+
+	}
 }

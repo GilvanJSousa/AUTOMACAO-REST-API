@@ -39,3 +39,4 @@ Feature: Validar Operações relacionadas a artigos
     Given que envio uma requisição de cadastro de Artigos
     When eu envio a requisição DELETE Artigos com ID
     Then a API Artigos deve retornar o status code 204 para exclusão
+

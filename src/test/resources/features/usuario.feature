@@ -37,6 +37,6 @@ Feature: Gerenciamento de Usuários CMS
 
 
   @CT-1006 @ATJ-310 @API
-  Scenario: Validar exclusão de usuario
+  Scenario: Validar exclusao de usuario
     Given envio uma solicitação de DELETE para o ID
     Then deve retornar o status code 204 para exclusão
