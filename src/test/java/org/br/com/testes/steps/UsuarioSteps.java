@@ -45,13 +45,8 @@ public class UsuarioSteps {
 		usuarioController.listarUsuariosComAutenticacao();
 	}
 
-	@Then("os dados do usuário devem ser retornados na resposta")
-	public void osDadosDoUsuarioDevemSerRetornadosNaResposta() {
-		usuarioController.validarNomeUsuario();
-	}
-
 	@When("eu envio a requisição de busca de usuário por ID")
-	public void euEnvioARequisiçãoDeBuscaDeUsuárioPorID() {
+	public void euEnvioARequisicaoDeBuscaDeUsuarioPorID() {
 		usuarioController.consultarUsuarioPorId();
 	}
 

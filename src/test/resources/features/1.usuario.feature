@@ -20,21 +20,16 @@ Feature: Gerenciamento de Usuários CMS
   Scenario: Buscar a lista de usuários CMS com autenticação
     When eu envio a requisição de listar de usuários com autenticação
     Then a API deve retornar o código de status 200
-#    And os dados do usuário devem ser retornados na resposta
-
 
   @CT-1004
   Scenario: Busca de usuario por ID
     Given eu envio a requisição de busca de usuário por ID
     Then a API deve retornar o código de status 200
-#    And os dados do usuário devem ser retornados na resposta
 
   @CT-1005
   Scenario: Validar alteração de usuário
     When que envio a solicitação de PUT com ID
     Then valido o retorno usuario atualizado com status code 200 e mensagem 'Usuário atualizado ou sem alterações'
-
-
 
   @CT-1006 @ATJ-310 @API
   Scenario: Validar exclusao de usuario
