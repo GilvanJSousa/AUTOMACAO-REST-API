@@ -4,14 +4,18 @@ Feature: Validar Operações relacionadas a artigos
   Eu quero gerenciar artigos
   Para organizar e compartilhar conteudos
 
-  Background: Criar um novo usuário, efetuar login e preparar dados para artigos
+#  Background: Criar um novo usuário, efetuar login e preparar dados para artigos
+#    Given que envio uma requisição de registro de usuario CMS
+#    When o sistema processa a requisição
+#    Then eu envio a requisição de login com as credenciais do usuário
+#    And que envio uma requisição de cadastro de categoria
+
+  @CT-3001
+  Scenario: Validar Criar um novo artigo
     Given que envio uma requisição de registro de usuario CMS
     When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
     And que envio uma requisição de cadastro de categoria
-
-  @CT-3001
-  Scenario: Validar Criar um novo artigo
     Given que envio uma requisição de cadastro de Artigos
     Then a API Artigos deve retornar o código de status 201
 

@@ -18,43 +18,6 @@ public class JavaFaker {
 	private static final Faker faker = new Faker(new Locale.Builder().setLanguage("pt").setRegion("BR").build());
 
 	/**
-	 * Gera um usuário CMS fake com dados aleatórios completos.
-	 * Método estático que não requer instanciação da classe.
-	 * Garante consistência entre nomeCompleto, nomeUsuario e email.
-	 *
-	 * @return um objeto UsuarioCms com dados fictícios completos
-	 */
-	public static UsuarioRequest UsuarioJavaFake() {
-		String fullName = faker.name().fullName();
-		String[] nameParts = fullName.split(" ");
-
-		String firstName = nameParts[0];
-		String lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : firstName;
-
-		String email = gerarEmailPersonalizado(firstName, lastName);
-
-		return UsuarioRequest.builder()
-				.nomeCompleto(fullName)
-				.nomeUsuario(lastName)
-				.email(email)
-				.senha(gerarSenhaValida())
-				.build();
-	}
-
-	/**
-	 * Gera um email personalizado usando firstName e lastName.
-	 * Formato: firstName.lastName@exemplo.com
-	 *
-	 * @param firstName Primeiro nome
-	 * @param lastName Sobrenome
-	 * @return Email personalizado
-	 */
-	private static String gerarEmailPersonalizado(String firstName, String lastName) {
-		String emailBase = firstName.toLowerCase() + "." + lastName.toLowerCase();
-		return emailBase + "@exemplo.com";
-	}
-
-	/**
 	 * Gera dados de atualizacao contendo apenas nomeUsuario e senha.
 	 * Utilizado para requisições de atualizacao parcial de usuario.
 	 *

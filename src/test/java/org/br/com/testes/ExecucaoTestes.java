@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
-        tags = "@categoria",
+        tags = "@artigos",
         monochrome = false,
         dryRun = false,
         plugin = {
@@ -19,7 +19,8 @@ import org.junit.runner.RunWith;
         publish = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         stepNotifications = false
-)
-public class ExecucaoTestes {
 
+)
+
+public class ExecucaoTestes {
 }
