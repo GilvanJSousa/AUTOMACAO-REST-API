@@ -9,7 +9,6 @@ Feature: Validar Operações relacionadas a artigos
     When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
     And que envio uma requisição de cadastro de categoria
-#    And preparo o autor para os artigos
 
   @CT-3001
   Scenario: Validar Criar um novo artigo

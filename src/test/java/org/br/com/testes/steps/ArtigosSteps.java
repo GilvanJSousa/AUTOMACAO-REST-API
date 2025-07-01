@@ -28,12 +28,6 @@ public class ArtigosSteps {
 		artigosController.criarCategoriaAntesDoArtigo();
 	}
 
-	@And("preparo o autor para os artigos")
-	public void preparoOAutorParaOsArtigos() {
-		LogFormatter.logStep("Preparando autor para os artigos");
-		artigosController.prepararAutorParaArtigos();
-	}
-
 	@And("crio um artigo para os testes")
 	public void crioUmArtigoParaOsTestes() {
 		LogFormatter.logStep("Criando artigo para os testes");
