@@ -36,6 +36,10 @@ public class UsuarioManager {
 		idUsuario.set(tk);
 	}
 
+	/**
+	 * Retorna o nome completo do usuário cadastrado/logado no cenário atual.
+	 * @return nome completo do usuário
+	 */
 	public static String getNomeCompletoUsuario(){
 		return nomeCompletoUsuario.get();
 	}

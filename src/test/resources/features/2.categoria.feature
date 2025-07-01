@@ -8,7 +8,6 @@ Feature: Validar Operações relacionadas a categoria
     Given que envio uma requisição de registro de usuario CMS
     When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
-    And crio uma categoria para os testes
 
   @CT-2001
   Scenario: Validar Criar um novo categoria

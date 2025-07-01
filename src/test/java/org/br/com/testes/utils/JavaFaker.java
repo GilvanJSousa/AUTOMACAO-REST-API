@@ -2,6 +2,8 @@ package org.br.com.testes.utils;
 
 import com.github.javafaker.Faker;
 import lombok.extern.apachecommons.CommonsLog;
+import org.br.com.testes.manager.CategoriaManager;
+import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.model.UsuarioRequest;
 
 import java.util.HashMap;
@@ -220,12 +222,17 @@ public class JavaFaker {
 	/**
 	 * Gera dados para teste de artigo usando nomes específicos.
 	 * Usa dados que funcionam com a API.
+	 * Se nomeAutor for nulo ou vazio, utiliza o nome completo do usuário logado via UsuarioManager.
 	 *
-	 * @param nomeAutor Nome do autor do artigo
+	 * @param nomeAutor Nome do autor do artigo (ou null para usar o usuário logado)
 	 * @param nomeCategoria Nome da categoria do artigo
 	 * @return Map contendo titulo, conteudo, nomeAutor, nomeCategoria e dataPublicacao
 	 */
 	public static Map<String, String> artigosTesteFixo(String nomeAutor, String nomeCategoria) {
+		if (nomeAutor == null || nomeAutor.isEmpty()) {
+			// Usa o nome completo do usuário logado, se disponível
+			nomeAutor = org.br.com.testes.manager.UsuarioManager.getNomeCompletoUsuario();
+		}
 		Map<String, String> artigo = new HashMap<>();
 		artigo.put("titulo", "Introdução aos Testes Automatizados");
 		artigo.put("conteudo", "Exemplos de ferramentas de testes automatizados...");
@@ -246,6 +253,24 @@ public class JavaFaker {
 		dadosAtualizacao.put("titulo", "string");
 		dadosAtualizacao.put("conteudo", "string");
 		return dadosAtualizacao;
+	}
+
+	/**
+	 * Gera dados para teste de artigo usando IDs de autor e categoria.
+	 * Usa dados que funcionam com a API quando o backend espera IDs ao invés de nomes.
+	 *
+	 * @param autorId ID do autor do artigo
+	 * @param categoriaId ID da categoria do artigo
+	 * @return Map contendo titulo, conteudo, autorId, categoriaId e dataPublicacao
+	 */
+	public static Map<String, Object> artigosTesteFixoComIds(String autorId, String categoriaId) {
+		Map<String, Object> artigo = new HashMap<>();
+		artigo.put("titulo", "Introdução aos Testes Automatizados");
+		artigo.put("conteudo", "Exemplos de ferramentas de testes automatizados...");
+		artigo.put("autorId", autorId);
+		artigo.put("categoriaId", categoriaId);
+		artigo.put("dataPublicacao", "2025-06-30T13:15:04.733Z");
+		return artigo;
 	}
 
 	/**

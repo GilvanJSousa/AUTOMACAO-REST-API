@@ -8,8 +8,8 @@ Feature: Validar Operações relacionadas a artigos
     Given que envio uma requisição de registro de usuario CMS
     When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
-    And crio uma categoria para os artigos
-    And preparo o autor para os artigos
+    And que envio uma requisição de cadastro de categoria
+#    And preparo o autor para os artigos
 
   @CT-3001
   Scenario: Validar Criar um novo artigo

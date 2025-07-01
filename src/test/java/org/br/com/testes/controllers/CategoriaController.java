@@ -29,11 +29,23 @@ public class CategoriaController {
 				.baseUri(BASE_URL)
 				.body(categoriaRequest)
 				.when()
-				.post(ENDPOINT_CATEGORIA);
+				.post(ENDPOINT_CATEGORIA)
+				.then()
+				.extract().response();
 
+		// Extrair e salvar todos os dados da categoria
+		String nome = response.jsonPath().getString("nome");
+		String descricao = response.jsonPath().getString("descricao");
 		String categoriaId = response.jsonPath().getString("id");
+		
+		// Salvar no CategoriaManager
+		CategoriaManager.setNomeCategoria(nome);
+		CategoriaManager.setDescricaoCategoria(descricao);
 		CategoriaManager.setCategoriaId(categoriaId);
+		
 		System.out.println("Categoria ID: " + categoriaId);
+		System.out.println("Nome: " + nome);
+		System.out.println("Descrição: " + descricao);
 	}
 
 	public void validarStatusCodeCategoria(int statusCode) {

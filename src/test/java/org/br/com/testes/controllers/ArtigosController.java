@@ -3,6 +3,7 @@ package org.br.com.testes.controllers;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.br.com.testes.manager.ArtigosManager;
+import org.br.com.testes.manager.CategoriaManager;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.utils.JavaFaker;
@@ -29,18 +30,23 @@ public class ArtigosController {
 		}
 		
 		// Usar dados dos managers que foram criados no Background
-		String nomeCategoria = ArtigosManager.getNomeCategoria();
+		String nomeCategoria = CategoriaManager.getNomeCategoria();
+		String nomeAutor = UsuarioManager.getNomeUsuario();
 		
 		// Se não houver dados nos managers, usar fallbacks
 		if (nomeCategoria == null || nomeCategoria.isEmpty()) {
 			nomeCategoria = "Tecnologia";
 		}
 		
-		// Usar nome literal "Usuario" conforme o cURL de exemplo da API
-		String nomeAutor = "Usuario";
+		if (nomeAutor == null || nomeAutor.isEmpty()) {
+			nomeAutor = "Usuario";
+		}
 		
-		// Gerar dados do artigo com nome literal do autor
+		// Gerar dados do artigo conforme o cURL fornecido
 		Map<String, String> artigoRequest = JavaFaker.artigosTesteFixo(nomeAutor, nomeCategoria);
+		
+		// Log do payload para debug
+		System.out.println("Payload enviado: " + artigoRequest);
 		
 		response = given()
 				.contentType(ContentType.JSON)
@@ -50,6 +56,9 @@ public class ArtigosController {
 				.body(artigoRequest)
 				.when()
 				.post(ENDPOINT_ARTIGOS);
+		
+		// Log da resposta para debug
+		System.out.println("Resposta da API: " + response.getBody().asString());
 		
 		if (response.getStatusCode() == 201) {
 			String artigoId = response.jsonPath().getString("id");

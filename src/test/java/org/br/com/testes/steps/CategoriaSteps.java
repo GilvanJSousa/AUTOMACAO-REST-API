@@ -17,19 +17,16 @@ public class CategoriaSteps {
 
 	@Given("que envio uma requisição de cadastro de categoria")
 	public void queEnvioUmaRequisicaoDeCadastroDeCategoria() throws Exception {
-		LogFormatter.logStep("Enviando requisição de cadastro de categoria");
 		categoriaController.cadastrarNovaCategoria();
 	}
 
 	@And("crio uma categoria para os testes")
 	public void crioUmaCategoriaParaOsTestes() {
-		LogFormatter.logStep("Criando categoria para os testes");
 		categoriaController.cadastrarNovaCategoria();
 	}
 
 	@Then("a API Categoria deve retornar o código de status {int}")
 	public void aAPIDeveRetornarOCodigoDeStatus(int statusCode) {
-		LogFormatter.logStep("Validando status code: " + statusCode);
 		categoriaController.validarStatusCodeCategoria(statusCode);
 	}
 
@@ -40,25 +37,21 @@ public class CategoriaSteps {
 
 	@Given("eu envio a requisição de busca de categorias por ID")
 	public void euEnvioARequisicaoDeBuscaDeCategoriasPorID() {
-		LogFormatter.logStep("Enviando requisição para buscar categoria por ID");
 		categoriaController.buscarCategoriaPorId();
 	}
 
 	@Given("eu envio a requisição de PUT com ID")
 	public void euEnvioARequisicaoDePUTComID() {
-		LogFormatter.logStep("Enviando requisição PUT para atualizar categoria");
 		categoriaController.atualizarCategoriaPorId();
 	}
 
 	@Given("eu envio a requisição de DELETE para o ID")
 	public void euEnvioARequisicaoDeDELETEParaOID() {
-		LogFormatter.logStep("Enviando requisição DELETE para excluir categoria");
 		categoriaController.excluirCategoriaPorId();
 	}
 
 	@Then("a API categoria deve retornar o status code {int} para exclusão")
 	public void aApiCategoriaDeveRetornarOStatusCodeParaExclusao(int statusCode) {
-		LogFormatter.logStep("Validando status code da exclusão: " + statusCode);
 		categoriaController.validarStatusCodeCategoria(statusCode);
 	}
 
