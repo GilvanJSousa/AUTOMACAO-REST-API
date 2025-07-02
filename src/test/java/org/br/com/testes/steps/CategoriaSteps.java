@@ -4,9 +4,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.qameta.allure.*;
 import org.br.com.testes.controllers.CategoriaController;
 import org.br.com.testes.utils.LogFormatter;
 
+@Epic("Gestão de Categorias")
+@Feature("Cadastro e Manutenção de Categorias")
 public class CategoriaSteps {
 
 	private final CategoriaController categoriaController;

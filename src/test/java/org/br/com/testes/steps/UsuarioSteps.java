@@ -4,7 +4,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.br.com.testes.controllers.UsuarioController;
+import org.br.com.testes.utils.LogFormatter;
+import io.qameta.allure.*;
 
+@Epic("Gestão de Usuários")
+@Feature("Cadastro e Manutenção de Usuários")
 public class UsuarioSteps {
 
 	private final UsuarioController usuarioController;
@@ -19,11 +23,6 @@ public class UsuarioSteps {
 		usuarioController.cadastrarNovoUsuario();
 	}
 
-	@When("o sistema processa a requisição")
-	public void oSistemaProcessaARequisicao() {
-		// Implementação do processamento
-	}
-
 	@Then("a API deve retornar o código de status {int}")
 	public void aAPIDeveRetornarOCodigoDeStatus(int statusCode) {
 		usuarioController.validarStatusCode(statusCode);
@@ -36,7 +35,6 @@ public class UsuarioSteps {
 
 	@Then("o token de autenticação deve ser retornado")
 	public void oTokenDeAutenticacaoDeveSerRetornado() {
-		usuarioController.validarStatusCode(200);
 //        xrayController.uploadReportToXray("reports/reports2.xml");
 	}
 

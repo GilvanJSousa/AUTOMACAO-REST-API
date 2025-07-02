@@ -68,7 +68,27 @@ LogFormatter.logJson(userData);
 }
 ```
 
-### 4. Métodos disponíveis no LogFormatter
+### 4. Como vai aparecer no console e relatório (RESULTADO REAL)
+
+**Antes (JSON concatenado):**
+```
+[01-07-2025 21:50:24.985] STEP: Enviando requisição de cadastro de usuário{"nomeCompleto":"Devante Sanford","nomeUsuario":"devante_sanford","email":"sanford.devante@hotmail.com","id":"b298c6a1-8fe4-43d0-90b5-ad4890997d61","dataCriacao":"2025-07-02T00:55:23.000Z"}
+```
+
+**Depois (JSON formatado):**
+```
+[01-07-2025 21:50:24.985] STEP: Enviando requisição de cadastro de usuário
+
+{
+  "nomeCompleto": "Devante Sanford",
+  "nomeUsuario": "devante_sanford",
+  "email": "sanford.devante@hotmail.com",
+  "id": "b298c6a1-8fe4-43d0-90b5-ad4890997d61",
+  "dataCriacao": "2025-07-02T00:55:23.000Z"
+}
+```
+
+### 5. Métodos disponíveis no LogFormatter
 
 - `logStep(String message)` - Log simples com timestamp
 - `logJson(String data)` - **Log JSON simples formatado (RECOMENDADO)**
@@ -76,30 +96,35 @@ LogFormatter.logJson(userData);
 - `logRequestJson(String method, String url, String body)` - Log de requisição em JSON
 - `logResponseJson(String statusCode, String body)` - Log de resposta em JSON
 
-### 5. Exemplo prático nos Steps
+### 6. Exemplo prático nos Controllers (Automático)
+
+```java
+// No UsuarioController.cadastrarNovoUsuario()
+String body = response.asString();
+
+// Log do step simples
+LogFormatter.logStep("Enviando requisição de cadastro de usuário");
+
+// Log do body da resposta formatado em JSON (AUTOMÁTICO)
+LogFormatter.logJson(body);
+```
+
+### 7. Como funciona nos Steps
 
 ```java
 @Step("Envio requisição de registro de usuário CMS")
 @When("que envio uma requisição de registro de usuario CMS")
 public void queEnvioUmaRequisicaoDeRegistroUsuarioCMS() {
-    // Log com dados estruturados (RECOMENDADO)
-    String userData = """
-    {
-        "nomeCompleto": "Edgar Prosacco",
-        "nomeUsuario": "edgar_prosacco",
-        "email": "prosacco.edgar@yahoo.com",
-        "senha": "P@ssword46"
-    }""";
-    
-    LogFormatter.logJson(userData);
+    // O log JSON será gerado automaticamente no controller
     usuarioController.cadastrarNovoUsuario();
 }
 ```
 
-### 6. Benefícios
+### 8. Benefícios
 
 - **Legibilidade**: JSON formatado é mais fácil de ler
 - **Estruturação**: Dados organizados em campos específicos
 - **Timestamp**: Cada log tem timestamp automático
 - **Attachments**: Aparecem como anexos no relatório Allure
-- **Filtros**: Podem ser filtrados por tipo no relatório 
+- **Filtros**: Podem ser filtrados por tipo no relatório
+- **Automático**: Não precisa adicionar logs manualmente nos steps 

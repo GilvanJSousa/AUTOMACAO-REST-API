@@ -13,7 +13,6 @@ Feature: Validar Operações relacionadas a artigos
   @CT-3001
   Scenario: Validar Criar um novo artigo
     Given que envio uma requisição de registro de usuario CMS
-    When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
     And que envio uma requisição de cadastro de categoria
     Given que envio uma requisição de cadastro de Artigos

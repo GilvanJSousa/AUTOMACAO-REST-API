@@ -8,9 +8,11 @@ import org.br.com.testes.model.LoginRequest;
 import org.br.com.testes.model.UsuarioRequest;
 import org.br.com.testes.utils.FakerApiData;
 import org.br.com.testes.utils.JavaFaker;
+import org.br.com.testes.utils.LogFormatter;
 
 import static io.restassured.RestAssured.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class UsuarioController {
@@ -41,7 +43,12 @@ public class UsuarioController {
 		UsuarioManager.setNomeUsuario(usuarioGerado.getNomeUsuario());
 		String userId = response.jsonPath().getString("id");
 		UsuarioManager.setIdUsuario(userId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 		System.out.println("Usuario ID: " + userId);
+
+
+
 	}
 
 	public void realizarLogin() {
@@ -67,6 +74,8 @@ public class UsuarioController {
 		TokenManager.setUserId(userId);
 		UsuarioManager.setIdUsuario(userId);
 		System.out.println("Token: " + token);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void listarUsuariosComAutenticacao() {
@@ -91,6 +100,8 @@ public class UsuarioController {
 				.baseUri(BASE_URL)
 				.when()
 				.get(ENDPOINT_USUARIOS + "/" + userId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void atualizarUsuarioPorId() {
@@ -106,6 +117,8 @@ public class UsuarioController {
 				.body(novosDados)
 				.when()
 				.put(ENDPOINT_USUARIOS + "/" + userId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void excluirUsuarioPorId() {
@@ -117,11 +130,14 @@ public class UsuarioController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_USUARIOS + "/" + idUsuario);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void validarStatusCode(int statusCode) {
 		response.then()
 				.statusCode(statusCode);
+		LogFormatter.logStepJson("Validação de Status Code ", String.valueOf(+ statusCode));
 	}
 
 	public void exclusaoDeMassas(String email, String senha) {
@@ -140,6 +156,8 @@ public class UsuarioController {
 		String token = response.jsonPath().getString("token");
 		TokenManager.setToken(token);
 		System.out.println("Token: " + token);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void massasParaExcluir(String idUsuario) {
@@ -151,6 +169,8 @@ public class UsuarioController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_USUARIOS + "/" + idUsuario);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 
 	}
 }

@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 import org.br.com.testes.manager.CategoriaManager;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.utils.JavaFaker;
+import org.br.com.testes.utils.LogFormatter;
+
 import java.util.Map;
 import static io.restassured.RestAssured.*;
 
@@ -46,11 +48,14 @@ public class CategoriaController {
 		System.out.println("Categoria ID: " + categoriaId);
 		System.out.println("Nome: " + nome);
 		System.out.println("Descrição: " + descricao);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void validarStatusCodeCategoria(int statusCode) {
 		response.then()
 				.statusCode(statusCode);
+		LogFormatter.logStepJson("Validação de Status Code ", String.valueOf(+ statusCode));
 	}
 
 	public void listarCategorias() {
@@ -65,6 +70,8 @@ public class CategoriaController {
 				.then()
 				.log().all()
 				.extract().response();
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void buscarCategoriaPorId() {
@@ -77,6 +84,8 @@ public class CategoriaController {
 				.baseUri(BASE_URL)
 				.when()
 				.get(ENDPOINT_CATEGORIA + "/" + categoriaId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void atualizarCategoriaPorId() {
@@ -92,6 +101,8 @@ public class CategoriaController {
 				.body(novaCategoria)
 				.when()
 				.put(ENDPOINT_CATEGORIA + "/" + categoriaId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void excluirCategoriaPorId() {
@@ -104,6 +115,8 @@ public class CategoriaController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_CATEGORIA + "/" + categoriaId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void excluirCategoriaEmMassa(String id) {
@@ -116,6 +129,8 @@ public class CategoriaController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_CATEGORIA + "/" + id);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 
 	}
 }

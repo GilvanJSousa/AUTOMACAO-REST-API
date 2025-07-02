@@ -7,7 +7,6 @@ Feature: Gerenciamento de Usuários CMS
   @CT-1001 @ATJ-332 @API
   Scenario: Criar um novo usuário CMS com sucesso
     Given que envio uma requisição de registro de usuario CMS
-    Given o sistema processa a requisição
     Then a API deve retornar o código de status 201
 
   @CT-1002 @ATJ-331 @API

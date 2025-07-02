@@ -34,9 +34,9 @@ public class LogFormatter {
             // Criar objeto JSON estruturado
             String jsonLog = String.format("""
                 {
-                    "timestamp": "%s",
-                    "step": "%s",
-                    "data": %s
+//                    "timestamp": "%s",
+//                    "step": "%s",
+                    "Status Code": %s
                 }""", timestamp, stepName, data);
             
             // Formatar JSON para ficar legível
@@ -51,7 +51,7 @@ public class LogFormatter {
         }
     }
 
-    @Attachment(value = "Log JSON Simples", type = "application/json")
+    @Attachment(value = "Log JSON", type = "application/json")
     public static String logJson(String data) {
         try {
             // Formatar JSON para ficar legível

@@ -12,7 +12,6 @@ Feature: Validar Operações relacionadas a categoria
   @CT-2001
   Scenario: Validar Criar um novo categoria
     Given que envio uma requisição de registro de usuario CMS
-    When o sistema processa a requisição
     Then eu envio a requisição de login com as credenciais do usuário
     Given que envio uma requisição de cadastro de categoria
     Then a API Categoria deve retornar o código de status 201

@@ -1,10 +1,11 @@
 package org.br.com.testes.utils.logger;
 
+import lombok.extern.apachecommons.CommonsLog;
 import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalDateTime;
 
-@Log4j2
+@CommonsLog
 public class ContextTime {
 
 	private static ThreadLocal<LocalDateTime> timeSuiteInit = new ThreadLocal<LocalDateTime>();

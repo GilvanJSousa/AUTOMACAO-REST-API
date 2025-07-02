@@ -7,6 +7,7 @@ import org.br.com.testes.manager.CategoriaManager;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.UsuarioManager;
 import org.br.com.testes.utils.JavaFaker;
+import org.br.com.testes.utils.LogFormatter;
 
 import java.util.Map;
 
@@ -41,12 +42,14 @@ public class ArtigosController {
 		String artigoId = response.jsonPath().getString("id");
 		ArtigosManager.setArtigoId(artigoId);
 		System.out.println("Artigo ID: " + artigoId);
-		ArtigosManager.setResponse(response);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void validarStatusCodeArtigos(int statusCodeEsperado) {
 		response.then()
 				.statusCode(statusCodeEsperado);
+		LogFormatter.logStepJson("Validação de Status Code ", String.valueOf(+ statusCodeEsperado));
 
 	}
 
@@ -74,8 +77,9 @@ public class ArtigosController {
 				.then()
 				.log().all()
 				.extract().response();
-		
-//		ArtigosManager.setResponse(response);
+
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void buscarArtigoPorId() {
@@ -89,8 +93,9 @@ public class ArtigosController {
 				.baseUri(BASE_URL)
 				.when()
 				.get(ENDPOINT_ARTIGOS + "/" + artigoId);
-		
-//		ArtigosManager.setResponse(response);
+
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void atualizarArtigoPorId() {
@@ -107,8 +112,9 @@ public class ArtigosController {
 				.body(dadosAtualizacao)
 				.when()
 				.put(ENDPOINT_ARTIGOS + "/" + artigoId);
-		
-//		ArtigosManager.setResponse(response);
+
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void excluirArtigoPorId() {
@@ -122,8 +128,9 @@ public class ArtigosController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_ARTIGOS + "/" + artigoId);
-		
-//		ArtigosManager.setResponse(response);
+
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void excluirArtigosEmMassa(String id) {
@@ -136,10 +143,13 @@ public class ArtigosController {
 				.baseUri(BASE_URL)
 				.when()
 				.delete(ENDPOINT_ARTIGOS + "/" + id);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 	public void validarStatusCodeExclusao(int statusCodeEsperado) {
 		response.then().statusCode(statusCodeEsperado);
+		LogFormatter.logStepJson("Validação de Status Code ", String.valueOf(+ statusCodeEsperado));
 	}
 
 	public void criarCategoriaAntesDoArtigo() {
@@ -161,6 +171,8 @@ public class ArtigosController {
 		ArtigosManager.setCategoriaId(categoriaId);
 		ArtigosManager.setNomeCategoria(nomeCategoria);
 		System.out.println("Categoria ID: " + categoriaId);
+		// Log do body da resposta formatado em JSON
+		LogFormatter.logJson(response.asString());
 	}
 
 }
