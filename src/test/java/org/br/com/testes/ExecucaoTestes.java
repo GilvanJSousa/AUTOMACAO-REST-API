@@ -8,13 +8,14 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
-        tags = "@usuario",
+        tags = "@all",
         monochrome = false,
         dryRun = false,
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports/cucumber.html",
-                "json:target/cucumber-reports/cucumber.json"
+                "json:target/cucumber-reports/cucumber.json",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
         },
         publish = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE,

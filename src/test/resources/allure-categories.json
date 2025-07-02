@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Falhas de Teste",
+    "matchedStatuses": ["failed"]
+  },
+  {
+    "name": "Testes Ignorados",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Problemas de Configuracao",
+    "matchedStatuses": ["broken"]
+  },
+  {
+    "name": "Testes Passaram",
+    "matchedStatuses": ["passed"]
+  }
+] 

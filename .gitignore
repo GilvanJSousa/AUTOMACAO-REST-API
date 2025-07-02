@@ -182,3 +182,12 @@ src/test/resources/config.properties
 
 # Arquivos de configuração de exemplo
 !src/test/resources/config.properties.example
+
+# Allure Framework
+allure-results/
+allure-report/
+.allure/
+target/allure-results/
+target/allure-report/
+*-result.json
+*-container.json
