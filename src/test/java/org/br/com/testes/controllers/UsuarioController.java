@@ -12,7 +12,6 @@ import org.br.com.testes.utils.LogFormatter;
 
 import static io.restassured.RestAssured.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 public class UsuarioController {

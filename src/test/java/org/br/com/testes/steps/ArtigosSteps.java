@@ -8,8 +8,6 @@ import org.br.com.testes.controllers.ArtigosController;
 import org.br.com.testes.utils.LogFormatter;
 import io.qameta.allure.*;
 
-@Epic("Gestão de Artigos")
-@Feature("Cadastro e Manutenção de Artigos")
 public class ArtigosSteps {
 
 	private final ArtigosController artigosController;
