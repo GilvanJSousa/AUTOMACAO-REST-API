@@ -17,13 +17,22 @@ public class CadastroViagemSteps {
 		cadastroViagemController.gerarTokenAdmin();
 	}
 
-	@Given("que envi uma requisição de cadastro de viagem")
-	public void queEnviUmaRequisicaoDeCadastroDeViagem() {
+	@Given("que envio uma requisição de cadastro de viagem")
+	public void queEnvioUmaRequisicaoDeCadastroDeViagem() {
 		cadastroViagemController.cadastrarViagem();
 	}
 	@Then("a API cadastro de viagem deve retornar o código de status {int}")
 	public void aAPICadastroDeViagemDeveRetornarOCodigoDeStatus(Integer int1) {
 		cadastroViagemController.validarStatusCode(int1);
+	}
+
+	@Given("que envio uma requisição GET para retornar todas as viagens")
+	public void queEnvioUmaRequisiçãoGETParaRetornarTodasAsViagens() {
+	}
+
+	@Then("a API Retorna todas as viagens deve retornar o código de status {int}")
+	public void aAPIRetornaTodasAsViagensDeveRetornarOCódigoDeStatus(int arg0) {
+
 	}
 
 

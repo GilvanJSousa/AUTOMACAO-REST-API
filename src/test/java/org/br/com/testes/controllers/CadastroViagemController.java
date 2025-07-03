@@ -26,7 +26,8 @@ public class CadastroViagemController {
 	}
 
 	public void cadastrarViagem() {
-		String token = TokenManager.getToken();
+		String token = "";
+		token = TokenManager.getToken();
 		CadastroViagemRequest request = CadastroViagemRequest.builder()
 				.acompanhate("Maria")
 				.dataPartida("2025-03-07")
