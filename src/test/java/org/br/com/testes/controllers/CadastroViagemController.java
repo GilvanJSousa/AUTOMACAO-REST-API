@@ -15,34 +15,32 @@ public class CadastroViagemController {
 	private Response response;
 	private static final String BASE_URL = "http://localhost:8089/api";
 	private static final String ENDPOINT = "/v1/viagens";
-	private static final String token = TokenManager.getToken();
+
 
 	public CadastroViagemController() {
 		this.response = null;
 	}
 
-	@Test
-	public void cadastrarViagem() {
-		GerarToken.gerarToken();
 
+	public void cadastrarViagem() {
+		GerarToken.gerarTokenAdmin();
+		String token = TokenManager.getToken();
 		CadastroViagemRequest request = CadastroViagemRequest.builder()
-				.acompanhate("Gilvan")
-				.dataPartida("2023-08-01")
-				.dataRetorno("2023-08-10")
+				.acompanhate("Maria")
+				.dataPartida("2025-03-07")
+				.dataRetorno("2025-03-08")
 				.localDeDestino("São Paulo")
 				.regiao("Sul")
 				.build();
 
 		this. response = given()
+//				.header("accept", "application/json")
+				.header("Authorization", " " + token)
 				.contentType(ContentType.JSON)
-				.header("Authorization", "Bearer " + token)
-				.baseUri(BASE_URL)
+				.log().all()
 				.body(request)
 				.when()
-				.post(ENDPOINT)
-				.then()
-				.extract()
-				.response();
+				.post(BASE_URL + ENDPOINT);
 
 		LogFormatter.logStep(response.asPrettyString());
 
