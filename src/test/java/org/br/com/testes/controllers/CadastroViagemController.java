@@ -21,9 +21,11 @@ public class CadastroViagemController {
 		this.response = null;
 	}
 
+	public void gerarTokenAdmin() {
+		GerarToken.gerarTokenAdmin();
+	}
 
 	public void cadastrarViagem() {
-		GerarToken.gerarTokenAdmin();
 		String token = TokenManager.getToken();
 		CadastroViagemRequest request = CadastroViagemRequest.builder()
 				.acompanhate("Maria")
