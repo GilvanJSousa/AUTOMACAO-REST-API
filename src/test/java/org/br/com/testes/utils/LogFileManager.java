@@ -53,4 +53,15 @@ public class LogFileManager {
             logWriter.close();
         }
     }
+
+    public static void setLogFile(String filePath) {
+        close();
+        try {
+            File logFile = new File(filePath);
+            logFile.getParentFile().mkdirs();
+            logWriter = new PrintWriter(new FileWriter(logFile, true));
+        } catch (IOException e) {
+            System.err.println("Erro ao inicializar arquivo de log: " + e.getMessage());
+        }
+    }
 } 
