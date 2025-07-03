@@ -4,12 +4,12 @@ Feature: Validar Login
   Eu quero realizar login
   para gerar o accessToken
 
-  @loginAdmin
+  @@TEST_QAR-1547
   Scenario: Validar login com sucesso
     Given envio uma solicitação POST de login como Admin
-    Then valido o API Login com status coide 200
+    Then valido o API Login com status code 200
 
-  @loginUsuario
+  @@TEST_QAR-1548
   Scenario: Validar login com sucesso
     Given envio uma solicitação POST de login como Usuario
-    Then valido o API Login com status coide 200
+    Then valido o API Login com status code 200

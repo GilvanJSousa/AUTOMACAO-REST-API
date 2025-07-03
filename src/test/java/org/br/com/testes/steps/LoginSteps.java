@@ -24,7 +24,7 @@ public class LoginSteps {
         gerarTokenController.gerarTokenUsuario();
     }
 
-    @Then("valido o API Login com status coide {int}")
+    @Then("valido o API Login com status code {int}")
     public void validoOAPILoginComStatusCoide(Integer int1) {
         gerarTokenController.validarStatusCode(int1);
     }

@@ -157,4 +157,11 @@ public class LogFormatter {
     public static void close() {
         LogFileManager.close();
     }
+
+    public static void logTag(String tag) {
+        // Garante que só um @ seja exibido
+        String formattedTag = tag.startsWith("@") ? tag : "@" + tag;
+        System.out.println(formattedTag);
+        logToFile(formattedTag);
+    }
 } 
