@@ -1,4 +1,4 @@
-package org.br.com.testes.tokens;
+package org.br.com.testes.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GerarTokenResquest {
-    private String email;
-    private String password;
+    private String username;
+    private String senha;
 }
