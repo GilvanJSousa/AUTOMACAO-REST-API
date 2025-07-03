@@ -2,6 +2,7 @@ package org.br.com.testes.utils.logger;
 
 import lombok.extern.apachecommons.CommonsLog;
 import lombok.extern.log4j.Log4j2;
+import org.br.com.testes.utils.LogFormatter;
 
 import java.time.LocalDateTime;
 
@@ -28,14 +29,11 @@ public class ContextTime {
 	}
 
 	private static void printHour(String previous, LocalDateTime time) {
-		log.info(String.format("%s: %d:%d:%d", previous, time.getHour(), time.getMinute(), time.getSecond()));
+		LogFormatter.logStep(String.format("%s: %d:%d:%d", previous, time.getHour(), time.getMinute(), time.getSecond()));
 	}
 
 	private static void printTime(String previous, LocalDateTime time) {
-		log.info(String.format("%s: %d Hour(s) %d minute(s) %d second(s)", previous, //
-				time.getHour(), //
-				time.getMinute(), //
-				time.getSecond()));
+		LogFormatter.logStep(String.format("%s: %d Hour(s) %d minute(s) %d second(s)", previous, time.getHour(), time.getMinute(), time.getSecond()));
 	}
 
 	private static LocalDateTime returnDifferenceBetweenTimes(LocalDateTime timeInit, LocalDateTime timeFinal) {

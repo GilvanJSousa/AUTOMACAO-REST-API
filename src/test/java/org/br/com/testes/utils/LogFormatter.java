@@ -18,11 +18,26 @@ public class LogFormatter {
         LogFileManager.writeLog(message);
     }
 
+    public static void logTestId(String testId) {
+        String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
+        String formattedMessage = String.format("[%s] +--:| TestID: %s", timestamp, testId);
+        System.out.println(formattedMessage);
+        logToFile(formattedMessage);
+    }
+
+    public static void logFeature(String featureName) {
+        String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
+        String formattedMessage = String.format("[%s] +---:| Feature: %s", timestamp, featureName);
+        System.out.println(formattedMessage);
+        logToFile(formattedMessage);
+    }
+
     @Attachment(value = "Log do Step", type = "text/plain")
     public static String logStep(String message) {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String formattedMessage = String.format("[%s] STEP: %s", timestamp, message);
+        String formattedMessage = String.format("[%s] +----: %s", timestamp, message);
         System.out.println(formattedMessage);
+        logToFile(formattedMessage);
         return formattedMessage;
     }
 

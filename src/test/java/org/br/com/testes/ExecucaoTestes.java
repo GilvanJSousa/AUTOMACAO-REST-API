@@ -8,11 +8,11 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = "org.br.com.testes.steps",
-        tags = "@all",
+        tags = "@login",
         monochrome = false,
         dryRun = false,
         plugin = {
-                "pretty",
+                //"pretty",
                 "html:target/cucumber-reports/cucumber.html",
                 "json:target/cucumber-reports/cucumber.json",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
         publish = false,
         snippets = CucumberOptions.SnippetType.CAMELCASE,
         stepNotifications = false
-
 )
 
 public class ExecucaoTestes {

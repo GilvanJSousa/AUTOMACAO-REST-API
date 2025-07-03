@@ -22,7 +22,6 @@ public class GerarTokenController {
         response = null;
     }
 
-    @Test
     public void gerarTokenAdmin() {
 
         GerarTokenResquest resquest = GerarTokenResquest.builder()
@@ -39,8 +38,44 @@ public class GerarTokenController {
 
         String token = response.jsonPath().getString("token");
         TokenManager.setToken(token);
-        LogFormatter.logStep("Token : " + token.replace((char) 1, (char) 10) + "...");
+        LogFormatter.logStep("Token gerado: " + token.substring(1, 10) + "...");
 
+    }
+
+    public void gerarTokenUsuario() {
+        GerarTokenResquest resquest = GerarTokenResquest.builder()
+                .username("usuario")
+                .senha("senha123")
+                .build();
+
+        response = given()
+                .contentType(ContentType.JSON)
+                .baseUri(BASE_URL)
+                .body(resquest)
+                .when()
+                .post(ENDPOINT);
+
+        String token = response.jsonPath().getString("token");
+        TokenManager.setToken(token);
+        LogFormatter.logStep("Token gerado: " + token.substring(1, 10) + "...");
+    }
+
+    public void validarStatusCode(int statusCode) {
+        response.then().statusCode(statusCode);
+        LogFormatter.logStepJson(
+                "Validação de Status Code ",
+                String.valueOf(+ statusCode));
+    }
+
+
+    /**
+     * Mascarar token para log seguro
+     */
+    private String mascararToken(String token) {
+        if (token == null || token.length() <= 12) {
+            return "****";
+        }
+        return token.substring(0, 6) + "..." + token.substring(token.length() - 6);
     }
 
 }
