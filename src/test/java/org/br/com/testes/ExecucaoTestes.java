@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
         monochrome = true,
         dryRun = false,
         plugin = {
-                //"pretty",
+                "org.br.com.testes.utils.LogSummaryPlugin",
                 "html:target/cucumber-reports/cucumber.html",
                 "json:target/cucumber-reports/cucumber.json",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"

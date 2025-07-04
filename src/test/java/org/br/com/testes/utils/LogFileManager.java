@@ -3,7 +3,9 @@ package org.br.com.testes.utils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,7 +61,7 @@ public class LogFileManager {
         try {
             File logFile = new File(filePath);
             logFile.getParentFile().mkdirs();
-            logWriter = new PrintWriter(new FileWriter(logFile, true));
+            logWriter = new PrintWriter(new OutputStreamWriter(new FileOutputStream(logFile, true), java.nio.charset.StandardCharsets.UTF_8));
         } catch (IOException e) {
             System.err.println("Erro ao inicializar arquivo de log: " + e.getMessage());
         }

@@ -64,7 +64,7 @@ public class GerarTokenController {
         response.then().statusCode(statusCode);
         LogFormatter.logStepJson(
                 "Validação de Status Code ",
-                String.valueOf(+ statusCode));
+                String.valueOf(+ statusCode + "\n"));
     }
 
 

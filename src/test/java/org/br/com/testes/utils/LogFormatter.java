@@ -164,4 +164,46 @@ public class LogFormatter {
         System.out.println(formattedTag);
         logToFile(formattedTag);
     }
+
+    public static void logTagOnce(String tag, String logFilePath) {
+        java.io.File logFile = new java.io.File(logFilePath);
+        boolean shouldLog = !logFile.exists() || logFile.length() == 0;
+        if (shouldLog) {
+            logTag(tag);
+        }
+    }
+
+    public static void logHeader() {
+        String header = "-------------------------------------------------------\n        T E S T S\n-------------------------------------------------------";
+        System.out.println(header);
+        LogFileManager.writeLog("-------------------------------------------------------");
+        LogFileManager.writeLog("T E S T S");
+        LogFileManager.writeLog("-------------------------------------------------------");
+    }
+
+    public static void logFooterSummary(int testsRun, int failures, int errors, int skipped, double timeElapsed, double totalTime, String finishedAt) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("-------------------------------------------------------\n");
+        sb.append("SUCCESS\n");
+        sb.append("------------------------------------------------------\n");
+        sb.append(String.format("Tests run: %d, \n", testsRun));
+        sb.append(String.format("Failures: %d, \n", failures));
+        sb.append(String.format("Errors: %d, \n", errors));
+        sb.append(String.format("Skipped: %d, \n", skipped));
+        sb.append(String.format("Time elapsed: %.2f s\n", timeElapsed));
+        sb.append(String.format("Total time:  %.3f s\n", totalTime));
+        sb.append(String.format("Finished at: %s\n", finishedAt));
+        System.out.print(sb.toString());
+        LogFileManager.writeLog("");
+        LogFileManager.writeLog("-------------------------------------------------------");
+        LogFileManager.writeLog("BUILD SUCCESS");
+        LogFileManager.writeLog("-------------------------------------------------------");
+        LogFileManager.writeLog(String.format("Tests run: %d, ", testsRun));
+        LogFileManager.writeLog(String.format("Failures: %d, ", failures));
+        LogFileManager.writeLog(String.format("Errors: %d, ", errors));
+        LogFileManager.writeLog(String.format("Skipped: %d, ", skipped));
+        LogFileManager.writeLog(String.format("Time elapsed: %.2f s", timeElapsed));
+        LogFileManager.writeLog(String.format("Total time:  %.3f s", totalTime));
+        LogFileManager.writeLog(String.format("Finished at: %s", finishedAt));
+    }
 } 
