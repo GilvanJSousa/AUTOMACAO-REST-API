@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.Locale;
 
 @Getter
 public class FakerApiData {
@@ -185,8 +186,37 @@ public class FakerApiData {
 			this.cvv = "123";
 
 		} catch (IOException e) {
-			throw new RuntimeException("Erro ao gerar dados fake: " + e.getMessage());
+			// Fallback para JavaFaker local quando a API externa falhar
+			LogFormatter.logStep("API externa indisponivel, usando JavaFaker local");
+			generateFakeDataLocal();
 		}
+	}
+
+	/**
+	 * Gera dados fake usando JavaFaker local como fallback.
+	 * Usado quando a API externa fakerapi.it está indisponível.
+	 */
+	private void generateFakeDataLocal() {
+		com.github.javafaker.Faker faker = new com.github.javafaker.Faker(new Locale("pt", "BR"));
+		
+		this.id = UUID.randomUUID().toString();
+		this.createdAt = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		this.firstName = faker.name().firstName();
+		this.lastName = faker.name().lastName();
+		this.phoneNumber = faker.phoneNumber().phoneNumber();
+		this.emailAddress = faker.internet().emailAddress();
+		this.password = faker.internet().password(8, 16, true, true, true);
+		this.fullName = faker.name().fullName();
+		this.addressLine = faker.address().streetAddress();
+		this.addressLine2 = faker.address().secondaryAddress();
+		this.city = faker.address().city();
+		this.stateRegion = faker.address().state();
+		this.zipCode = faker.address().zipCode();
+		this.country = faker.address().country();
+		this.cardNumber = faker.business().creditCardNumber();
+		this.cardFullName = this.fullName;
+		this.expiryDate = faker.business().creditCardExpiry();
+		this.cvv = String.valueOf(faker.number().numberBetween(100, 999));
 	}
 
 	public void salvarDadosEmJson() {

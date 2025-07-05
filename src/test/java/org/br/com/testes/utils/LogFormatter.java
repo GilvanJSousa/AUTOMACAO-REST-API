@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class LogFormatter {
     private static final Logger logger = LoggerFactory.getLogger(LogFormatter.class);
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static void logToFile(String message) {
@@ -27,7 +27,7 @@ public class LogFormatter {
 
     public static void logFeature(String featureName) {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String formattedMessage = String.format("[%s] +---:| Feature: %s", timestamp, featureName);
+        String formattedMessage = String.format("[%s] [INFO] Feature: %s", timestamp, featureName);
         System.out.println(formattedMessage);
         logToFile(formattedMessage);
     }
@@ -35,7 +35,7 @@ public class LogFormatter {
     @Attachment(value = "Log do Step", type = "text/plain")
     public static String logStep(String message) {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String formattedMessage = String.format("[%s] +----: %s", timestamp, message);
+        String formattedMessage = String.format("[%s] [INFO] %s", timestamp, message);
         System.out.println(formattedMessage);
         logToFile(formattedMessage);
         return formattedMessage;

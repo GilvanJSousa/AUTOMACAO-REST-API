@@ -1,0 +1,374 @@
+# Estrutura e Boas Práticas: src/test/java
+
+O diretório [src/test/java](mdc:src/test/java) contém todo o código-fonte dos testes automatizados, organizado por pacotes Java. Aqui ficam:
+
+- Steps definitions (implementações dos steps do Cucumber)
+- Page Objects (Elements, Logic, Steps)
+- Classes utilitárias e de suporte aos testes
+
+## Padrão de organização
+- Cada feature deve ter seu próprio pacote dentro de `pages`.
+- Não criar pacotes separados para steps, elements ou logic.
+- Exemplo: `org/br/com/web/pages/login/LoginElements.java`, `LoginLogic.java`, `LoginSteps.java`
+
+## Steps: Evite Duplicidade e Reaproveite com Critério
+- **Nunca duplique steps**: Steps com nomes idênticos em diferentes classes dificultam manutenção e geram inconsistências.
+- **Reaproveite steps** apenas quando o comportamento for idêntico e genérico entre features.
+- **Crie steps específicos** (com nome/contexto da feature) quando houver qualquer variação de lógica, dados ou fluxo de negócio.
+- **Exemplo correto**:
+  - Genérico: `@Given("que estou logado como admin")`
+  - Específico: `@Given("que estou na pagina de cadastro de usuario")`
+- **Justificativa**: Garante rastreabilidade, facilita manutenção e evita efeitos colaterais ao evoluir features.
+
+## Importante
+- Siga as convenções de nomenclatura e estrutura definidas nas regras do projeto para garantir consistência e fácil manutenção.
+- Consulte sempre as regras de steps e page objects para evitar duplicidade e promover reaproveitamento responsável.
+
+## Referências externas
+- [Documentação oficial da API Cielo E-commerce](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api)
+
+Acesse o link acima para detalhes sobre endpoints, exemplos de integração, ambientes (sandbox/produção) e melhores práticas de uso da API Cielo. Utilize essas informações para garantir que os testes automatizados estejam alinhados com a documentação oficial e cubram os principais fluxos de negócio.
+
+## Exemplos práticos de integração com a API Cielo
+
+### 1. Criação de pagamento com cartão de crédito (endpoint transacional)
+
+- **Endpoint:** `POST /1/sales/`
+- **Exemplo de uso em teste automatizado:**
+  - Validar criação de transação com dados válidos de cartão
+  - Validar resposta de erro para cartão inválido
+
+```java
+// Exemplo de step para criar pagamento
+@When("realizo um pagamento com cartao de credito valido")
+public void realizoPagamentoCartaoCreditoValido() {
+    // Chamar lógica que executa POST para /1/sales/ com dados válidos
+}
+
+// Exemplo de step para validar erro
+@Then("valido mensagem de erro para cartao invalido")
+public void validoMensagemErroCartaoInvalido() {
+    // Chamar lógica que executa POST para /1/sales/ com dados inválidos e valida resposta de erro
+}
+```
+
+### 2. Consulta de transação por PaymentId (endpoint de consulta)
+
+- **Endpoint:** `GET /1/sales/{paymentId}`
+- **Exemplo de uso em teste automatizado:**
+  - Validar que a transação criada pode ser consultada e retorna os dados esperados
+
+```java
+@When("consulto a transacao pelo paymentId")
+public void consultoTransacaoPorPaymentId() {
+    // Chamar lógica que executa GET para /1/sales/{paymentId}
+}
+
+@Then("valido os dados da transacao retornada")
+public void validoDadosTransacaoRetornada() {
+    // Validar campos obrigatórios na resposta
+}
+```
+
+### 3. Cancelamento de transação
+
+- **Endpoint:** `PUT /1/sales/{paymentId}/void`
+- **Exemplo de uso em teste automatizado:**
+  - Validar que uma transação pode ser cancelada e o status é atualizado corretamente
+
+```java
+@When("cancelo a transacao pelo paymentId")
+public void canceloTransacaoPorPaymentId() {
+    // Chamar lógica que executa PUT para /1/sales/{paymentId}/void
+}
+
+@Then("valido que o status da transacao foi atualizado para cancelado")
+public void validoStatusTransacaoCancelada() {
+    // Validar status na resposta
+}
+```
+
+> Consulte sempre a [documentação oficial da API Cielo](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api) para detalhes de payload, exemplos de resposta e regras de negócio.
+
+# Estrutura e Boas Práticas: src/test/resources
+
+O diretório [src/test/resources](mdc:src/test/resources) armazena todos os recursos necessários para a execução dos testes automatizados, incluindo:
+
+- Arquivos `.feature` do Cucumber (em `features/`)
+- Arquivos de configuração (`config.properties`, `logback-test.xml`, etc.)
+- Dados de teste, templates e outros recursos
+
+## Padrão de organização
+- Features devem estar em `src/test/resources/features`.
+- Configurações e arquivos auxiliares ficam diretamente em `src/test/resources`.
+
+## Convenções importantes
+- Não use acentos nos nomes dos arquivos.
+- Siga as convenções de nomenclatura do projeto para evitar problemas de compatibilidade.
+- Não utilize `# language: pt` nos arquivos feature; o idioma deve ser configurado globalmente.
+- Prefixos do Cucumber sempre em inglês: `Feature:`, `Scenario:`, `Given`, `When`, `Then`, `And`.
+
+## Justificativa
+- Organização clara facilita manutenção, onboarding e evolução dos testes.
+- Seguir padrões evita erros de execução e problemas de compatibilidade entre ambientes.
+
+## Referências externas
+- [Documentação oficial da API Cielo E-commerce](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api)
+
+Consulte o link acima para garantir que os arquivos de recursos (features, dados de teste, configs) estejam em conformidade com os fluxos e requisitos documentados pela Cielo, facilitando a criação de cenários realistas e completos.
+
+## Exemplos práticos de features e recursos alinhados à API Cielo
+
+### Exemplo de arquivo .feature para pagamento com cartão de crédito
+
+```gherkin
+Feature: Pagamento com cartao de credito
+  Como usuario
+  Eu quero realizar um pagamento com cartao de credito
+  Para efetuar compras online
+
+  @ATJ-123 @all
+  Scenario: Realizar pagamento com cartao valido
+    Given que estou com os dados do cartao valido
+    When realizo um pagamento com cartao de credito valido
+    Then valido que o pagamento foi aprovado
+
+  Scenario: Tentar pagamento com cartao invalido
+    Given que estou com os dados do cartao invalido
+    When realizo um pagamento com cartao de credito invalido
+    Then valido mensagem de erro para cartao invalido
+```
+
+### Exemplo de arquivo de configuração para ambiente sandbox
+
+```
+# config.properties
+cielo.api.url=https://apisandbox.cieloecommerce.cielo.com.br/1/sales/
+cielo.api.query.url=https://apiquerysandbox.cieloecommerce.cielo.com.br/1/sales/
+cielo.merchant.id=SEU_MERCHANT_ID
+ecielo.merchant.key=SEU_MERCHANT_KEY
+```
+
+> Consulte sempre a [documentação oficial da API Cielo](mdc:https:/docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api) para exemplos completos de payloads, respostas e regras de negócio.
+
+# Configuração e Uso do Allure Framework
+
+## Visão Geral
+O Allure é uma ferramenta de geração de relatórios para testes automatizados, integrado com Cucumber, JUnit e Rest Assured. O projeto possui um plugin customizado (`AllureAutoReportPlugin`) que automatiza a geração e abertura do relatório.
+
+## Estrutura de Arquivos do Allure
+
+### Arquivos de Configuração Obrigatórios
+```
+src/test/resources/
+├── allure.properties              # Configuração principal
+├── allure-categories.json         # Categorização de falhas
+└── allure-environment.properties  # Configuração do ambiente
+```
+
+### Arquivos de Resultado
+```
+target/
+├── allure-results/                # Resultados brutos (JSON)
+└── allure-report/                 # Relatório HTML gerado
+```
+
+## Controle de Ativação do Allure
+
+### Parâmetro Principal: `allure.enabled`
+Localizado em `src/test/resources/allure.properties`:
+```properties
+allure.enabled=true   # Habilita geração de relatório
+allure.enabled=false  # Desabilita geração de relatório
+```
+
+**Comportamento:**
+- `true`: Executa testes + gera relatório + abre navegador automaticamente
+- `false`: Executa apenas os testes, sem gerar relatório
+
+## Plugin Customizado: AllureAutoReportPlugin
+
+### Localização
+`src/test/java/org/br/com/testes/utils/AllureAutoReportPlugin.java`
+
+### Funcionalidades
+- Executa automaticamente ao final dos testes
+- Lê a configuração `allure.enabled` do arquivo properties
+- Gera relatório usando `allure serve target/allure-results`
+- Abre navegador automaticamente na URL correta
+- Evita abertura dupla do navegador
+- Logs de debug comentados para output limpo
+
+### Configuração no Runner
+```java
+@CucumberOptions(
+    plugin = {
+        "org.br.com.testes.utils.LogSummaryPlugin",
+        "org.br.com.testes.utils.AllureAutoReportPlugin",  // Plugin customizado
+        "html:target/cucumber-reports/cucumber.html",
+        "json:target/cucumber-reports/cucumber.json",
+        "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"  // Plugin oficial (obrigatório)
+    },
+    ...
+)
+```
+
+## Scripts de Automação
+
+### executa-tudo.bat
+Script principal que:
+- Lê `allure.enabled` do arquivo properties
+- Executa testes com perfil apropriado
+- Gera relatório se habilitado
+- Abre navegador automaticamente
+
+### abrir-allure.bat
+Script para abrir relatório existente:
+- Tenta porta 56565 primeiro
+- Fallback para porta 8080
+- Filtra mensagens de erro
+
+## Boas Práticas para Allure
+
+### 1. Controle de Ativação
+- **Sempre** use `allure.enabled=false` em ambientes de CI/CD
+- **Sempre** use `allure.enabled=true` em desenvolvimento local
+- **Nunca** commite `allure.enabled=true` em produção
+
+### 2. Estrutura de Testes
+- Steps devem ser simples, apenas chamando controllers
+- Controllers devem conter toda lógica de negócio
+- Use `LogFormatter.logStep()` para logs (sem acentos)
+
+### 3. Organização de Features
+- Sem acentos em nomes de arquivos
+- Prefixos Cucumber em inglês: `Feature:`, `Scenario:`, `Given`, `When`, `Then`
+- Tags obrigatórias: `@ATJ-[número]` e `@all`
+
+### 4. Configuração de Ambientes
+```properties
+# allure-environment.properties
+Environment=Development
+BaseURL=https://dev-api.example.com
+Framework=Cucumber + Rest Assured
+Language=Java 21
+```
+
+## Troubleshooting do Allure
+
+### Problema: Relatório Abre Vazio
+**Solução:**
+- Verifique se existem arquivos em `target/allure-results/`
+- Execute `mvn clean test` para limpar e regenerar
+- Verifique se o plugin oficial do Allure está configurado
+
+### Problema: Navegador Abre Duas Vezes
+**Solução:**
+- O plugin customizado já trata isso automaticamente
+- Se persistir, verifique se há outros scripts .bat executando
+
+### Problema: Erro de Porta em Uso
+**Solução:**
+- Feche servidores Allure antigos: `taskkill /f /im java.exe`
+- Use o script `abrir-allure.bat` que tenta portas alternativas
+- Mude a porta manualmente: `allure serve target/allure-results -p 8080`
+
+### Problema: Erro "Could not add attachment: no test is running"
+**Solução:**
+- O plugin oficial do Allure é obrigatório
+- Mantenha `"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"` na configuração
+
+### Problema: Allure Não Respeita `allure.enabled=false`
+**Solução:**
+- O plugin customizado já verifica essa configuração
+- Verifique se o arquivo `allure.properties` está sendo lido corretamente
+- Execute `mvn clean` antes dos testes
+
+## Comandos Úteis
+
+### Execução Manual
+```bash
+# Executar com Allure habilitado
+mvn test -P with-allure
+
+# Executar sem Allure
+mvn test -P no-allure
+
+# Gerar relatório manualmente
+mvn allure:report
+
+# Abrir relatório manualmente
+mvn allure:serve
+```
+
+### CLI Allure
+```bash
+# Abrir relatório existente
+allure serve target/allure-results
+
+# Gerar relatório estático
+allure generate target/allure-results --clean -o allure-report
+```
+
+## Integração com CI/CD
+
+### Jenkins Pipeline
+```groovy
+pipeline {
+    agent any
+    stages {
+        stage('Test') {
+            steps {
+                sh 'mvn test -P with-allure'
+            }
+        }
+        stage('Generate Report') {
+            steps {
+                sh 'mvn allure:report'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'allure-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Allure Report'
+                ])
+            }
+        }
+    }
+}
+```
+
+### GitHub Actions
+```yaml
+name: Tests with Allure
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
+      with:
+        java-version: '21'
+    - name: Run tests
+      run: mvn test -P with-allure
+    - name: Generate Allure Report
+      run: mvn allure:report
+    - name: Upload Allure Report
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-report
+        path: allure-report/
+```
+
+## Referências
+- [Documentação oficial do Allure](https://docs.qameta.io/allure/)
+- [Allure Maven Plugin](https://docs.qameta.io/allure/#_maven)
+- [Exemplo de integração Cucumber + Allure](https://github.com/allure-framework/allure-cucumber)
+- [Documentação oficial da API Cielo](https://docs.cielo.com.br/ecommerce-cielo/reference/sobre-a-api)
+
+---
+
+**IMPORTANTE:** O plugin customizado `AllureAutoReportPlugin` é essencial para o funcionamento correto do Allure neste projeto. Sempre mantenha a configuração `allure.enabled` adequada para cada ambiente. 

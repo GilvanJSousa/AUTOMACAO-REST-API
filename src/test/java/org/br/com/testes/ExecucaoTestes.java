@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
         dryRun = false,
         plugin = {
                 "org.br.com.testes.utils.LogSummaryPlugin",
+                "org.br.com.testes.utils.AllureAutoReportPlugin",
                 "html:target/cucumber-reports/cucumber.html",
                 "json:target/cucumber-reports/cucumber.json",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"

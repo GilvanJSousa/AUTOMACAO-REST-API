@@ -11,6 +11,7 @@ Este projeto contém testes automatizados para a API da Cielo E-commerce, utiliz
 - Lombok
 - JUnit
 - Jackson
+- Allure Reports
 
 ## 📋 Pré-requisitos
 
@@ -18,6 +19,7 @@ Este projeto contém testes automatizados para a API da Cielo E-commerce, utiliz
 - Maven
 - IDE (recomendado: IntelliJ IDEA)
 - Credenciais de Sandbox da Cielo (MerchantId e MerchantKey)
+- **Allure CLI** (para geração de relatórios)
 
 ## 🔧 Configuração do Ambiente
 
@@ -32,6 +34,214 @@ git clone https://github.com/seu-usuario/AUTOMACAO-REST-API.git
 ```bash
 mvn clean install
 ```
+
+4. **Instale o Allure CLI** (Windows):
+   - Baixe o Allure CLI de: https://github.com/allure-framework/allure2/releases
+   - Extraia o arquivo zip para uma pasta (ex: `C:\allure-2.24.0`)
+   - Adicione o caminho `C:\allure-2.24.0\bin` ao PATH do sistema
+   - Reinicie o terminal/IDE
+   - Verifique a instalação: `allure --version`
+
+## 📊 Relatórios Allure
+
+### Geração Automatizada de Relatórios
+
+O projeto inclui um sistema automatizado para gerar e visualizar relatórios Allure:
+
+#### Script Batch Principal (`executa-tudo.bat`)
+Este script executa os testes e gera o relatório automaticamente:
+
+```bash
+.\executa-tudo.bat
+```
+
+**Funcionalidades:**
+- Executa todos os testes com `mvn test`
+- Gera o relatório Allure com `mvn allure:report`
+- Abre o relatório no navegador com `mvn allure:serve`
+- Filtra mensagens de erro de porta em uso
+
+#### Script para Abrir Relatório (`abrir-allure.bat`)
+Script específico para abrir relatórios existentes sem mensagens de erro:
+
+```bash
+.\abrir-allure.bat
+```
+
+**Funcionalidades:**
+- Tenta abrir o relatório em porta 56565
+- Se falhar, tenta porta 8080
+- Suprime mensagens de erro de porta em uso
+- Fornece instruções para acesso manual
+
+#### Controle de Ativação/Desativação
+
+O relatório pode ser ativado ou desativado editando o arquivo `src/test/resources/allure.properties`:
+
+```properties
+# Para ativar o relatório automático
+allure.enabled=true
+
+# Para desativar o relatório automático (executa apenas os testes)
+allure.enabled=false
+```
+
+**Importante:** Esta configuração funciona tanto para execução via script batch quanto via IDE.
+
+### Comandos Allure CLI Manuais
+
+#### Gerar Relatório
+```bash
+# Gerar relatório a partir dos resultados dos testes
+allure generate target/allure-results --clean
+
+# Gerar relatório em diretório específico
+allure generate target/allure-results -o target/allure-reports/custom-report --clean
+```
+
+#### Abrir Relatório no Navegador
+```bash
+# Abrir relatório em porta específica (recomendado)
+allure open target/allure-results -p 56565
+
+# Abrir relatório em porta automática
+allure open target/allure-results
+
+# Abrir relatório gerado
+allure open target/allure-reports/feature-03.07.2025
+```
+
+#### Servir Relatório (para compartilhamento)
+```bash
+# Servir relatório em porta específica
+allure serve target/allure-results -p 56565
+
+# Servir relatório em porta automática
+allure serve target/allure-results
+```
+
+### Configurações do Allure
+
+O projeto inclui configurações personalizadas do Allure:
+
+#### Arquivo de Configuração (`src/test/resources/allure.properties`)
+```properties
+# Diretórios de resultados e relatórios
+allure.results.directory=target/allure-results
+allure.report.directory=target/allure-reports/feature-03.07.2025
+
+# Integração com Cucumber
+allure.cucumber.attach.console.log=true
+allure.cucumber.attach.screenshot=true
+allure.cucumber.attach.video=true
+
+# Configurações de relatório
+allure.report.issue.pattern=https://example.com/browse/{}
+allure.report.tms.pattern=https://example.com/browse/{}
+
+# Controle de ativação
+allure.enabled=true
+
+# Idioma
+allure.language=pt
+
+# Arquivos de configuração
+allure.categories.file=src/test/resources/allure-categories.json
+allure.environment.file=src/test/resources/allure-environment.properties
+```
+
+#### Categorias de Teste (`src/test/resources/allure-categories.json`)
+Define categorias personalizadas para organizar os testes no relatório.
+
+#### Ambiente (`src/test/resources/allure-environment.properties`)
+Define informações do ambiente de teste para o relatório.
+
+### Perfis Maven
+
+O projeto usa perfis Maven para controlar a execução do Allure:
+
+#### Perfil `no-allure` (padrão)
+- **Ativação:** Automática por padrão
+- **Comportamento:** Executa os testes sem gerar relatório Allure automaticamente
+- **Uso:** `mvn test -P no-allure`
+
+#### Perfil `with-allure`
+- **Ativação:** Manual
+- **Comportamento:** Executa os testes e gera relatório Allure automaticamente
+- **Uso:** `mvn test -P with-allure`
+
+### Plugins Automatizados
+
+O projeto inclui plugins Java que automatizam o processo:
+
+- **`AllureAutoReportPlugin`**: Executa automaticamente o script batch após os testes
+- **`LogSummaryPlugin`**: Gera resumo dos logs de execução
+
+### Fluxo de Execução Recomendado
+
+1. **Execução Completa Automatizada:**
+   ```bash
+   .\executa-tudo.bat
+   ```
+
+2. **Execução pela IDE com Controle:**
+   ```bash
+   # Executar pela IDE respeitando allure.enabled
+   .\executa-ide.bat
+   
+   # Ou executar diretamente com perfil específico
+   mvn test -P no-allure    # Sem Allure
+   mvn test -P with-allure  # Com Allure
+   ```
+
+3. **Execução Manual com Controle:**
+   ```bash
+   # Executar apenas os testes (sem Allure)
+   mvn test -P no-allure
+   
+   # Executar testes com Allure
+   mvn test -P with-allure
+   
+   # Gerar relatório
+   mvn allure:report
+   
+   # Abrir relatório
+   mvn allure:serve
+   ```
+
+4. **Execução com Allure CLI:**
+   ```bash
+   # Executar testes
+   mvn test -P no-allure
+   
+   # Gerar e abrir relatório
+   allure open target/allure-results -p 56565
+   ```
+
+### Troubleshooting
+
+#### Problema: Comando `allure` não reconhecido
+**Solução:**
+1. Verifique se o Allure CLI está instalado
+2. Confirme se o caminho está no PATH do sistema
+3. Reinicie o terminal/IDE
+4. Execute: `allure --version`
+
+#### Problema: Browser não abre automaticamente
+**Solução:**
+- Use o Allure CLI: `allure open target/allure-results -p 56565`
+- Ou acesse manualmente: `http://localhost:56565`
+
+#### Problema: Porta em uso
+**Solução:**
+- Use uma porta diferente: `allure serve target/allure-results -p 8080`
+- Ou mate o processo que está usando a porta
+- Use o script `abrir-allure.bat` que tenta portas alternativas automaticamente
+
+#### Problema: Mensagens de erro de porta em uso no log
+**Solução:**
+- As mensagens "Address already in use" e "Could not serve the report" são filtradas automaticamente pelos scripts
+- Se ainda aparecerem, use o script `abrir-allure.bat` que suprime essas mensagens
 
 ## 🏗️ Estrutura do Projeto
 

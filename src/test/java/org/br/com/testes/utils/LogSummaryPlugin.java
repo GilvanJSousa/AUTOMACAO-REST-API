@@ -2,6 +2,15 @@ package org.br.com.testes.utils;
 
 import io.cucumber.plugin.ConcurrentEventListener;
 import io.cucumber.plugin.event.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.lang.StringBuilder;
 
 public class LogSummaryPlugin implements ConcurrentEventListener {
     private int testsRun = 0;
@@ -33,5 +42,16 @@ public class LogSummaryPlugin implements ConcurrentEventListener {
             testsRun, failures, errors, skipped,
             totalTime, totalTime, java.time.LocalDateTime.now().toString()
         );
+        // Removido: geração automática do Allure e manipulação de diretórios customizados
+    }
+
+    private boolean isAllureEnabled() {
+        Properties prop = new Properties();
+        try (FileInputStream fis = new FileInputStream("src/test/resources/properties.allure")) {
+            prop.load(fis);
+            return Boolean.parseBoolean(prop.getProperty("allure.enabled", "true"));
+        } catch (IOException e) {
+            return true; // padrão: ativado
+        }
     }
 } 
