@@ -24,6 +24,13 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
     }
 
     private void runAllureCli() {
+        // Se estiver rodando em ambiente de CI, não executa este plugin,
+        // pois o workflow do GitHub Actions já cuida da geração do relatório.
+        if (System.getenv("CI") != null && System.getenv("CI").equalsIgnoreCase("true")) {
+            System.out.println("[INFO] AllureAutoReportPlugin: Ambiente CI detectado. Pulando execução automática do Allure CLI por este plugin.");
+            return;
+        }
+
         // Evita execução múltipla
         if (alreadyExecuted) {
             // System.out.println("[DEBUG] AllureAutoReportPlugin: Já foi executado, ignorando...");
@@ -44,6 +51,7 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
 
             // System.out.println("[DEBUG] AllureAutoReportPlugin: Iniciando servidor Allure...");
             // Inicia o servidor Allure diretamente dos resultados (gera e serve automaticamente)
+            // Esta parte ainda é específica do Windows e para execução local.
             ProcessBuilder pbServe = new ProcessBuilder("cmd", "/c", "allure serve target/allure-results");
             pbServe.redirectErrorStream(true);
             Process serveProcess = pbServe.start();
@@ -72,11 +80,12 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
             
         } catch (Exception e) {
             // System.out.println("[DEBUG] AllureAutoReportPlugin: Exceção capturada: " + e.getMessage());
-            e.printStackTrace();
-            // Não exibe erro se for relacionado a porta em uso
+            // e.printStackTrace(); // Comentado para não poluir o log do CI com stack trace esperado
+            // Não exibe erro se for relacionado a porta em uso ou se for erro de 'cmd' não encontrado em não-Windows
             if (!e.getMessage().contains("Address already in use") && 
-                !e.getMessage().contains("BindException")) {
-                System.err.println("Erro ao abrir o relatório Allure via CLI: " + e.getMessage());
+                !e.getMessage().contains("BindException") &&
+                !(e.getMessage().contains("Cannot run program \"cmd\"") && !System.getProperty("os.name").toLowerCase().contains("win")) ) {
+                System.err.println("Erro ao tentar abrir o relatório Allure localmente via CLI: " + e.getMessage());
             }
         }
     }
@@ -87,6 +96,7 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
     private boolean isAllureEnabled() {
         try {
             Properties props = new Properties();
+            // Ajustar o caminho para ser mais robusto ou configurável se necessário
             FileInputStream fis = new FileInputStream("src/test/resources/allure.properties");
             props.load(fis);
             fis.close();
@@ -105,50 +115,46 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
      * Captura a URL do servidor Allure a partir da saída do comando
      */
     private String captureServerUrl(Process process) {
+        // Esta lógica é primariamente para Windows e execução local com 'allure serve'
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            return null; // Não tenta capturar URL em não-Windows para 'allure serve' via cmd
+        }
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
-            // Padrão mais específico para capturar URLs do Allure
             Pattern urlPattern = Pattern.compile("http://[0-9.]+:[0-9]+");
             
-            // Aguarda até 30 segundos para encontrar a URL
             long startTime = System.currentTimeMillis();
             while (System.currentTimeMillis() - startTime < 30000) {
                 if (reader.ready()) {
                     line = reader.readLine();
                     if (line != null) {
-                        // System.out.println("[DEBUG] AllureAutoReportPlugin: Saída do servidor: " + line);
                         Matcher matcher = urlPattern.matcher(line);
                         if (matcher.find()) {
-                            String url = matcher.group();
-                            // System.out.println("[DEBUG] AllureAutoReportPlugin: URL capturada: " + url);
-                            return url;
+                            return matcher.group();
                         }
                     }
                 } else {
                     Thread.sleep(500);
                 }
             }
-            
-            // Se não encontrou a URL, tenta uma abordagem alternativa
-            // System.out.println("[DEBUG] AllureAutoReportPlugin: Tentando abordagem alternativa para capturar URL...");
-            return captureUrlFromNetstat();
+            return captureUrlFromNetstat(); // Fallback para netstat (ainda específico do Windows)
             
         } catch (Exception e) {
-            // System.out.println("[DEBUG] AllureAutoReportPlugin: Erro ao capturar URL: " + e.getMessage());
+            // Silencioso no CI
         }
         return null;
     }
     
     /**
-     * Captura a URL do servidor Allure usando netstat como fallback
+     * Captura a URL do servidor Allure usando netstat como fallback (Específico do Windows)
      */
     private String captureUrlFromNetstat() {
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            return null;
+        }
         try {
-            // Aguarda um pouco mais para o servidor inicializar
             Thread.sleep(5000);
-            
-            // Executa netstat para encontrar a porta do Allure
             ProcessBuilder pbNetstat = new ProcessBuilder("cmd", "/c", "netstat -an | findstr LISTENING");
             pbNetstat.redirectErrorStream(true);
             Process netstatProcess = pbNetstat.start();
@@ -182,9 +188,12 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
     }
     
     /**
-     * Verifica se já existe um navegador aberto para a URL do Allure
+     * Verifica se já existe um navegador aberto para a URL do Allure (Específico do Windows)
      */
     private boolean isBrowserAlreadyOpen(String serverUrl) {
+        if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+            return false;
+        }
         try {
             // Extrai a porta da URL
             String port = serverUrl.split(":")[2];
@@ -212,4 +221,4 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
             return false;
         }
     }
-} 
+}
