@@ -24,7 +24,7 @@ public class TransferenciaController {
 
     private static final String ENDPOINT_TRANSFERENCIA = "/transferencias";
 
-    private static final String token = TokenManager.getToken();
+    // Token será obtido dinamicamente após a geração
 
     public TransferenciaController() {
         response = null;
@@ -35,17 +35,20 @@ public class TransferenciaController {
 
         GerarTokenController.gerarTokenAdmin();
 
+        // Obter o token atualizado após a geração
+        String token = TokenManager.getToken();
+        
+        // Validar se o token foi obtido
+        if (token == null || token.isEmpty()) {
+            throw new RuntimeException("Token nao foi gerado corretamente");
+        }
+
         TransferenciaRequest request = TransferenciaRequest.builder()
                 .contaOrigem("6866ef0c822da5a2bb628768")
                 .contaDestino("6866ef0c822da5a2bb628767")
                 .token(token)
                 .valor(100.00)
                 .build();
-
-//        String token = TokenManager.getToken();
-//        if (token == null || token.isEmpty()) {
-//            throw new RuntimeException("Token nao foi gerado corretamente");
-//        }
 
         response = given()
                 .baseUri(BASE_URL)

@@ -22,8 +22,6 @@ public class ContasController {
 
     private static final String ENDPOINT_CONTAS = "/contas";
 
-    private static final String token = TokenManager.getToken();
-    
     public ContasController() {
         response = null;
     }
@@ -31,6 +29,7 @@ public class ContasController {
     public void listarContasBancarias() {
 
         GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
 
         response = given()
                 .baseUri(BASE_URL)
