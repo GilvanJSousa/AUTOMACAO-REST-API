@@ -16,7 +16,7 @@ public class LoginSteps {
 
     @Given("envio uma solicitação POST de login como Admin")
     public void envioUmaSolicitacaoPOSTDeLoginComoAdmin() {
-        gerarTokenController.gerarTokenAdmin();
+        GerarTokenController.gerarTokenAdmin();
     }
 
     @Given("envio uma solicitação POST de login como Usuario")

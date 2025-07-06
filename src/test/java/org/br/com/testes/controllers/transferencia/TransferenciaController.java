@@ -12,14 +12,10 @@ import org.junit.Test;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
-import io.qameta.allure.Story;
 
-import org.br.com.testes.controllers.tokens.GerarTokenController;
 import static io.restassured.RestAssured.*;
 
 @Getter
-@Epic("API de Transferencias")
-@Feature("Transferencia entre Contas")
 public class TransferenciaController {
 
     private Response response;

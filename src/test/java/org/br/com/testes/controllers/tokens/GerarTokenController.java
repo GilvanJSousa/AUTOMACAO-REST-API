@@ -2,6 +2,8 @@ package org.br.com.testes.controllers.tokens;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import lombok.Getter;
+import lombok.Setter;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.model.GerarTokenResquest;
 import org.br.com.testes.utils.LogFormatter;
@@ -9,7 +11,8 @@ import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
 
-
+@Getter
+@Setter
 public class GerarTokenController {
 
     private static Response response;
