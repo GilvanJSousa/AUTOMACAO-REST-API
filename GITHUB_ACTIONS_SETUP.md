@@ -67,17 +67,15 @@ env:
 name: API Transações Testes CI
 
 on:
-  push:
-    branches: [ main, develop ]  # ✅ Específico para branches principais
-  pull_request:
-    branches: [ main, develop ]
+  push:                    # ✅ Executa em TODAS as branches
+  pull_request:            # ✅ Executa em TODOS os PRs
 
 jobs:
   test-java-21:
     runs-on: ubuntu-latest
     env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}      # ✅ Seguro
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}    # ✅ Seguro
+      MONGO_URI: mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      JWT_SECRET: KNAqSlJj0n6mawLV
       PORT: 3000
 
     steps:
@@ -93,11 +91,10 @@ jobs:
 
 ## 🔧 Configurações Avançadas
 
-### **Execução Condicional**
-O workflow agora executa apenas em:
-- `main` branch
-- `develop` branch
-- Pull requests para essas branches
+### **Execução Automática**
+O workflow agora executa em:
+- **TODAS as branches** quando há push
+- **TODOS os pull requests** para qualquer branch
 
 ### **Cache Inteligente**
 ```yaml
