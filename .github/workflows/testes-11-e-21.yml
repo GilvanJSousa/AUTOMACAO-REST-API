@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Test with Java 11
     env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      PORT: ${{ secrets.PORT }}
+      MONGO_URI: mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      JWT_SECRET: KNAqSlJj0n6mawLV
+      PORT: 3000
 
     steps:
     - uses: actions/checkout@v3
@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Test with Java 21
     env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      PORT: ${{ secrets.PORT }} # Ensure PORT is also available here, maybe a different one if needed
+      MONGO_URI: mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      JWT_SECRET: KNAqSlJj0n6mawLV
+      PORT: 3000 # Ensure PORT is also available here, maybe a different one if needed
 
     steps:
     - uses: actions/checkout@v3
