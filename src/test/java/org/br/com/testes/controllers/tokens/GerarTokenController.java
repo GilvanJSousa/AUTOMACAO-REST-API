@@ -38,7 +38,7 @@ public class GerarTokenController {
 
         String token = response.jsonPath().getString("token");
         TokenManager.setToken(token);
-        LogFormatter.logJson("Token gerado: " + token.substring(1, 10) + "...");
+        LogFormatter.logJson("Token: " + token.substring(1, 10) + "...");
 
     }
 
@@ -57,12 +57,12 @@ public class GerarTokenController {
 
         String token = response.jsonPath().getString("token");
         TokenManager.setToken(token);
-        LogFormatter.logStepJson("Token gerado", token.substring(1, 10) + "...");
+        LogFormatter.logStepJson("Token: ", token.substring(1, 10) + "...");
     }
 
     public void validarStatusCode(int statusCode) {
         response.then().statusCode(statusCode);
-        LogFormatter.logJson(String.valueOf(+ statusCode + "\n"));
+        LogFormatter.logJson(String.valueOf("Status Code: " + statusCode));
     }
 
 

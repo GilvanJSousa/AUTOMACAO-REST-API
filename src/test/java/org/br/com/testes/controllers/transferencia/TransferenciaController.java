@@ -68,7 +68,7 @@ public class TransferenciaController {
     public void validarStatusCode(int statusCode) {
         response.then()
                 .statusCode(statusCode);
-        LogFormatter.logJson(String.valueOf(statusCode));
+        LogFormatter.logJson(String.valueOf("Status Code: " + statusCode));
     }
 
 }

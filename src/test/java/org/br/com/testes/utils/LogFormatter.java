@@ -20,14 +20,14 @@ public class LogFormatter {
 
     public static void logTestId(String testId) {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String formattedMessage = String.format("[%s] +--:| TestID: %s", timestamp, testId);
+        String formattedMessage = String.format("%s +--:| TestID: %s", timestamp, testId);
         System.out.println(formattedMessage);
         logToFile(formattedMessage);
     }
 
     public static void logFeature(String featureName) {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String formattedMessage = String.format("[%s] [INFO] Feature: %s", timestamp, featureName);
+        String formattedMessage = String.format("%s INFO Feature: %s", timestamp, featureName);
         System.out.println(formattedMessage);
         logToFile(formattedMessage);
     }
@@ -35,7 +35,7 @@ public class LogFormatter {
     @Attachment(value = "Log do Step", type = "text/plain")
     public static String logStep(String message) {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
-        String formattedMessage = String.format("[%s] [INFO] %s", timestamp, message);
+        String formattedMessage = String.format("%s INFO %s", timestamp, message);
         System.out.println(formattedMessage);
         logToFile(formattedMessage);
         return formattedMessage;
@@ -77,7 +77,7 @@ public class LogFormatter {
             return prettyJson;
         } catch (Exception e) {
             // Se não conseguir formatar como JSON, retorna como texto simples
-            return logStep("JSON: " + data);
+            return logStep("" + data);
         }
     }
 
