@@ -35,7 +35,6 @@ public class GerarTokenController {
                 .body(resquest)
                 .when()
                 .post(ENDPOINT);
-
         String token = response.jsonPath().getString("token");
         TokenManager.setToken(token);
         LogFormatter.logJson("Token: " + token.substring(1, 10) + "...");

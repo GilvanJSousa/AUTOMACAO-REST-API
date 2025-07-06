@@ -76,9 +76,23 @@ public class LogFormatter {
             System.out.println(prettyJson);
             return prettyJson;
         } catch (Exception e) {
-            // Se não conseguir formatar como JSON, retorna como texto simples
-            return logStep("" + data);
+            // Se não conseguir formatar como JSON, retorna como texto simples sem anexo
+            String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
+            String formattedMessage = String.format("%s INFO %s", timestamp, data);
+            System.out.println(formattedMessage);
+            logToFile(formattedMessage);
+            return formattedMessage;
         }
+    }
+
+    /**
+     * Log simples sem anexo no Allure - para quando você quer apenas console/arquivo
+     */
+    public static void logSimple(String message) {
+        String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
+        String formattedMessage = String.format("[%s] [INFO] %s", timestamp, message);
+        System.out.println(formattedMessage);
+        logToFile(formattedMessage);
     }
 
     @Attachment(value = "Log de Requisição", type = "application/json")

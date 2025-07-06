@@ -40,8 +40,8 @@ public class TransferenciaController {
         GerarTokenController.gerarTokenAdmin();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6866ef0c822da5a2bb628767")
-                .contaDestino("6866ef0c822da5a2bb628768")
+                .contaOrigem("6866ef0c822da5a2bb628768")
+                .contaDestino("6866ef0c822da5a2bb628767")
                 .token(token)
                 .valor(100.00)
                 .build();
@@ -61,7 +61,6 @@ public class TransferenciaController {
                 .post(ENDPOINT_TRANSFERENCIA)
                 .then()
                 .extract().response();
-
         LogFormatter.logJson(response.asPrettyString());
     }
 
