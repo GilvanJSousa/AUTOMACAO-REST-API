@@ -77,7 +77,7 @@ public class LogFormatter {
             return prettyJson;
         } catch (Exception e) {
             // Se não conseguir formatar como JSON, retorna como texto simples
-            return logStep("JSON inválido: " + data);
+            return logStep("JSON: " + data);
         }
     }
 

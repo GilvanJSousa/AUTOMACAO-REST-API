@@ -22,7 +22,7 @@ public class GerarTokenController {
         response = null;
     }
 
-    public void gerarTokenAdmin() {
+    public static void gerarTokenAdmin() {
 
         GerarTokenResquest resquest = GerarTokenResquest.builder()
                 .username("admin")
@@ -38,7 +38,7 @@ public class GerarTokenController {
 
         String token = response.jsonPath().getString("token");
         TokenManager.setToken(token);
-        LogFormatter.logStep("Token gerado: " + token.substring(1, 10) + "...");
+        LogFormatter.logJson("Token gerado: " + token.substring(1, 10) + "...");
 
     }
 
@@ -57,14 +57,12 @@ public class GerarTokenController {
 
         String token = response.jsonPath().getString("token");
         TokenManager.setToken(token);
-        LogFormatter.logStep("Token gerado: " + token.substring(1, 10) + "...");
+        LogFormatter.logStepJson("Token gerado", token.substring(1, 10) + "...");
     }
 
     public void validarStatusCode(int statusCode) {
         response.then().statusCode(statusCode);
-        LogFormatter.logStepJson(
-                "Validação de Status Code ",
-                String.valueOf(+ statusCode + "\n"));
+        LogFormatter.logJson(String.valueOf(+ statusCode + "\n"));
     }
 
 
