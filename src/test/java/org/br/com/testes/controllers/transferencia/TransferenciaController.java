@@ -34,14 +34,7 @@ public class TransferenciaController {
     public void realizarTransferencia() {
 
         GerarTokenController.gerarTokenAdmin();
-
-        // Obter o token atualizado após a geração
         String token = TokenManager.getToken();
-        
-        // Validar se o token foi obtido
-        if (token == null || token.isEmpty()) {
-            throw new RuntimeException("Token nao foi gerado corretamente");
-        }
 
         TransferenciaRequest request = TransferenciaRequest.builder()
                 .contaOrigem("6866ef0c822da5a2bb628768")
@@ -60,6 +53,23 @@ public class TransferenciaController {
                 .post(ENDPOINT_TRANSFERENCIA)
                 .then()
                 .extract().response();
+        LogFormatter.logJson(response.asPrettyString());
+    }
+
+    public void listarTransferenciasBancarias() {
+        GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
+        response = given()
+                .baseUri(BASE_URL)
+                .param("page", 1)
+                .param("limit", 10)
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+
         LogFormatter.logJson(response.asPrettyString());
     }
 
