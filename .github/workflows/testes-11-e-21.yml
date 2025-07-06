@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Test with Java 21
     env:
-      MONGO_URI: mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      JWT_SECRET: KNAqSlJj0n6mawLV
-      PORT: 3000
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      PORT: ${{ secrets.PORT }}
 
     steps:
     - uses: actions/checkout@v3
@@ -21,12 +21,12 @@ jobs:
       with:
         node-version: '18'
 
-    # - name: Install Allure Commandline
-    #   run: |
-    #     sudo wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz -O /tmp/allure.tgz
-    #     sudo tar -zxvf /tmp/allure.tgz -C /opt/
-    #     sudo ln -s /opt/allure-2.29.0/bin/allure /usr/bin/allure
-    #     allure --version
+    - name: Install Allure Commandline
+      run: |
+        sudo wget https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz -O /tmp/allure.tgz
+        sudo tar -zxvf /tmp/allure.tgz -C /opt/
+        sudo ln -s /opt/allure-2.29.0/bin/allure /usr/bin/allure
+        allure --version
 
     - name: Install banco-api dependencies
       run: npm install
@@ -57,17 +57,17 @@ jobs:
     - name: Build and Test with Maven (Java 21)
       run: mvn -B clean package test --file pom.xml
 
-    # - name: Generate Allure Report
-    #   if: always() # Ensure this runs even if tests fail
-    #   run: allure generate allure-results --clean -o allure-report
+    - name: Generate Allure Report
+      if: always() # Ensure this runs even if tests fail
+      run: allure generate allure-results --clean -o allure-report
 
-    # - name: Upload Allure Report
-    #   if: always()
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: allure-report-java-21
-    #     path: allure-report/
-    #     retention-days: 30
+    - name: Upload Allure Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: allure-report-java-21
+        path: allure-report/
+        retention-days: 30
 
     - name: Upload Test Results (Surefire)
       if: always()
