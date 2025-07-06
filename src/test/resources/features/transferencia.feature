@@ -14,4 +14,9 @@ Feature: Validar funcionalidade de Transferencias entre contas
     Given que envio a solicitação de GET para Listar as transferências realizadas
     Then a API Transferencia deve retornar o status code 200
 
+   @TransferenciasEspecifica
+   Scenario: Validar consulta de transferencia especifica
+     Given que envio a solicitação de GET para consultar transferencia especifica
+     Then a API Transferencia deve retornar o status code 200
+
 

@@ -20,6 +20,11 @@ public class TransferenciaSteps {
         transferenciaController.validarStatusCode(statusCode);
     }
 
+    @Given("que envio a solicitação de GET para consultar transferencia especifica")
+    public void queEnvioASolicitaçãoDeGETParaConsultarTransferenciaEspecifica() {
+        transferenciaController.consultarTransferenciaBancaria();
+    }
+
     @Given("que envio a solicitação de GET para Listar as transferências realizadas")
     public void queEnvioASolicitaçãoDeGETParaListarAsTransferênciasRealizadas() {
         transferenciaController.listarTransferenciasBancarias();

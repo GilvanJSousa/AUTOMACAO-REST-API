@@ -73,6 +73,24 @@ public class TransferenciaController {
         LogFormatter.logJson(response.asPrettyString());
     }
 
+    public void consultarTransferenciaBancaria() {
+        GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
+
+        String id = "6866ef0c822da5a2bb628768";
+        response = given()
+                .baseUri(BASE_URL)
+                .param("id" + id)
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+
+        LogFormatter.logJson(response.asPrettyString());
+    }
+
     public void validarStatusCode(int statusCode) {
         response.then()
                 .statusCode(statusCode);
