@@ -1,0 +1,33 @@
+# 1. ATUALIZAR PARCIALMENTE UMA TRANSFERENCIA (PATCH)
+curl -X PATCH http://localhost:3000/transferencias/6866c42554f7e3896d3a9f50 \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI' \
+-H 'Content-Type: application/json' \
+-d '{"valor": 85.00}'
+
+# 2. REMOVER UMA TRANSFERENCIA (DELETE)
+curl -X DELETE http://localhost:3000/transferencias/6866c42554f7e3896d3a9f50 \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI'
+
+# 3. LISTAR TODAS AS CONTAS BANCARIAS (GET)
+curl -X GET http://localhost:3000/contas \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI'
+
+# 4. OBTER DETALHES DE UMA CONTA BANCARIA (GET)
+curl -X GET http://localhost:3000/contas/6866b72dbb33cc30f0413b6d \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI'
+
+# 5. ATUALIZAR COMPLETAMENTE UMA TRANSFERENCIA (PUT)
+curl -X PUT http://localhost:3000/transferencias/6866c42554f7e3896d3a9f50 \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI' \
+-H 'Content-Type: application/json' \
+-d '{
+  "contaOrigem": "6866b72dbb33cc30f0413b6d",
+  "contaDestino": "6866b72dbb33cc30f0413b6c",
+  "valor": 120.00,
+  "token": "123456"
+}'
+
+# 6. OBTER TOKEN JWT (POST)
+curl -X POST http://localhost:3000/login \
+-H 'Content-Type: application/json' \
+-d '{"username": "admin", "senha": "admin123"}' 

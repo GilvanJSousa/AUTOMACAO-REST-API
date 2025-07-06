@@ -1,0 +1,39 @@
+# CURL PARA ATUALIZAR TRANSFERENCIA COMPLETAMENTE (PUT)
+
+# 1. Primeiro, obtenha um token JWT válido:
+curl -X POST http://localhost:3000/login \
+-H 'Content-Type: application/json' \
+-d '{"username": "admin", "senha": "admin123"}'
+
+# 2. Use o token retornado para atualizar a transferência:
+curl -X PUT http://localhost:3000/transferencias/6866c42554f7e3896d3a9f50 \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI' \
+-H 'Content-Type: application/json' \
+-d '{
+  "contaOrigem": "6866b72dbb33cc30f0413b6d",
+  "contaDestino": "6866b72dbb33cc30f0413b6c", 
+  "valor": 120.00,
+  "token": "123456"
+}'
+
+# 3. Para verificar a transferência atualizada:
+curl -X GET http://localhost:3000/transferencias/6866c42554f7e3896d3a9f50 \
+-H 'Authorization: Bearer SEU_TOKEN_AQUI'
+
+# ========================================
+# EXPLICAÇÃO DOS CAMPOS:
+# ========================================
+# - contaOrigem: ID da conta de origem (ObjectId do MongoDB)
+# - contaDestino: ID da conta de destino (ObjectId do MongoDB)  
+# - valor: Novo valor da transferência (deve ser >= R$ 10,00)
+# - token: Token de autenticação para valores >= R$ 5.000,00 (use "123456")
+
+# ========================================
+# CÓDIGOS DE RESPOSTA:
+# ========================================
+# 204: Transferência atualizada com sucesso
+# 400: Parâmetros inválidos
+# 401: Token inválido ou autenticação necessária
+# 404: Transferência não encontrada
+# 422: Erro de validação (saldo insuficiente, contas inativas, etc.)
+# 500: Erro interno do servidor 

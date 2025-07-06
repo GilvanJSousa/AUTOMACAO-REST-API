@@ -1,0 +1,29 @@
+{
+  "name": "banco-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rest-api": "node rest/app.js",
+    "graphql-api": "node graphql/app.js",
+    "seed": "node scripts/seed.js",
+    "consultar": "node scripts/consultar-dados.js",
+    "create-env": "node scripts/create-env.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "apollo-server": "^3.13.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "graphql": "^16.10.0",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.0",
+    "open-api-test-automation-coverage": "^1.0.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
