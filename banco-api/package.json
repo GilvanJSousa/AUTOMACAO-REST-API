@@ -11,7 +11,13 @@
     "create-env": "node scripts/create-env.js",
     "config": "node scripts/config-manager.js",
     "config:show": "node scripts/config-manager.js show",
-    "config:list-ports": "node scripts/config-manager.js list-ports"
+    "config:list-ports": "node scripts/config-manager.js list-ports",
+    "config:rest-port": "node scripts/config-manager.js rest-port",
+    "config:graphql-port": "node scripts/config-manager.js graphql-port",
+    "config:update-ports": "node scripts/config-manager.js update-ports",
+    "config:sync-workflow": "node scripts/config-manager.js sync-workflow",
+    "workflow:sync": "node scripts/sync-workflow-port.js sync",
+    "workflow:info": "node scripts/sync-workflow-port.js info"
   },
   "keywords": [],
   "author": "",

@@ -95,8 +95,22 @@ GRAPHQLPORT=${config.server.graphql.port}
     try {
       fs.writeFileSync(this.envPath, envContent, 'utf8');
       console.log('✅ Arquivo .env atualizado com sucesso!');
+      
+      // Sincronizar porta com o workflow do GitHub Actions
+      this.syncWorkflowPort(config.server.rest.port);
     } catch (error) {
       console.error('❌ Erro ao atualizar arquivo .env:', error.message);
+    }
+  }
+
+  // Sincronizar porta com o workflow do GitHub Actions
+  syncWorkflowPort(port) {
+    try {
+      const WorkflowPortSync = require('./sync-workflow-port');
+      const sync = new WorkflowPortSync();
+      sync.updateWorkflowPort(port);
+    } catch (error) {
+      console.log('⚠️  Aviso: Não foi possível sincronizar com o workflow (pode ser normal em desenvolvimento)');
     }
   }
 
@@ -125,6 +139,18 @@ GRAPHQLPORT=${config.server.graphql.port}
     console.log('8000/8001 - Portas de desenvolvimento');
     console.log('9000/9001 - Portas de alta numeração');
     console.log('===================\n');
+  }
+
+  // Sincronizar workflow manualmente
+  syncWorkflow() {
+    try {
+      const WorkflowPortSync = require('./sync-workflow-port');
+      const sync = new WorkflowPortSync();
+      return sync.syncPort();
+    } catch (error) {
+      console.error('❌ Erro ao sincronizar workflow:', error.message);
+      return false;
+    }
   }
 }
 
@@ -168,6 +194,10 @@ switch (command) {
     configManager.listAvailablePorts();
     break;
     
+  case 'sync-workflow':
+    configManager.syncWorkflow();
+    break;
+    
   default:
     console.log('\n🔧 Gerenciador de Configurações - Banco API');
     console.log('==========================================');
@@ -177,10 +207,12 @@ switch (command) {
     console.log('  graphql-port <porta>    - Alterar porta do servidor GraphQL');
     console.log('  update-ports <r> <g>    - Alterar ambas as portas');
     console.log('  list-ports              - Listar portas sugeridas');
+    console.log('  sync-workflow           - Sincronizar porta com workflow GitHub Actions');
     console.log('\nExemplos:');
     console.log('  node config-manager.js show');
     console.log('  node config-manager.js rest-port 9090');
     console.log('  node config-manager.js update-ports 9090 9091');
+    console.log('  node config-manager.js sync-workflow');
     console.log('==========================================\n');
 }
 
