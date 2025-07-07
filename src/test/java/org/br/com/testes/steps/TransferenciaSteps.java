@@ -30,4 +30,9 @@ public class TransferenciaSteps {
         transferenciaController.listarTransferenciasBancarias();
     }
 
+    @Given("que envio uma requisição PUT atualiza completamente uma transferência")
+    public void queEnvioUmaRequisiçãoPUTPUTAtualizaCompletamenteUmaTransferência() {
+        transferenciaController.atualizarCompletamenteTransferencia();
+    }
+
 }

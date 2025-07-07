@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import lombok.Getter;
 import org.br.com.testes.controllers.tokens.GerarTokenController;
 import org.br.com.testes.manager.TokenManager;
+import org.br.com.testes.manager.TransferenciaManager;
 import org.br.com.testes.model.TransferenciaRequest;
 import org.br.com.testes.utils.LogFormatter;
 import org.junit.Test;
@@ -78,6 +79,7 @@ public class TransferenciaController {
         String token = TokenManager.getToken();
 
         String id = "6867c26d12ba0eba945873a7";
+
         response = given()
                 .baseUri(BASE_URL)
                 .param("id" + id)
@@ -88,7 +90,34 @@ public class TransferenciaController {
                 .then()
                 .extract().response();
 
+        String idTransferencia = response.jsonPath().getString("transferencias._id[0]");
+        TransferenciaManager.setIdTransferencia(idTransferencia);
         LogFormatter.logJson(response.asPrettyString());
+        LogFormatter.logStep("ID da Transferência: " + idTransferencia);
+    }
+
+    public void atualizarCompletamenteTransferencia() {
+
+        GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
+
+        String idTransferencia = TransferenciaManager.getIdTransferencia();
+
+        TransferenciaRequest request = TransferenciaRequest.builder()
+                .contaOrigem("6867c26d12ba0eba945873a6")
+                .contaDestino("6867c26d12ba0eba945873a7")
+                .token(token)
+                .valor(29.00)
+                .build();
+
+        response = given()
+                .baseUri(BASE_URL)
+                .log().all()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .when()
+                .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
     }
 
     public void validarStatusCode(int statusCode) {
