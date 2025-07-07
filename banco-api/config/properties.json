@@ -1,0 +1,22 @@
+{
+  "server": {
+    "rest": {
+      "port": 9090,
+      "host": "localhost"
+    },
+    "graphql": {
+      "port": 9091,
+      "host": "localhost"
+    }
+  },
+  "database": {
+    "mongo_uri": "mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/banco?retryWrites=true&w=majority&appName=Cluster0"
+  },
+  "jwt": {
+    "secret": "banco_api_jwt_secret_key_2024"
+  },
+  "swagger": {
+    "enabled": true,
+    "path": "/api-docs"
+  }
+}

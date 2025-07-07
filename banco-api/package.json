@@ -8,7 +8,10 @@
     "graphql-api": "node graphql/app.js",
     "seed": "node scripts/seed.js",
     "consultar": "node scripts/consultar-dados.js",
-    "create-env": "node scripts/create-env.js"
+    "create-env": "node scripts/create-env.js",
+    "config": "node scripts/config-manager.js",
+    "config:show": "node scripts/config-manager.js show",
+    "config:list-ports": "node scripts/config-manager.js list-ports"
   },
   "keywords": [],
   "author": "",

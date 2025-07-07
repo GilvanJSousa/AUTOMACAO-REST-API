@@ -9,8 +9,8 @@ MONGO_URI=mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/
 JWT_SECRET=banco_api_jwt_secret_key_2024
 
 # Portas dos servidores
-PORT=3000
-GRAPHQLPORT=3001
+PORT=8080
+GRAPHQLPORT=8081
 `;
 
   const envPath = path.join(__dirname, '..', '.env');
@@ -22,7 +22,7 @@ GRAPHQLPORT=3001
     console.log('\n🔧 Configurações:');
     console.log('   - MongoDB Atlas: Configurado');
     console.log('   - JWT Secret: Definido');
-    console.log('   - Portas: 3000 (REST) e 3001 (GraphQL)');
+    console.log('   - Portas: 8080 (REST) e 8081 (GraphQL)');
     console.log('\n🚀 Próximo passo: npm run seed');
   } catch (error) {
     console.error('❌ Erro ao criar arquivo .env:', error.message);
