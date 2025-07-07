@@ -37,8 +37,8 @@ public class TransferenciaController {
         String token = TokenManager.getToken();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6866ef0c822da5a2bb628768")
-                .contaDestino("6866ef0c822da5a2bb628767")
+                .contaOrigem("6867c26d12ba0eba945873a6")
+                .contaDestino("6867c26d12ba0eba945873a7")
                 .token(token)
                 .valor(100.00)
                 .build();
@@ -77,7 +77,7 @@ public class TransferenciaController {
         GerarTokenController.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
-        String id = "6866ef0c822da5a2bb628768";
+        String id = "6867c26d12ba0eba945873a7";
         response = given()
                 .baseUri(BASE_URL)
                 .param("id" + id)

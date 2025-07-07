@@ -1,4 +1,4 @@
-package org.br.com.testes.controllers;
+package org.br.com.testes.controllers.contas;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.br.com.testes.controllers.tokens.GerarTokenController;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.utils.LogFormatter;
-import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
 

@@ -15,7 +15,7 @@ import static io.restassured.RestAssured.*;
 
 public class ArtigosController {
 	private Response response;
-	private static final String BASE_URL = "http://localhost:9090";
+	private static final String BASE_URL = "http://localhost:3000";
 	private static final String ENDPOINT_ARTIGOS = "/artigos";
 
 	public ArtigosController() {

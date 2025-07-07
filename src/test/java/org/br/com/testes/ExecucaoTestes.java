@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = {"org.br.com.testes.steps", "org.br.com.testes.utils"},
-        tags = "@login or @transferencia or @contas",
+        tags = "@login or @transferencia or @contas or @usuario",
         monochrome = true,
         dryRun = false,
         plugin = {

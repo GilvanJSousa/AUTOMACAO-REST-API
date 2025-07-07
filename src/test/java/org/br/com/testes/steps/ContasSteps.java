@@ -2,7 +2,7 @@ package org.br.com.testes.steps;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import org.br.com.testes.controllers.ContasController;
+import org.br.com.testes.controllers.contas.ContasController;
 
 public class ContasSteps {
 
