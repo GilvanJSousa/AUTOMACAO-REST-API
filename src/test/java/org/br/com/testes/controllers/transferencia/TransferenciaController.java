@@ -145,7 +145,7 @@ public class TransferenciaController {
     }
 
     public void removeUmaTransferencia() {
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         String idTransferencia = TransferenciaManager.getIdTransferencia();

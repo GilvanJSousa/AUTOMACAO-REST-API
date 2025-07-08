@@ -43,7 +43,7 @@ public class ContasController {
 
     public void obterContaBancaria(String conta) {
 
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         response = given()
