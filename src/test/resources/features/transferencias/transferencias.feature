@@ -19,8 +19,13 @@ Feature: Validar funcionalidade de Transferencias entre contas
      Given que envio a solicitação de GET para consultar transferencia especifica
      Then a API Transferencia deve retornar o status code 200
 
-   @TransferenciaAtuailizacaoCompleta
-   Scenario: Validar atualização completa de uma transação
+   @TransferenciaAtualizacaoCompleta
+   Scenario: Validar atualização completa de uma transferencia
      Given que envio uma requisição PUT atualiza completamente uma transferência
+     Then a API Transferencia deve retornar o status code 204
+
+   @TransferenciaParcial
+   Scenario: Validar atualização parcial de uma transferencia
+     Given que envio uma requisição PUT atualiza parcialmente uma transferencia
      Then a API Transferencia deve retornar o status code 204
 

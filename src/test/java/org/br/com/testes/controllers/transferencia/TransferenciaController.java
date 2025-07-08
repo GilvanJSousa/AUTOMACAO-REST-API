@@ -112,12 +112,34 @@ public class TransferenciaController {
 
         response = given()
                 .baseUri(BASE_URL)
-                .log().all()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+    }
+
+    public void atualizarParcialmenteTransferencia() {
+        GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
+
+        String idTransferencia = TransferenciaManager.getIdTransferencia();
+
+        TransferenciaRequest request = TransferenciaRequest.builder()
+                .contaOrigem("6867c26d12ba0eba945873a6")
+                .contaDestino("6867c26d12ba0eba945873a7")
+                .token(token)
+                .valor(29.00)
+                .build();
+
+        response = given()
+                .baseUri(BASE_URL)
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .body(request)
+                .when()
+                .patch(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+        
     }
 
     public void validarStatusCode(int statusCode) {
