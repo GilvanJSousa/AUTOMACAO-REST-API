@@ -1,6 +1,8 @@
 package org.br.com.testes.controllers.transferencia;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.Getter;
@@ -17,6 +19,8 @@ public class TransferenciaController {
 
     private Response response;
 
+    private String requestBody;
+
     private static final String BASE_URL = "http://localhost:9090";
 
     private static final String ENDPOINT_TRANSFERENCIA = "/transferencias";
@@ -28,7 +32,7 @@ public class TransferenciaController {
     }
 
 
-    public void realizarTransferencia() {
+    public void prepararRequisicaoDeTransferencia(double valor) throws JsonProcessingException {
 
         // Joao Silva =====> ID: 6867c26d12ba0eba945873a5
         // Maria Santos ===> ID: 6867c26d12ba0eba945873a6
@@ -43,15 +47,39 @@ public class TransferenciaController {
                 .contaOrigem("6867c26d12ba0eba945873a7")
                 .contaDestino("6867c26d12ba0eba945873a6")
                 .token(token)
-                .valor(20.00)
+                .valor(valor)
                 .build();
+
+        requestBody = new ObjectMapper().writeValueAsString(request);
+    }
+
+    public void realizarTransferencia() {
+
+        String token = TokenManager.getToken();
 
         response = given()
                 .baseUri(BASE_URL)
                 .header("accept", "*/*")
                 .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
-                .body(request)
+                .body(requestBody)
+                .when()
+                .post(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+        LogFormatter.logJson(response.asPrettyString());
+    }
+
+    public void realizarTransferenciaComValorDivergente(double valor) {
+
+        String token = TokenManager.getToken();
+
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
                 .when()
                 .post(ENDPOINT_TRANSFERENCIA)
                 .then()
@@ -62,6 +90,7 @@ public class TransferenciaController {
     public void listarTransferenciasBancarias() {
         GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
+
         response = given()
                 .baseUri(BASE_URL)
                 .param("page", 1)
@@ -84,15 +113,15 @@ public class TransferenciaController {
 
         response = given()
                 .baseUri(BASE_URL)
-                .param("id" + id)
+                .pathParam("id", id)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .get(ENDPOINT_TRANSFERENCIA)
+                .get(ENDPOINT_TRANSFERENCIA + "/{id}")
                 .then()
                 .extract().response();
 
-        String idTransferencia = response.jsonPath().getString("transferencias._id[0]");
+        String idTransferencia = response.jsonPath().getString("_id");
         TransferenciaManager.setIdTransferencia(idTransferencia);
         LogFormatter.logJson(response.asPrettyString());
         LogFormatter.logStep("ID da Transferência: " + idTransferencia);
@@ -100,45 +129,29 @@ public class TransferenciaController {
 
     public void atualizarCompletamenteTransferencia() {
 
-        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         String idTransferencia = TransferenciaManager.getIdTransferencia();
-
-        TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6867c26d12ba0eba945873a7")
-                .contaDestino("6867c26d12ba0eba945873a6")
-                .token(token)
-                .valor(25.00)
-                .build();
 
         response = given()
                 .baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .body(request)
+                .body(requestBody)
                 .when()
                 .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
     }
 
     public void atualizarParcialmenteTransferencia() {
-        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         String idTransferencia = TransferenciaManager.getIdTransferencia();
-
-        TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6867c26d12ba0eba945873a7")
-                .contaDestino("6867c26d12ba0eba945873a6")
-                .token(token)
-                .valor(30.00)
-                .build();
 
         response = given()
                 .baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .body(request)
+                .body(requestBody)
                 .when()
                 .patch(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
         
