@@ -35,4 +35,9 @@ public class TransferenciaSteps {
         transferenciaController.atualizarCompletamenteTransferencia();
     }
 
+    @Given("que envio uma requisição PUT atualiza parcialmente uma transferencia")
+    public void queEnvioUmaRequisiçãoPUTAtualizaParcialmenteUmaTransferencia() {
+        transferenciaController.atualizarParcialmenteTransferencia();
+    }
+
 }
