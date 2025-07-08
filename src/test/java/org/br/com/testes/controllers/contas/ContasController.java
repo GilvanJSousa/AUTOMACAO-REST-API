@@ -4,7 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.Getter;
 import lombok.Setter;
-import org.br.com.testes.controllers.tokens.GerarTokenController;
+import org.br.com.testes.tokens.GerarToken;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.utils.LogFormatter;
 
@@ -27,7 +27,7 @@ public class ContasController {
     
     public void listarContasBancarias() {
 
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         response = given()

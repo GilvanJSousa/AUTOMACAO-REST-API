@@ -1,4 +1,4 @@
-package org.br.com.testes.model;
+package org.br.com.testes.tokens;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

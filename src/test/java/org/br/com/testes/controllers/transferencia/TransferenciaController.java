@@ -4,15 +4,11 @@ package org.br.com.testes.controllers.transferencia;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.Getter;
-import org.br.com.testes.controllers.tokens.GerarTokenController;
+import org.br.com.testes.tokens.GerarToken;
 import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.TransferenciaManager;
 import org.br.com.testes.model.TransferenciaRequest;
 import org.br.com.testes.utils.LogFormatter;
-import org.junit.Test;
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
-import io.qameta.allure.Feature;
 
 import static io.restassured.RestAssured.*;
 
@@ -34,7 +30,7 @@ public class TransferenciaController {
 
     public void realizarTransferencia() {
 
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
@@ -58,7 +54,7 @@ public class TransferenciaController {
     }
 
     public void listarTransferenciasBancarias() {
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
         response = given()
                 .baseUri(BASE_URL)
@@ -75,7 +71,7 @@ public class TransferenciaController {
     }
 
     public void consultarTransferenciaBancaria() {
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         String id = "6867c26d12ba0eba945873a7";
@@ -98,7 +94,7 @@ public class TransferenciaController {
 
     public void atualizarCompletamenteTransferencia() {
 
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         String idTransferencia = TransferenciaManager.getIdTransferencia();
@@ -120,7 +116,7 @@ public class TransferenciaController {
     }
 
     public void atualizarParcialmenteTransferencia() {
-        GerarTokenController.gerarTokenAdmin();
+        GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
         String idTransferencia = TransferenciaManager.getIdTransferencia();

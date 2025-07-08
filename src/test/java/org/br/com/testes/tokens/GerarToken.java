@@ -1,19 +1,17 @@
-package org.br.com.testes.controllers.tokens;
+package org.br.com.testes.tokens;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import lombok.Getter;
 import lombok.Setter;
 import org.br.com.testes.manager.TokenManager;
-import org.br.com.testes.model.GerarTokenResquest;
 import org.br.com.testes.utils.LogFormatter;
-import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
 
 @Getter
 @Setter
-public class GerarTokenController {
+public class GerarToken {
 
     private static Response response;
 
@@ -21,7 +19,7 @@ public class GerarTokenController {
 
     private static final String ENDPOINT = "/login";
 
-    public GerarTokenController() {
+    public GerarToken() {
         response = null;
     }
 
