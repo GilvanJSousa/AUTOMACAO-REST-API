@@ -41,6 +41,22 @@ public class ContasController {
         LogFormatter.logJson(response.asPrettyString());
     }
 
+    public void obterContaBancaria(String conta) {
+
+        GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
+
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .when()
+                .get(ENDPOINT_CONTAS + "/" + conta);
+
+        LogFormatter.logJson(response.asPrettyString());
+    }
+
     public void validasStatusCode(int statusCode) {
         response.then().statusCode(statusCode);
         LogFormatter.logJson(String.valueOf("Status code: " + statusCode));

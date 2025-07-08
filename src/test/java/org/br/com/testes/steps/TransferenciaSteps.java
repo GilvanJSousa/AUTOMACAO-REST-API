@@ -11,33 +11,38 @@ public class TransferenciaSteps {
         transferenciaController = new TransferenciaController();
     }
 
-    @Given("que envio a solicitação de POST para realizar uma transferencia entre contas")
-    public void queEnvioaSolicitaçãoDePOSTParaRealizarUmaTransferenciaEntreContas() {
+    @Given("que envio a requisicao de POST para realizar uma transferencia entre contas")
+    public void queEnvioaRequisicaoDePOSTParaRealizarUmaTransferenciaEntreContas() {
         transferenciaController.realizarTransferencia();
     }
+
     @Then("a API Transferencia deve retornar o status code {int}")
     public void aAPITransferenciaDeveRetornarOStatusCode(Integer statusCode) {
         transferenciaController.validarStatusCode(statusCode);
     }
 
-    @Given("que envio a solicitação de GET para consultar transferencia especifica")
-    public void queEnvioASolicitaçãoDeGETParaConsultarTransferenciaEspecifica() {
+    @Given("que envio a requisicao de GET para consultar transferencia especifica")
+    public void queEnvioaRequisicaoDeGETParaConsultarTransferenciaEspecifica() {
         transferenciaController.consultarTransferenciaBancaria();
     }
 
-    @Given("que envio a solicitação de GET para Listar as transferências realizadas")
-    public void queEnvioASolicitaçãoDeGETParaListarAsTransferênciasRealizadas() {
+    @Given("que envio a requisicao de GET para Listar as transferencias realizadas")
+    public void queEnvioaRequisicaoDeGETParaListarAsTransferenciasRealizadas() {
         transferenciaController.listarTransferenciasBancarias();
     }
 
-    @Given("que envio uma requisição PUT atualiza completamente uma transferência")
-    public void queEnvioUmaRequisiçãoPUTPUTAtualizaCompletamenteUmaTransferência() {
+    @Given("que envio uma requisicao PUT atualiza completamente uma transferencia")
+    public void queEnvioUmaRequisicaoPUTPUTAtualizaCompletamenteUmaTransferencia() {
         transferenciaController.atualizarCompletamenteTransferencia();
     }
 
-    @Given("que envio uma requisição PUT atualiza parcialmente uma transferencia")
-    public void queEnvioUmaRequisiçãoPUTAtualizaParcialmenteUmaTransferencia() {
+    @Given("que envio uma requisicao PATCH atualiza parcialmente uma transferencia")
+    public void queEnvioUmaRequisicaoPUTAtualizaParcialmenteUmaTransferencia() {
         transferenciaController.atualizarParcialmenteTransferencia();
     }
 
+    @Given("que envio uma requisicao DELETE Remove uma transferencia")
+    public void queEnvioUmaRequisicaoDELETERemoveUmaTransferencia() {
+        transferenciaController.removeUmaTransferencia();
+    }
 }
