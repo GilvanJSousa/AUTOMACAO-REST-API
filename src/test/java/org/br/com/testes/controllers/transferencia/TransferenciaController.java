@@ -30,14 +30,20 @@ public class TransferenciaController {
 
     public void realizarTransferencia() {
 
+        // Joao Silva =====> ID: 6867c26d12ba0eba945873a5
+        // Maria Santos ===> ID: 6867c26d12ba0eba945873a6
+        // Pedro Oliveira => ID: 6867c26d12ba0eba945873a7
+        // Ana Costa ======> ID: 6867c26d12ba0eba945873a8
+
         GerarToken.gerarTokenAdmin();
+
         String token = TokenManager.getToken();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6867c26d12ba0eba945873a6")
-                .contaDestino("6867c26d12ba0eba945873a7")
+                .contaOrigem("6867c26d12ba0eba945873a7")
+                .contaDestino("6867c26d12ba0eba945873a6")
                 .token(token)
-                .valor(100.00)
+                .valor(20.00)
                 .build();
 
         response = given()
@@ -100,10 +106,10 @@ public class TransferenciaController {
         String idTransferencia = TransferenciaManager.getIdTransferencia();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6867c26d12ba0eba945873a6")
-                .contaDestino("6867c26d12ba0eba945873a7")
+                .contaOrigem("6867c26d12ba0eba945873a7")
+                .contaDestino("6867c26d12ba0eba945873a6")
                 .token(token)
-                .valor(29.00)
+                .valor(25.00)
                 .build();
 
         response = given()
@@ -122,10 +128,10 @@ public class TransferenciaController {
         String idTransferencia = TransferenciaManager.getIdTransferencia();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6867c26d12ba0eba945873a6")
-                .contaDestino("6867c26d12ba0eba945873a7")
+                .contaOrigem("6867c26d12ba0eba945873a7")
+                .contaDestino("6867c26d12ba0eba945873a6")
                 .token(token)
-                .valor(29.00)
+                .valor(30.00)
                 .build();
 
         response = given()
@@ -136,6 +142,20 @@ public class TransferenciaController {
                 .when()
                 .patch(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
         
+    }
+
+    public void removeUmaTransferencia() {
+        GerarTokenController.gerarTokenAdmin();
+        String token = TokenManager.getToken();
+
+        String idTransferencia = TransferenciaManager.getIdTransferencia();
+
+        response = given()
+                .baseUri(BASE_URL)
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
     }
 
     public void validarStatusCode(int statusCode) {
