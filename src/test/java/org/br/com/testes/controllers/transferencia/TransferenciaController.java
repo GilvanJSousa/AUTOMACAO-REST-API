@@ -116,7 +116,7 @@ public class TransferenciaController {
         String idTransferencia = response.jsonPath().getString("transferencias[0]._id");
         LogFormatter.logStep("ID da Transferência: " + idTransferencia);
         TransferenciaManager.setIdTransferencia(idTransferencia);
-        LogFormatter.logJson(response.asPrettyString());
+//        LogFormatter.logJson(response.asPrettyString());
     }
 
     public void consultarTransferenciaBancaria() {
