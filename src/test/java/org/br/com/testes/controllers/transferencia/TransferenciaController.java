@@ -11,6 +11,7 @@ import org.br.com.testes.manager.TokenManager;
 import org.br.com.testes.manager.TransferenciaManager;
 import org.br.com.testes.model.TransferenciaRequest;
 import org.br.com.testes.utils.LogFormatter;
+import org.junit.Test;
 
 import static io.restassured.RestAssured.*;
 
@@ -112,6 +113,9 @@ public class TransferenciaController {
                 .then()
                 .extract().response();
 
+        String idTransferencia = response.jsonPath().getString("transferencias[0]._id");
+        LogFormatter.logStep("ID da Transferência: " + idTransferencia);
+        TransferenciaManager.setIdTransferencia(idTransferencia);
         LogFormatter.logJson(response.asPrettyString());
     }
 
@@ -231,6 +235,8 @@ public class TransferenciaController {
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .delete(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+
+        LogFormatter.logJson(idTransferencia + "==> Excluido");
     }
 
     public void validarStatusCode(int statusCode) {
@@ -406,6 +412,139 @@ public class TransferenciaController {
             }
         } else {
             throw new RuntimeException("Status code nao corresponde ao esperado. Esperado: " + statusCodeEsperado + ", Recebido: " + statusCode);
+        }
+    }
+
+    /**
+     * Realiza transferência inicial entre contas específicas
+     */
+    public void realizarTransferenciaEntreContas(double valor, String contaOrigem, String contaDestino) throws JsonProcessingException {
+        LogFormatter.logStep("Realizando transferencia inicial - Valor: R$ " + valor + ", Origem: " + contaOrigem + ", Destino: " + contaDestino);
+        
+        // Validar se as contas não estão vazias
+        if (contaOrigem == null || contaOrigem.trim().isEmpty()) {
+            throw new IllegalArgumentException("Conta de origem nao pode estar vazia");
+        }
+        if (contaDestino == null || contaDestino.trim().isEmpty()) {
+            throw new IllegalArgumentException("Conta de destino nao pode estar vazia");
+        }
+        
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        // Preparar requisição com contas específicas
+        TransferenciaRequest request = TransferenciaRequest.builder()
+                .contaOrigem(contaOrigem)
+                .contaDestino(contaDestino)
+                .token(TokenManager.getToken())
+                .valor(valor)
+                .build();
+
+        String requestBody = new ObjectMapper().writeValueAsString(request);
+        
+        String token = TokenManager.getToken();
+        
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+        
+        LogFormatter.logJson(response.asPrettyString());
+        
+        // Validar que a transferência foi processada com sucesso
+        int statusCode = response.getStatusCode();
+        if (statusCode == 200 || statusCode == 201) {
+            LogFormatter.logStep("Transferencia inicial realizada com sucesso - Status Code: " + statusCode);
+            
+            // Salvar o ID da transferência criada para uso posterior
+            String idTransferencia = response.jsonPath().getString("_id");
+            if (idTransferencia != null && !idTransferencia.isEmpty()) {
+                TransferenciaManager.setIdTransferencia(idTransferencia);
+                LogFormatter.logStep("ID da transferencia salvo: " + idTransferencia);
+            } else {
+                // Se não conseguir pegar o ID da resposta, usar o método de listagem padrão
+                LogFormatter.logStep("ID nao encontrado na resposta, buscando na lista de transferencias");
+                listarTransferenciasBancarias();
+                
+                String idEncontrado = TransferenciaManager.getIdTransferencia();
+                if (idEncontrado != null) {
+                    LogFormatter.logStep("ID da transferencia encontrado na lista: " + idEncontrado);
+                } else {
+                    LogFormatter.logStep("Nao foi possivel encontrar o ID da transferencia");
+                }
+            }
+        } else {
+            throw new RuntimeException("Falha ao realizar transferencia inicial. Status Code: " + statusCode);
+        }
+    }
+
+
+
+    /**
+     * Atualiza transferência com novos dados (valor e conta de destino)
+     */
+    public void atualizarTransferenciaComNovosDados(double novoValor, String novaContaDestino) throws JsonProcessingException {
+        LogFormatter.logStep("Atualizando transferencia com novos dados - Valor: R$ " + novoValor + ", Conta Destino: " + novaContaDestino);
+        
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        // Preparar requisição com novos dados
+        TransferenciaRequest request = TransferenciaRequest.builder()
+                .contaOrigem("686fa208cbdb4375dbb8ed47") // Conta de origem fixa
+                .contaDestino(novaContaDestino)
+                .token(TokenManager.getToken())
+                .valor(novoValor)
+                .build();
+
+        String requestBody = new ObjectMapper().writeValueAsString(request);
+        
+        // Obter ID da transferência para atualização
+        String idTransferencia = TransferenciaManager.getIdTransferencia();
+        
+        // Se não temos ID, buscar na lista de transferências mais recentes
+        if (idTransferencia == null || idTransferencia.isEmpty()) {
+            LogFormatter.logStep("ID da transferencia nao encontrado, buscando na lista");
+            listarTransferenciasBancarias();
+            idTransferencia = TransferenciaManager.getIdTransferencia();
+            
+            if (idTransferencia == null || idTransferencia.isEmpty()) {
+                throw new RuntimeException("ID da transferencia nao encontrado. Execute primeiro um step que liste transferencias.");
+            }
+        }
+        
+        LogFormatter.logStep("ID da transferencia para atualizacao: " + idTransferencia);
+        String token = TokenManager.getToken();
+        
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia)
+                .then()
+                .extract().response();
+        
+        LogFormatter.logJson(response.asPrettyString());
+        
+        // Validar que a atualização foi bem-sucedida
+        int statusCode = response.getStatusCode();
+        if (statusCode == 204) {
+            LogFormatter.logStep("Transferencia atualizada com sucesso - Status Code: " + statusCode);
+        } else {
+            throw new RuntimeException("Falha ao atualizar transferencia. Status Code: " + statusCode);
         }
     }
 

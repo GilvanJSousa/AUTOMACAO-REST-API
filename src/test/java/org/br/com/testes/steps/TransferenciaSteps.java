@@ -93,5 +93,23 @@ public class TransferenciaSteps {
         LogFormatter.logStep("Validacao de erro de valor minimo concluida");
     }
 
+    @Given("que a transferencia de R$ {double} foi realizada entre a conta de origem {string} e a conta de destino {string}")
+    public void queATransferenciaDeR$FoiRealizadaEntreAContaDeOrigemEAContaDeDestino(double valor, String contaOrigem, String contaDestino) throws JsonProcessingException {
+        transferenciaController.realizarTransferenciaEntreContas(valor, contaOrigem, contaDestino);
+    }
+
+    @When("a transferencia e atualizada com novos dados valor R$ {double} conta de destino {string}")
+    public void aTransferenciaEAtualizadaComNovosDadosValorR$ContaDeDestino(double valor, String contaDestino) throws JsonProcessingException {
+        transferenciaController.atualizarTransferenciaComNovosDados(valor, contaDestino);
+    }
+
+    @Then("todos os dados da transferencia sao atualizados com sucesso")
+    public void todosOsDadosDaTransferenciaSaoAtualizadosComSucesso() {
+        // A validação já é feita no método atualizarTransferenciaComNovosDados
+        // Este step apenas confirma que chegou até aqui sem exceções
+        LogFormatter.logStep("Validacao de atualizacao da transferencia concluida");
+    }
+
+
 
 }

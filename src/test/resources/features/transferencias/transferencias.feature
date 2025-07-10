@@ -61,3 +61,13 @@ Feature: Validar funcionalidade de Transferencias entre contas
     When uma transferencia de R$ 5.00 e realizada com validacao de erro
     Then o sistema retorna um erro indicando que o valor minimo e de R$ 10.00
 
+  @CT-1011 @TransferenciaAtualizarDados
+  Scenario Outline: Atualizar todos os dados de uma transferência
+    Given que a transferencia de R$ 100.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
+    When a transferencia e atualizada com novos dados valor R$ 200.00 conta de destino "<CONTA_DESTINO>"
+    Then todos os dados da transferencia sao atualizados com sucesso
+
+  Examples:
+    | CONTA_ORIGEM             | CONTA_DESTINO            |
+    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
+    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed46 |
