@@ -13,8 +13,8 @@ public class TransferenciaSteps {
         transferenciaController = new TransferenciaController();
     }
 
-    @Given("que envio a requisicao de POST para realizar uma transferencia no valor de R$ {double} entre contas")
-    public void queEnvioaRequisicaoDePOSTParaRealizarUmaTransferenciaEntreContas(double valor) throws JsonProcessingException {
+    @Given("que envio a requisicao de {string} para realizar uma transferencia no valor de R$ {double} entre contas")
+    public void queEnvioaRequisicaoDePOSTParaRealizarUmaTransferenciaEntreContas(String arg, double valor) throws JsonProcessingException {
         transferenciaController.realizarTransferencia(valor);
     }
 
@@ -23,34 +23,34 @@ public class TransferenciaSteps {
         transferenciaController.validarStatusCode(statusCode);
     }
 
-    @Given("que envio a requisicao de GET para consultar transferencia especifica")
-    public void queEnvioaRequisicaoDeGETParaConsultarTransferenciaEspecifica() {
+    @Given("que envio a requisicao de {string} para consultar transferencia especifica")
+    public void queEnvioaRequisicaoDeGETParaConsultarTransferenciaEspecifica(String arg) {
         transferenciaController.consultarTransferenciaBancaria();
     }
 
-    @Given("que envio a requisicao de GET para Listar as transferencias realizadas")
-    public void queEnvioaRequisicaoDeGETParaListarAsTransferenciasRealizadas() {
+    @Given("que envio a requisicao de {string} para Listar as transferencias realizadas")
+    public void queEnvioaRequisicaoDeGETParaListarAsTransferenciasRealizadas(String arg) {
         transferenciaController.listarTransferenciasBancarias();
     }
 
-    @Given("que envio uma requisicao PUT atualizar completamente o valor R$ {double} da transferencia")
-    public void queEnvioUmaRequisicaoPUTPUTAtualizaCompletamenteUmaTransferencia(double valor) throws JsonProcessingException {
+    @Given("que envio uma requisicao {string} atualizar completamente o valor R$ {double} da transferencia")
+    public void queEnvioUmaRequisicaoPUTPUTAtualizaCompletamenteUmaTransferencia(String arg, double valor) throws JsonProcessingException {
         transferenciaController.atualizarCompletamenteTransferencia(valor);
     }
 
-    @Given("que envio uma requisicao PATCH atualiza parcialmente em valor R$ {double} da transferencia")
-    public void queEnvioUmaRequisicaoPUTAtualizaParcialmenteUmaTransferencia(double valor) throws JsonProcessingException {
+    @Given("que envio uma requisicao {string} atualiza parcialmente em valor R$ {double} da transferencia")
+    public void queEnvioUmaRequisicaoPUTAtualizaParcialmenteUmaTransferencia(String arg, double valor) throws JsonProcessingException {
         transferenciaController.atualizarParcialmenteTransferencia(valor);
     }
 
-    @Given("que envio uma requisicao DELETE Remove uma transferencia")
-    public void queEnvioUmaRequisicaoDELETERemoveUmaTransferencia() {
+    @Given("que envio uma requisicao {string} Remove uma transferencia")
+    public void queEnvioUmaRequisicaoDELETERemoveUmaTransferencia(String arg) {
         transferenciaController.removeUmaTransferencia();
     }
 
 
-    @Given("que envio a requisicao de POST para realizar uma transferencia de R$ {double} entre contas")
-    public void queEnvioARequisicaoDePOSTParaRealizarUmaTransferenciaDeR$EntreContas(double valor) throws JsonProcessingException {
+    @Given("que envio a requisicao de {string} para realizar uma transferencia de R$ {double} entre contas")
+    public void queEnvioARequisicaoDePOSTParaRealizarUmaTransferenciaDeR$EntreContas(String argc, double valor) throws JsonProcessingException {
         transferenciaController.realizarTransferenciaComValorDivergente(valor);
     }
 
@@ -83,16 +83,11 @@ public class TransferenciaSteps {
 
     @When("uma transferencia de R$ {double} e realizada com validacao de erro")
     public void umaTransferenciaDeRERealizadaComValidacaoDeErro(double valor) throws JsonProcessingException {
-        // Para valores abaixo de R$10,00, esperamos erro 422
-        if (valor < 10) {
-            transferenciaController.realizarTransferenciaComValidacaoDeErro(valor, 422, "R$10,00");
-        } else {
-            transferenciaController.realizarTransferenciaComValidacao(valor);
-        }
+        transferenciaController.realizarTransferenciaComValidacaoInteligente(valor);
     }
 
-    @Then("o sistema retorna um erro indicando que o valor minimo e de R$ 10.00")
-    public void oSistemaRetornaUmErroIndicandoQueOValorMinimoEDeR$10_00() {
+    @Then("o sistema retorna um erro indicando que o valor minimo e de R$ {double}")
+    public void oSistemaRetornaUmErroIndicandoQueOValorMinimoEDeR$10_00(double valor) {
         // A validação já é feita no método realizarTransferenciaComValidacaoDeErro
         // Este step apenas confirma que chegou até aqui sem exceções
         LogFormatter.logStep("Validacao de erro de valor minimo concluida");

@@ -200,6 +200,7 @@ public class TransferenciaController {
                 .when()
                 .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
         System.out.println("Response PUT: " + response.asString());
+        LogFormatter.logJson(response.asPrettyString());
     }
 
     public void atualizarParcialmenteTransferencia(double valor) throws JsonProcessingException {
@@ -348,6 +349,20 @@ public class TransferenciaController {
             LogFormatter.logStep("Transferencia processada com sucesso - Status Code: " + statusCode);
         } else {
             throw new RuntimeException("Transferencia nao foi processada com sucesso. Status Code: " + statusCode);
+        }
+    }
+
+    /**
+     * Realiza transferência com validação inteligente (sucesso ou erro baseado no valor)
+     */
+    public void realizarTransferenciaComValidacaoInteligente(double valor) throws JsonProcessingException {
+        LogFormatter.logStep("Realizando transferencia de R$ " + valor + " com validacao inteligente");
+        
+        // Para valores abaixo de R$10,00, esperamos erro 422
+        if (valor < 10) {
+            realizarTransferenciaComValidacaoDeErro(valor, 422, "R$10,00");
+        } else {
+            realizarTransferenciaComValidacao(valor);
         }
     }
 
