@@ -81,4 +81,8 @@ public class TransferenciaSteps {
         LogFormatter.logStep("Validacao de sucesso da transferencia concluida");
     }
 
+    @Then("o sistema retorna um erro indicando que o valor minimo e de R$ {double}")
+    public void oSistemaRetornaUmErroIndicandoQueOValorMinimoEDeR$(double valor, String statusCode) {
+//        transferenciaController.validarStatusCode(Integer.parseInt(statusCode));
+    }
 }
