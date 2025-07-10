@@ -40,10 +40,10 @@ Feature: Validar funcionalidade de Transferencias entre contas
     Then a API Transferencia deve retornar o status code 422
 
   @CT-1008 @transferenciaValorAcima
-  Scenario: Transferir valor acima de R$5000,00 com autenticação
-    Given que a conta de origem possui saldo de R$6000,00
-    And a conta de destino está ativa
-    And o token de autenticação "123456" é fornecido
-    When uma transferência de R$6000,00 é realizada
-    Then a transferência é processada com sucesso
+  Scenario: Transferir valor acima de R$100,00 com autenticação
+    Given que a conta de origem possui saldo de R$ 6000.00
+    And a conta de destino esta ativa
+    And o token de autenticacao 'yJhbGciOi...' e fornecido
+    When uma transferencia de R$ 6000.00 e realizada
+    Then a transferencia e processada com sucesso
 

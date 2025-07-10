@@ -3,6 +3,7 @@ package org.br.com.testes.steps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.*;
 import org.br.com.testes.controllers.transferencia.TransferenciaController;
+import org.br.com.testes.utils.LogFormatter;
 
 public class TransferenciaSteps {
 
@@ -51,6 +52,33 @@ public class TransferenciaSteps {
     @Given("que envio a requisicao de POST para realizar uma transferencia de R$ {double} entre contas")
     public void queEnvioARequisicaoDePOSTParaRealizarUmaTransferenciaDeR$EntreContas(double valor) throws JsonProcessingException {
         transferenciaController.realizarTransferenciaComValorDivergente(valor);
+    }
+
+    @Given("que a conta de origem possui saldo de R$ {double}")
+    public void queAContaDeOrigemPossuiSaldoDeR$(double saldo) {
+        transferenciaController.verificarSaldoContaOrigem(saldo);
+    }
+
+    @Given("a conta de destino esta ativa")
+    public void aContaDeDestinoEstaAtiva() {
+        transferenciaController.verificarContaDestinoAtiva();
+    }
+
+    @Given("o token de autenticacao {string} e fornecido")
+    public void oTokenDeAutenticacaoEFornecido(String token) {
+        transferenciaController.definirTokenAutenticacao(token);
+    }
+
+    @When("uma transferencia de R$ {double} e realizada")
+    public void umaTransferenciaDeRERealizada(double valor) throws JsonProcessingException {
+        transferenciaController.realizarTransferenciaComValidacao(valor);
+    }
+
+    @Then("a transferencia e processada com sucesso")
+    public void aTransferenciaEProcessadaComSucesso() {
+        // A validação já é feita no método realizarTransferenciaComValidacao
+        // Este step apenas confirma que chegou até aqui sem exceções
+        LogFormatter.logStep("Validacao de sucesso da transferencia concluida");
     }
 
 }

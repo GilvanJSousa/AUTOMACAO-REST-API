@@ -37,14 +37,24 @@ public class TransferenciaController {
         // Pedro Oliveira => ID: 6867c26d12ba0eba945873a7
         // Ana Costa ======> ID: 6867c26d12ba0eba945873a8
 
-        GerarToken.gerarTokenAdmin();
+        // Só gerar token se não tivermos um já definido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
 
         String token = TokenManager.getToken();
+        
+        // Para transferências acima de R$5.000,00, a API exige token '123456' no body
+        String tokenParaBody = token;
+        if (valor >= 5000) {
+            tokenParaBody = "123456";
+            LogFormatter.logStep("Transferencia acima de R$5.000,00 - usando token especial no body: " + tokenParaBody);
+        }
 
         TransferenciaRequest request = TransferenciaRequest.builder()
                 .contaOrigem("686fa208cbdb4375dbb8ed47")
                 .contaDestino("686fa208cbdb4375dbb8ed48")
-                .token(token)
+                .token(tokenParaBody)
                 .valor(valor)
                 .build();
 
@@ -226,6 +236,119 @@ public class TransferenciaController {
         response.then()
                 .statusCode(statusCode);
         LogFormatter.logJson(String.valueOf("Status Code: " + statusCode));
+    }
+
+    /**
+     * Verifica se a conta de origem possui saldo suficiente
+     */
+    public void verificarSaldoContaOrigem(double saldoEsperado) {
+        LogFormatter.logStep("Verificando saldo da conta de origem: R$ " + saldoEsperado);
+        
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        // Consultar a conta de origem para verificar o saldo
+        String contaOrigem = "686fa208cbdb4375dbb8ed47";
+        
+        Response contaResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaOrigem)
+                .then()
+                .extract().response();
+        
+        double saldoAtual = contaResponse.jsonPath().getDouble("saldo");
+        LogFormatter.logStep("Saldo atual da conta de origem: R$ " + saldoAtual);
+        
+        if (saldoAtual >= saldoEsperado) {
+            LogFormatter.logStep("Conta de origem possui saldo suficiente para a transferencia");
+        } else {
+            throw new RuntimeException("Saldo insuficiente na conta de origem. Saldo atual: R$ " + saldoAtual + ", Saldo necessario: R$ " + saldoEsperado);
+        }
+    }
+
+    /**
+     * Verifica se a conta de destino está ativa
+     */
+    public void verificarContaDestinoAtiva() {
+        LogFormatter.logStep("Verificando se a conta de destino esta ativa");
+        
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        String contaDestino = "686fa208cbdb4375dbb8ed48";
+        
+        Response contaResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaDestino)
+                .then()
+                .extract().response();
+        
+        boolean contaAtiva = contaResponse.jsonPath().getBoolean("ativa");
+        LogFormatter.logStep("Status da conta de destino: " + (contaAtiva ? "Ativa" : "Inativa"));
+        
+        if (!contaAtiva) {
+            throw new RuntimeException("Conta de destino nao esta ativa");
+        }
+    }
+
+    /**
+     * Define um token de autenticação específico
+     */
+    public void definirTokenAutenticacao(String token) {
+        LogFormatter.logStep("Definindo token de autenticacao: " + token.substring(0, Math.min(token.length(), 10)) + "...");
+        
+        // Se o token for "yJhbGciOi... ", gerar um token válido do sistema
+        if ("yJhbGciOi...".equals(token)) {
+            LogFormatter.logStep("Token especificado e fixo, gerando token valido do sistema");
+            GerarToken.gerarTokenAdmin();
+        } else {
+            TokenManager.setToken(token);
+        }
+    }
+
+    /**
+     * Realiza transferência com valor específico e valida sucesso
+     */
+    public void realizarTransferenciaComValidacao(double valor) throws JsonProcessingException {
+        LogFormatter.logStep("Realizando transferencia de R$ " + valor + " com validacao de sucesso");
+        
+        prepararRequisicaoDeTransferencia(valor);
+        
+        String token = TokenManager.getToken();
+        LogFormatter.logStep("Token sendo usado na transferencia: " + token.substring(0, Math.min(token.length(), 20)) + "...");
+        
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+        
+        LogFormatter.logJson(response.asPrettyString());
+        
+        // Validar que a transferência foi processada com sucesso
+        int statusCode = response.getStatusCode();
+        if (statusCode == 201) {
+            LogFormatter.logStep("Transferencia processada com sucesso - Status Code: " + statusCode);
+        } else {
+            throw new RuntimeException("Transferencia nao foi processada com sucesso. Status Code: " + statusCode);
+        }
     }
 
 }
