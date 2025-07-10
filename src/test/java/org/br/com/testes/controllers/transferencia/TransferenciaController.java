@@ -351,4 +351,47 @@ public class TransferenciaController {
         }
     }
 
+    /**
+     * Realiza transferência e valida erro específico
+     */
+    public void realizarTransferenciaComValidacaoDeErro(double valor, int statusCodeEsperado, String mensagemErroEsperada) throws JsonProcessingException {
+        LogFormatter.logStep("Realizando transferencia de R$ " + valor + " com validacao de erro esperado: " + statusCodeEsperado);
+        
+        prepararRequisicaoDeTransferencia(valor);
+        
+        String token = TokenManager.getToken();
+        LogFormatter.logStep("Token sendo usado na transferencia: " + token.substring(0, Math.min(token.length(), 20)) + "...");
+        
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+        
+        LogFormatter.logJson(response.asPrettyString());
+        
+        // Validar que o erro esperado foi retornado
+        int statusCode = response.getStatusCode();
+        if (statusCode == statusCodeEsperado) {
+            LogFormatter.logStep("Erro esperado retornado corretamente - Status Code: " + statusCode);
+            
+            // Validar mensagem de erro se fornecida
+            if (mensagemErroEsperada != null && !mensagemErroEsperada.isEmpty()) {
+                String mensagemErro = response.jsonPath().getString("error");
+                if (mensagemErro != null && mensagemErro.contains(mensagemErroEsperada)) {
+                    LogFormatter.logStep("Mensagem de erro validada: " + mensagemErro);
+                } else {
+                    throw new RuntimeException("Mensagem de erro nao corresponde ao esperado. Esperado: " + mensagemErroEsperada + ", Recebido: " + mensagemErro);
+                }
+            }
+        } else {
+            throw new RuntimeException("Status code nao corresponde ao esperado. Esperado: " + statusCodeEsperado + ", Recebido: " + statusCode);
+        }
+    }
+
 }

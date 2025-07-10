@@ -81,8 +81,22 @@ public class TransferenciaSteps {
         LogFormatter.logStep("Validacao de sucesso da transferencia concluida");
     }
 
-    @Then("o sistema retorna um erro indicando que o valor minimo e de R$ {double}")
-    public void oSistemaRetornaUmErroIndicandoQueOValorMinimoEDeR$(double valor, String statusCode) {
-//        transferenciaController.validarStatusCode(Integer.parseInt(statusCode));
+    @When("uma transferencia de R$ {double} e realizada com validacao de erro")
+    public void umaTransferenciaDeRERealizadaComValidacaoDeErro(double valor) throws JsonProcessingException {
+        // Para valores abaixo de R$10,00, esperamos erro 422
+        if (valor < 10) {
+            transferenciaController.realizarTransferenciaComValidacaoDeErro(valor, 422, "R$10,00");
+        } else {
+            transferenciaController.realizarTransferenciaComValidacao(valor);
+        }
     }
+
+    @Then("o sistema retorna um erro indicando que o valor minimo e de R$ 10.00")
+    public void oSistemaRetornaUmErroIndicandoQueOValorMinimoEDeR$10_00() {
+        // A validação já é feita no método realizarTransferenciaComValidacaoDeErro
+        // Este step apenas confirma que chegou até aqui sem exceções
+        LogFormatter.logStep("Validacao de erro de valor minimo concluida");
+    }
+
+
 }

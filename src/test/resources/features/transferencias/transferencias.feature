@@ -58,6 +58,6 @@ Feature: Validar funcionalidade de Transferencias entre contas
   Scenario: Transferir valor abaixo do limite mínimo
     Given que a conta de origem possui saldo de R$ 100.00
     And a conta de destino esta ativa
-    When uma transferencia de R$ 5.00 e realizada
-    Then a API Transferencia deve retornar o status code 422
+    When uma transferencia de R$ 5.00 e realizada com validacao de erro
+    Then o sistema retorna um erro indicando que o valor minimo e de R$ 10.00
 
