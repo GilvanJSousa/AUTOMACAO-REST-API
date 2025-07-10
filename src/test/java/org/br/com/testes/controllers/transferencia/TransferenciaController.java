@@ -25,8 +25,6 @@ public class TransferenciaController {
 
     private static final String ENDPOINT_TRANSFERENCIA = "/transferencias";
 
-    // Token será obtido dinamicamente após a geração
-
     public TransferenciaController() {
         response = null;
     }
@@ -44,8 +42,8 @@ public class TransferenciaController {
         String token = TokenManager.getToken();
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("6867c26d12ba0eba945873a7")
-                .contaDestino("6867c26d12ba0eba945873a6")
+                .contaOrigem("686fa208cbdb4375dbb8ed47")
+                .contaDestino("686fa208cbdb4375dbb8ed48")
                 .token(token)
                 .valor(valor)
                 .build();
@@ -53,7 +51,8 @@ public class TransferenciaController {
         requestBody = new ObjectMapper().writeValueAsString(request);
     }
 
-    public void realizarTransferencia() {
+    public void realizarTransferencia(double valor) throws JsonProcessingException {
+        prepararRequisicaoDeTransferencia(valor);
 
         String token = TokenManager.getToken();
 
@@ -70,7 +69,8 @@ public class TransferenciaController {
         LogFormatter.logJson(response.asPrettyString());
     }
 
-    public void realizarTransferenciaComValorDivergente(double valor) {
+    public void realizarTransferenciaComValorDivergente(double valor) throws JsonProcessingException {
+        prepararRequisicaoDeTransferencia(valor);
 
         String token = TokenManager.getToken();
 
@@ -109,11 +109,62 @@ public class TransferenciaController {
         GerarToken.gerarTokenAdmin();
         String token = TokenManager.getToken();
 
-        String id = "6867c26d12ba0eba945873a7";
+        // Primeiro, vamos listar as transferências para obter um ID válido
+        Response listResponse = given()
+                .baseUri(BASE_URL)
+                .param("page", 1)
+                .param("limit", 10)
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
 
+        // Obter o ID da primeira transferência
+        String idTransferencia = listResponse.jsonPath().getString("transferencias[0]._id");
+        
+        // Se não houver transferências ou ID for null, criar uma primeiro
+//        if (idTransferencia == null || idTransferencia.isEmpty()) {
+//            LogFormatter.logStep("Nenhuma transferência encontrada. Criando uma transferência para consulta...");
+//            try {
+//                prepararRequisicaoDeTransferencia(15.00);
+//                realizarTransferencia();
+//
+//                // Aguardar um pouco para garantir que a transferência foi criada
+//                Thread.sleep(1000);
+//
+//                // Listar novamente para obter o ID
+//                listResponse = given()
+//                        .baseUri(BASE_URL)
+//                        .param("page", 1)
+//                        .param("limit", 10)
+//                        .contentType(ContentType.JSON)
+//                        .header("Authorization", "Bearer " + token)
+//                        .when()
+//                        .get(ENDPOINT_TRANSFERENCIA)
+//                        .then()
+//                        .extract().response();
+//
+//                idTransferencia = listResponse.jsonPath().getString("transferencias[0]._id");
+//            } catch (JsonProcessingException e) {
+//                throw new RuntimeException(e);
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//            }
+//        }
+//
+//        if (idTransferencia == null || idTransferencia.isEmpty()) {
+//            throw new RuntimeException("Não foi possível obter ID de transferência para consulta");
+//        }
+
+        TransferenciaManager.setIdTransferencia(idTransferencia);
+        LogFormatter.logStep("ID da Transferência para consulta: " + idTransferencia);
+
+        // Agora consultar a transferência específica
         response = given()
                 .baseUri(BASE_URL)
-                .pathParam("id", id)
+                .pathParam("id", idTransferencia)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -121,13 +172,11 @@ public class TransferenciaController {
                 .then()
                 .extract().response();
 
-        String idTransferencia = response.jsonPath().getString("_id");
-        TransferenciaManager.setIdTransferencia(idTransferencia);
         LogFormatter.logJson(response.asPrettyString());
-        LogFormatter.logStep("ID da Transferência: " + idTransferencia);
     }
 
-    public void atualizarCompletamenteTransferencia() {
+    public void atualizarCompletamenteTransferencia(double valor) throws JsonProcessingException {
+        prepararRequisicaoDeTransferencia(valor);
 
         String token = TokenManager.getToken();
 
@@ -140,9 +189,11 @@ public class TransferenciaController {
                 .body(requestBody)
                 .when()
                 .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+        System.out.println("Response PUT: " + response.asString());
     }
 
-    public void atualizarParcialmenteTransferencia() {
+    public void atualizarParcialmenteTransferencia(double valor) throws JsonProcessingException {
+        prepararRequisicaoDeTransferencia(valor);
         String token = TokenManager.getToken();
 
         String idTransferencia = TransferenciaManager.getIdTransferencia();

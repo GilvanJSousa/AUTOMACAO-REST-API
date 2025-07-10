@@ -14,8 +14,7 @@ public class TransferenciaSteps {
 
     @Given("que envio a requisicao de POST para realizar uma transferencia no valor de R$ {double} entre contas")
     public void queEnvioaRequisicaoDePOSTParaRealizarUmaTransferenciaEntreContas(double valor) throws JsonProcessingException {
-        transferenciaController.prepararRequisicaoDeTransferencia(valor);
-        transferenciaController.realizarTransferencia();
+        transferenciaController.realizarTransferencia(valor);
     }
 
     @Then("a API Transferencia deve retornar o status code {int}")
@@ -34,13 +33,13 @@ public class TransferenciaSteps {
     }
 
     @Given("que envio uma requisicao PUT atualizar completamente o valor R$ {double} da transferencia")
-    public void queEnvioUmaRequisicaoPUTPUTAtualizaCompletamenteUmaTransferencia(double valor) {
-        transferenciaController.atualizarCompletamenteTransferencia();
+    public void queEnvioUmaRequisicaoPUTPUTAtualizaCompletamenteUmaTransferencia(double valor) throws JsonProcessingException {
+        transferenciaController.atualizarCompletamenteTransferencia(valor);
     }
 
     @Given("que envio uma requisicao PATCH atualiza parcialmente em valor R$ {double} da transferencia")
-    public void queEnvioUmaRequisicaoPUTAtualizaParcialmenteUmaTransferencia(double valor) {
-        transferenciaController.atualizarParcialmenteTransferencia();
+    public void queEnvioUmaRequisicaoPUTAtualizaParcialmenteUmaTransferencia(double valor) throws JsonProcessingException {
+        transferenciaController.atualizarParcialmenteTransferencia(valor);
     }
 
     @Given("que envio uma requisicao DELETE Remove uma transferencia")
@@ -50,12 +49,8 @@ public class TransferenciaSteps {
 
 
     @Given("que envio a requisicao de POST para realizar uma transferencia de R$ {double} entre contas")
-    public void queEnvioARequisicaoDePOSTParaRealizarUmaTransferenciaDeR$EntreContas(double valor) {
+    public void queEnvioARequisicaoDePOSTParaRealizarUmaTransferenciaDeR$EntreContas(double valor) throws JsonProcessingException {
         transferenciaController.realizarTransferenciaComValorDivergente(valor);
     }
 
-    @When("para realizar uma transferencia no valor de R$ {double} entre contas")
-    public void umaTransferenciaDeR$ERealizada(double valor) {
-
-    }
 }
