@@ -97,7 +97,7 @@ public class AllureAutoReportPlugin implements ConcurrentEventListener {
         try {
             Properties props = new Properties();
             // Ajustar o caminho para ser mais robusto ou configurável se necessário
-            FileInputStream fis = new FileInputStream("src/test/resources/allure.properties");
+            FileInputStream fis = new FileInputStream("src/test/resources/core/allure.properties");
             props.load(fis);
             fis.close();
             
