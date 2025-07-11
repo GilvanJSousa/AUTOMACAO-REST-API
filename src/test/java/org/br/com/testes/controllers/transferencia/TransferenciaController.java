@@ -105,7 +105,7 @@ public class TransferenciaController {
         response = given()
                 .baseUri(BASE_URL)
                 .param("page", 1)
-                .param("limit", 10)
+                .param("limit", 2)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -200,10 +200,11 @@ public class TransferenciaController {
         response = given()
                 .baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
+                .pathParam("id", idTransferencia)
                 .header("Authorization", "Bearer " + token)
                 .body(requestBody)
                 .when()
-                .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+                .put(ENDPOINT_TRANSFERENCIA + "/{id}");
     }
 
     public void atualizarParcialmenteTransferencia(double valor) throws JsonProcessingException {
@@ -215,10 +216,11 @@ public class TransferenciaController {
         response = given()
                 .baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
+                .pathParam("id", idTransferencia)
                 .header("Authorization", "Bearer " + token)
                 .body(requestBody)
                 .when()
-                .patch(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+                .patch(ENDPOINT_TRANSFERENCIA + "/{id}");
         
     }
 
@@ -231,9 +233,10 @@ public class TransferenciaController {
         response = given()
                 .baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
+                .pathParam("id", idTransferencia)
                 .header("Authorization", "Bearer " + token)
                 .when()
-                .delete(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+                .delete(ENDPOINT_TRANSFERENCIA + "/{id}");
 
         LogFormatter.logJson(idTransferencia + "==> Excluido");
     }
@@ -528,11 +531,12 @@ public class TransferenciaController {
         response = given()
                 .baseUri(BASE_URL)
                 .header("accept", "*/*")
+                .pathParam("idTransferencia", idTransferencia)
                 .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
-                .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
+                .put(ENDPOINT_TRANSFERENCIA + "/{idTransferencia}");
         
 //        LogFormatter.logJson(response.asPrettyString());
         
@@ -633,9 +637,10 @@ public class TransferenciaController {
         responseRemocaoInexistente = given()
                 .baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
+                .pathParam("idTransferencia", idTransferencia)
                 .header("Authorization", "Bearer " + TokenManager.getToken())
                 .when()
-                .delete(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia)
+                .delete(ENDPOINT_TRANSFERENCIA + "/{idTransferencia}")
                 .then()
                 .extract().response();
         LogFormatter.logJson(responseRemocaoInexistente.asPrettyString());
