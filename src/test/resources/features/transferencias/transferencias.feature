@@ -4,10 +4,10 @@ Feature: Validar funcionalidade de Transferencias entre contas
   Eu quero realizar transferencias
   Para
 
-    @CT-1001 @TransferenciaContas
-    Scenario: Validar transferencia entre contas
-      Given que envio a requisicao de 'POST' para realizar uma transferencia no valor de R$ 11.00 entre contas
-      Then a API Transferencia deve retornar o status code 201
+  @CT-1001 @TransferenciaContas
+  Scenario: Validar transferencia entre contas
+    Given que envio a requisicao de 'POST' para realizar uma transferencia no valor de R$ 11.00 entre contas
+    Then a API Transferencia deve retornar o status code 201
 
   @CT-1002 @TransferenciasLista
   Scenario: Validar a lista das transferencias realizadas
@@ -100,4 +100,3 @@ Feature: Validar funcionalidade de Transferencias entre contas
     Examples:
       | ID                       |
       | 686fa208cbdb4375dbb8ed47 |
-
