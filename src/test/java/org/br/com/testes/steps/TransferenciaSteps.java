@@ -93,9 +93,46 @@ public class TransferenciaSteps {
 //        LogFormatter.logStep("Validacao de erro de valor minimo concluida");
     }
 
+    // --- CT-1013: Remover uma transferência e reverter saldos ---
+    private String contaOrigemCT1013;
+    private String contaDestinoCT1013;
+    private double valorTransferenciaCT1013;
+
     @Given("que a transferencia de R$ {double} foi realizada entre a conta de origem {string} e a conta de destino {string}")
     public void queATransferenciaDeR$FoiRealizadaEntreAContaDeOrigemEAContaDeDestino(double valor, String contaOrigem, String contaDestino) throws JsonProcessingException {
+        this.contaOrigemCT1013 = contaOrigem;
+        this.contaDestinoCT1013 = contaDestino;
+        this.valorTransferenciaCT1013 = valor;
         transferenciaController.realizarTransferenciaEntreContas(valor, contaOrigem, contaDestino);
+        transferenciaController.armazenarSaldosAntesRemocao(contaOrigem, contaDestino);
+    }
+
+    @When("a transferencia e removida")
+    public void aTransferenciaERemovida() {
+        transferenciaController.removeUmaTransferencia();
+    }
+
+    @Then("o saldo da conta de origem e da conta de destino e revertido")
+    public void oSaldoDaContaDeOrigemEDaContaDeDestinoERevertido() {
+        transferenciaController.validarReversaoDeSaldo(contaOrigemCT1013, contaDestinoCT1013);
+    }
+
+    // --- CT-1014: Tentar remover uma transferência inexistente ---
+    private String idTransferenciaInexistente;
+
+    @Given("que nao existe transferancia com o ID {string}")
+    public void queNaoExisteTransferanciaComOID(String id) {
+        this.idTransferenciaInexistente = id;
+    }
+
+    @When("a tentativa de remoção da transferencia e realizada")
+    public void aTentativaDeRemoçãoDaTransferenciaERealizada() {
+        transferenciaController.tentarRemoverTransferenciaInexistente(idTransferenciaInexistente);
+    }
+
+    @Then("o sistema retorna um erro indicando que a transferencia nao foi encontrada")
+    public void oSistemaRetornaUmErroIndicandoQueATransferenciaNaoFoiEncontrada() {
+        transferenciaController.validarErroTransferenciaNaoEncontrada(404, "Transferencia nao encontrada.");
     }
 
     @When("a transferencia e atualizada com novos dados valor R$ {double} conta de destino {string}")
@@ -117,23 +154,6 @@ public class TransferenciaSteps {
 
     @Then("a transferencia e modificada com sucesso")
     public void aTransferenciaEModificadaComSucesso() {
-    }
-
-    @When("a transferencia e removida")
-    public void aTransferenciaERemovida() {
-    }
-    @Then("o saldo da conta de origem e da conta de destino e revertido")
-    public void oSaldoDaContaDeOrigemEDaContaDeDestinoERevertido() {
-    }
-
-    @Given("que nao existe transferancia com o ID {string}")
-    public void queNaoExisteTransferanciaComOID(String id) {
-    }
-    @When("a tentativa de remoção da transferencia e realizada")
-    public void aTentativaDeRemoçãoDaTransferenciaERealizada() {
-    }
-    @Then("o sistema retorna um erro indicando que a transferencia nao foi encontrada")
-    public void oSistemaRetornaUmErroIndicandoQueATransferenciaNaoFoiEncontrada() {
     }
 
 }

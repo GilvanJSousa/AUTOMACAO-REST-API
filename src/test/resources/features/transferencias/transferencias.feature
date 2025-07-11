@@ -41,7 +41,7 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   @CT-1008 @transferenciaValorAcima
   Scenario: Transferir valor acima de R$ 100.00 com autenticação
-    Given que a conta de origem possui saldo de R$ 6000.00
+    Given que a conta de origem possui saldo de R$ 1000.00
     And a conta de destino esta ativa
     And o token de autenticacao 'yJhbGciOi...' e fornecido
     When uma transferencia de R$ 100.00 e realizada
@@ -49,9 +49,9 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   @CT-1009 @TransferenciaValorDentro
   Scenario: Transferir valor dentro do limite sem autenticação
-    Given que a conta de origem possui saldo de R$ 500.00
+    Given que a conta de origem possui saldo de R$ 100.00
     And a conta de destino esta ativa
-    When uma transferencia de R$ 100.00 e realizada
+    When uma transferencia de R$ 30.00 e realizada
     Then a transferencia e processada com sucesso
 
   @CT-1010 @TransferenciaValorBaixo
@@ -63,8 +63,8 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   @CT-1011 @TransferenciaAtualizarDados
   Scenario Outline: Atualizar todos os dados de uma transferência
-    Given que a transferencia de R$ 100.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
-    When a transferencia e atualizada com novos dados valor R$ 200.00 conta de destino "<CONTA_DESTINO_NOVO>"
+    Given que a transferencia de R$ 80.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
+    When a transferencia e atualizada com novos dados valor R$ 120.00 conta de destino "<CONTA_DESTINO_NOVO>"
     Then todos os dados da transferencia sao atualizados com sucesso
 
   Examples:
@@ -73,8 +73,8 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   @CT-1012 @TransferenciaModificarValor
   Scenario Outline: Modificar o valor de uma transferência
-    Given que a transferencia de R$ 50.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
-    When o valor da transferencia e modificado para R$ 60.00
+    Given que a transferencia de R$ 49.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
+    When o valor da transferencia e modificado para R$ 51.00
     Then a transferencia e modificada com sucesso
 
     Examples:
@@ -83,7 +83,7 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   @CT-1013 @TransferenciaRemover
   Scenario Outline: Remover uma transferência e reverter saldos
-    Given que a transferencia de R$ 200.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
+    Given que a transferencia de R$ 90.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
     When a transferencia e removida
     Then o saldo da conta de origem e da conta de destino e revertido
 

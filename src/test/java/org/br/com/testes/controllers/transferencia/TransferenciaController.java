@@ -545,4 +545,120 @@ public class TransferenciaController {
         }
     }
 
+    // --- CT-1013: Remover uma transferência e reverter saldos ---
+    private double saldoOrigemAntesRemocao;
+    private double saldoDestinoAntesRemocao;
+
+    /**
+     * Armazena os saldos das contas de origem e destino antes da remoção da transferência
+     * @param contaOrigem ID da conta de origem
+     * @param contaDestino ID da conta de destino
+     */
+    public void armazenarSaldosAntesRemocao(String contaOrigem, String contaDestino) {
+        LogFormatter.logStep("Consultando saldo da conta de origem antes da remocao: " + contaOrigem);
+        Response contaOrigemResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaOrigem)
+                .then()
+                .extract().response();
+        saldoOrigemAntesRemocao = contaOrigemResponse.jsonPath().getDouble("saldo");
+        LogFormatter.logStep("Saldo origem antes: R$ " + saldoOrigemAntesRemocao);
+
+        LogFormatter.logStep("Consultando saldo da conta de destino antes da remocao: " + contaDestino);
+        Response contaDestinoResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaDestino)
+                .then()
+                .extract().response();
+        saldoDestinoAntesRemocao = contaDestinoResponse.jsonPath().getDouble("saldo");
+        LogFormatter.logStep("Saldo destino antes: R$ " + saldoDestinoAntesRemocao);
+    }
+
+    /**
+     * Valida que os saldos das contas de origem e destino foram revertidos após a remoção da transferência
+     * @param contaOrigem ID da conta de origem
+     * @param contaDestino ID da conta de destino
+     */
+    public void validarReversaoDeSaldo(String contaOrigem, String contaDestino) {
+        LogFormatter.logStep("Validando reversao de saldo apos remocao da transferencia");
+        Response contaOrigemResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaOrigem)
+                .then()
+                .extract().response();
+        double saldoOrigemDepois = contaOrigemResponse.jsonPath().getDouble("saldo");
+        LogFormatter.logStep("Saldo origem depois: R$ " + saldoOrigemDepois);
+
+        Response contaDestinoResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaDestino)
+                .then()
+                .extract().response();
+        double saldoDestinoDepois = contaDestinoResponse.jsonPath().getDouble("saldo");
+        LogFormatter.logStep("Saldo destino depois: R$ " + saldoDestinoDepois);
+
+        // Validação: saldo origem aumentou, saldo destino diminuiu
+        if (saldoOrigemDepois > saldoOrigemAntesRemocao && saldoDestinoDepois < saldoDestinoAntesRemocao) {
+            LogFormatter.logStep("Reversao de saldo validada com sucesso");
+        } else {
+            throw new RuntimeException("Reversao de saldo nao ocorreu como esperado. Origem antes: " + saldoOrigemAntesRemocao + ", depois: " + saldoOrigemDepois + ". Destino antes: " + saldoDestinoAntesRemocao + ", depois: " + saldoDestinoDepois);
+        }
+    }
+
+    // --- CT-1014: Tentar remover uma transferência inexistente ---
+    private Response responseRemocaoInexistente;
+
+    /**
+     * Tenta remover uma transferência inexistente pelo ID informado
+     * @param idTransferencia ID da transferência inexistente
+     */
+    public void tentarRemoverTransferenciaInexistente(String idTransferencia) {
+        LogFormatter.logStep("Tentando remover transferencia inexistente: " + idTransferencia);
+        responseRemocaoInexistente = given()
+                .baseUri(BASE_URL)
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .when()
+                .delete(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia)
+                .then()
+                .extract().response();
+        LogFormatter.logJson(responseRemocaoInexistente.asPrettyString());
+    }
+
+    /**
+     * Valida o erro retornado ao tentar remover uma transferência inexistente
+     * @param statusCodeEsperado Status code esperado (ex: 404)
+     * @param mensagemEsperada Mensagem de erro esperada
+     */
+    public void validarErroTransferenciaNaoEncontrada(int statusCodeEsperado, String mensagemEsperada) {
+        int statusCode = responseRemocaoInexistente.getStatusCode();
+        String mensagemErro = responseRemocaoInexistente.jsonPath().getString("error");
+        LogFormatter.logStep("Status code recebido: " + statusCode);
+        LogFormatter.logStep("Mensagem de erro recebida: " + mensagemErro);
+        // Normalizar para comparação robusta
+        String esperado = mensagemEsperada.toLowerCase().replaceAll("[. ]+$", "").trim();
+        String recebido = mensagemErro != null ? mensagemErro.toLowerCase().replaceAll("[. ]+$", "").trim() : "";
+        if (statusCode == statusCodeEsperado && recebido.contains(esperado)) {
+            LogFormatter.logStep("Erro de transferencia inexistente validado com sucesso");
+        } else {
+            throw new RuntimeException("Erro ao validar remocao de transferencia inexistente. Esperado status: " + statusCodeEsperado + ", recebido: " + statusCode + ". Esperado mensagem: " + mensagemEsperada + ", recebida: " + mensagemErro);
+        }
+    }
+
 }
