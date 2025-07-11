@@ -78,7 +78,7 @@ public class TransferenciaSteps {
     public void aTransferenciaEProcessadaComSucesso() {
         // A validação já é feita no método realizarTransferenciaComValidacao
         // Este step apenas confirma que chegou até aqui sem exceções
-        LogFormatter.logStep("Validacao de sucesso da transferencia concluida");
+//        LogFormatter.logStep("Validacao de sucesso da transferencia concluida");
     }
 
     @When("uma transferencia de R$ {double} e realizada com validacao de erro")
@@ -90,7 +90,7 @@ public class TransferenciaSteps {
     public void oSistemaRetornaUmErroIndicandoQueOValorMinimoEDeR$10_00(double valor) {
         // A validação já é feita no método realizarTransferenciaComValidacaoDeErro
         // Este step apenas confirma que chegou até aqui sem exceções
-        LogFormatter.logStep("Validacao de erro de valor minimo concluida");
+//        LogFormatter.logStep("Validacao de erro de valor minimo concluida");
     }
 
     @Given("que a transferencia de R$ {double} foi realizada entre a conta de origem {string} e a conta de destino {string}")
@@ -107,9 +107,33 @@ public class TransferenciaSteps {
     public void todosOsDadosDaTransferenciaSaoAtualizadosComSucesso() {
         // A validação já é feita no método atualizarTransferenciaComNovosDados
         // Este step apenas confirma que chegou até aqui sem exceções
-        LogFormatter.logStep("Validacao de atualizacao da transferencia concluida");
+//        LogFormatter.logStep("Validacao de atualizacao da transferencia concluida");
     }
 
+    @When("o valor da transferencia e modificado para R$ {double}")
+    public void oValorDaTransferenciaEModificadoParaR$(Double valor) throws JsonProcessingException {
+        transferenciaController.atualizarCompletamenteTransferencia(valor);
+    }
 
+    @Then("a transferencia e modificada com sucesso")
+    public void aTransferenciaEModificadaComSucesso() {
+    }
+
+    @When("a transferencia e removida")
+    public void aTransferenciaERemovida() {
+    }
+    @Then("o saldo da conta de origem e da conta de destino e revertido")
+    public void oSaldoDaContaDeOrigemEDaContaDeDestinoERevertido() {
+    }
+
+    @Given("que nao existe transferancia com o ID {string}")
+    public void queNaoExisteTransferanciaComOID(String id) {
+    }
+    @When("a tentativa de remoção da transferencia e realizada")
+    public void aTentativaDeRemoçãoDaTransferenciaERealizada() {
+    }
+    @Then("o sistema retorna um erro indicando que a transferencia nao foi encontrada")
+    public void oSistemaRetornaUmErroIndicandoQueATransferenciaNaoFoiEncontrada() {
+    }
 
 }

@@ -64,10 +64,40 @@ Feature: Validar funcionalidade de Transferencias entre contas
   @CT-1011 @TransferenciaAtualizarDados
   Scenario Outline: Atualizar todos os dados de uma transferência
     Given que a transferencia de R$ 100.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
-    When a transferencia e atualizada com novos dados valor R$ 200.00 conta de destino "<CONTA_DESTINO>"
+    When a transferencia e atualizada com novos dados valor R$ 200.00 conta de destino "<CONTA_DESTINO_NOVO>"
     Then todos os dados da transferencia sao atualizados com sucesso
 
   Examples:
-    | CONTA_ORIGEM             | CONTA_DESTINO            |
-    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
-    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed46 |
+    | CONTA_ORIGEM             | CONTA_DESTINO            | CONTA_DESTINO_NOVO       |
+    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 | 686fa208cbdb4375dbb8ed46 |
+
+  @CT-1012 @TransferenciaModificarValor
+  Scenario Outline: Modificar o valor de uma transferência
+    Given que a transferencia de R$ 50.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
+    When o valor da transferencia e modificado para R$ 60.00
+    Then a transferencia e modificada com sucesso
+
+    Examples:
+      | CONTA_ORIGEM             | CONTA_DESTINO            |
+      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
+
+  @CT-1013 @TransferenciaRemover
+  Scenario Outline: Remover uma transferência e reverter saldos
+    Given que a transferencia de R$ 200.00 foi realizada entre a conta de origem "<CONTA_ORIGEM>" e a conta de destino "<CONTA_DESTINO>"
+    When a transferencia e removida
+    Then o saldo da conta de origem e da conta de destino e revertido
+
+    Examples:
+      | CONTA_ORIGEM             | CONTA_DESTINO            |
+      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
+
+  @CT-1014 @TransferenciaRemoverInexistente
+  Scenario Outline: Tentar remover uma transferencia inexistente
+    Given que nao existe transferancia com o ID "<ID>"
+    When a tentativa de remoção da transferencia e realizada
+    Then o sistema retorna um erro indicando que a transferencia nao foi encontrada
+
+    Examples:
+      | ID                       |
+      | 686fa208cbdb4375dbb8ed47 |
+

@@ -114,7 +114,7 @@ public class TransferenciaController {
                 .extract().response();
 
         String idTransferencia = response.jsonPath().getString("transferencias[0]._id");
-        LogFormatter.logStep("ID da Transferência: " + idTransferencia);
+//        LogFormatter.logStep("ID da Transferência: " + idTransferencia);
         TransferenciaManager.setIdTransferencia(idTransferencia);
 //        LogFormatter.logJson(response.asPrettyString());
     }
@@ -191,6 +191,7 @@ public class TransferenciaController {
 
     public void atualizarCompletamenteTransferencia(double valor) throws JsonProcessingException {
         prepararRequisicaoDeTransferencia(valor);
+        LogFormatter.logStep("o valor da transferencia e modificado para R$ " + valor);
 
         String token = TokenManager.getToken();
 
@@ -203,8 +204,6 @@ public class TransferenciaController {
                 .body(requestBody)
                 .when()
                 .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
-        System.out.println("Response PUT: " + response.asString());
-        LogFormatter.logJson(response.asPrettyString());
     }
 
     public void atualizarParcialmenteTransferencia(double valor) throws JsonProcessingException {
@@ -471,12 +470,12 @@ public class TransferenciaController {
                 LogFormatter.logStep("ID da transferencia salvo: " + idTransferencia);
             } else {
                 // Se não conseguir pegar o ID da resposta, usar o método de listagem padrão
-                LogFormatter.logStep("ID nao encontrado na resposta, buscando na lista de transferencias");
+//                LogFormatter.logStep("ID nao encontrado na resposta, buscando na lista de transferencias");
                 listarTransferenciasBancarias();
                 
                 String idEncontrado = TransferenciaManager.getIdTransferencia();
                 if (idEncontrado != null) {
-                    LogFormatter.logStep("ID da transferencia encontrado na lista: " + idEncontrado);
+                    LogFormatter.logStep("ID da transferencia: " + idEncontrado);
                 } else {
                     LogFormatter.logStep("Nao foi possivel encontrar o ID da transferencia");
                 }
@@ -514,7 +513,7 @@ public class TransferenciaController {
         
         // Se não temos ID, buscar na lista de transferências mais recentes
         if (idTransferencia == null || idTransferencia.isEmpty()) {
-            LogFormatter.logStep("ID da transferencia nao encontrado, buscando na lista");
+//            LogFormatter.logStep("ID da transferencia nao encontrado, buscando na lista");
             listarTransferenciasBancarias();
             idTransferencia = TransferenciaManager.getIdTransferencia();
             
@@ -523,7 +522,7 @@ public class TransferenciaController {
             }
         }
         
-        LogFormatter.logStep("ID da transferencia para atualizacao: " + idTransferencia);
+//        LogFormatter.logStep("ID da transferencia para atualizacao: " + idTransferencia);
         String token = TokenManager.getToken();
         
         response = given()
@@ -533,11 +532,9 @@ public class TransferenciaController {
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
-                .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia)
-                .then()
-                .extract().response();
+                .put(ENDPOINT_TRANSFERENCIA + "/" + idTransferencia);
         
-        LogFormatter.logJson(response.asPrettyString());
+//        LogFormatter.logJson(response.asPrettyString());
         
         // Validar que a atualização foi bem-sucedida
         int statusCode = response.getStatusCode();
