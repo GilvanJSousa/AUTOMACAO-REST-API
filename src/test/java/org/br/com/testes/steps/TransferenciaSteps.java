@@ -69,18 +69,9 @@ public class TransferenciaSteps {
         transferenciaController.definirTokenAutenticacao(token);
     }
 
-    // --- CT-1015: Validar conta inativa ---
-    private String contaOrigemCT1015;
-    private String contaDestinoCT1015;
-
     @When("uma transferencia de R$ {double} e realizada")
     public void umaTransferenciaDeRERealizada(double valor) throws JsonProcessingException {
-        // Se temos contas específicas do cenário CT-1015, usar elas
-        if (contaOrigemCT1015 != null && contaDestinoCT1015 != null) {
-            transferenciaController.realizarTransferenciaComValidacaoEntreContas(valor, contaOrigemCT1015, contaDestinoCT1015);
-        } else {
-            transferenciaController.realizarTransferenciaComValidacao(valor);
-        }
+        transferenciaController.realizarTransferenciaComContextoAtual(valor);
     }
 
     @Then("a transferencia e processada com sucesso")
@@ -102,16 +93,11 @@ public class TransferenciaSteps {
 //        LogFormatter.logStep("Validacao de erro de valor minimo concluida");
     }
 
-    // --- CT-1013: Remover uma transferência e reverter saldos ---
-    private String contaOrigemCT1013;
-    private String contaDestinoCT1013;
-    private double valorTransferenciaCT1013;
-
     @Given("que a transferencia de R$ {double} foi realizada entre a conta de origem {string} e a conta de destino {string}")
     public void queATransferenciaDeR$FoiRealizadaEntreAContaDeOrigemEAContaDeDestino(double valor, String contaOrigem, String contaDestino) throws JsonProcessingException {
-        this.contaOrigemCT1013 = contaOrigem;
-        this.contaDestinoCT1013 = contaDestino;
-        this.valorTransferenciaCT1013 = valor;
+        transferenciaController.definirContaOrigem(contaOrigem);
+        transferenciaController.definirContaDestino(contaDestino);
+        transferenciaController.definirValorTransferencia(valor);
         transferenciaController.realizarTransferenciaEntreContas(valor, contaOrigem, contaDestino);
         transferenciaController.armazenarSaldosAntesRemocao(contaOrigem, contaDestino);
     }
@@ -123,20 +109,19 @@ public class TransferenciaSteps {
 
     @Then("o saldo da conta de origem e da conta de destino e revertido")
     public void oSaldoDaContaDeOrigemEDaContaDeDestinoERevertido() {
-        transferenciaController.validarReversaoDeSaldo(contaOrigemCT1013, contaDestinoCT1013);
+        // O controller já tem o contexto das contas, então não precisa passar parâmetros
+        transferenciaController.validarReversaoDeSaldoComContextoAtual();
     }
-
-    // --- CT-1014: Tentar remover uma transferência inexistente ---
-    private String idTransferenciaInexistente;
 
     @Given("que nao existe transferancia com o ID {string}")
     public void queNaoExisteTransferanciaComOID(String id) {
-        this.idTransferenciaInexistente = id;
+        transferenciaController.definirIdTransferenciaInexistente(id);
     }
 
     @When("a tentativa de remoção da transferencia e realizada")
     public void aTentativaDeRemoçãoDaTransferenciaERealizada() {
-        transferenciaController.tentarRemoverTransferenciaInexistente(idTransferenciaInexistente);
+        // O controller já tem o contexto do ID, então não precisa passar parâmetro
+        transferenciaController.tentarRemoverTransferenciaInexistenteComContextoAtual();
     }
 
     @Then("o sistema retorna um erro indicando que a transferencia nao foi encontrada")
@@ -168,20 +153,28 @@ public class TransferenciaSteps {
 
     @Given("que a conta de origem {string} possui saldo de R$ {double}")
     public void queAContaDeOrigemPossuiSaldoDeR$(String contaOrigem, Double saldo) {
-        // Armazenar conta de origem para CT-1015
-        this.contaOrigemCT1015 = contaOrigem;
+        transferenciaController.definirContaOrigem(contaOrigem);
         transferenciaController.verificarSaldoContaOrigem(contaOrigem, saldo);
     }
 
     @And("a conta de destino {string} esta inativa")
     public void aContaDeDestinoEstaInativa(String contaDestino) {
-        // Armazenar conta de destino para CT-1015
-        this.contaDestinoCT1015 = contaDestino;
+        transferenciaController.definirContaDestino(contaDestino);
         transferenciaController.verificarContaDestinoInativa(contaDestino);
     }
 
     @Then("o sistema retorna um erro indicando que a Conta de origem ou destino esta inativa.")
     public void oSistemaRetornaUmErroIndicandoQueAContaDeOrigemOuDestinoEstaInativa() {
         transferenciaController.validarErroContaInativa();
+    }
+
+    @Then("o sistema retorna um erro indicando que o Saldo esta insuficiente para realizar a transferencia.")
+    public void oSistemaRetornaUmErroIndicandoQueOSaldoEstaInsuficienteParaRealizarATransferencia() {
+        transferenciaController.validarErroSaldoInsuficiente();
+    }
+
+    @And("a conta de destino {string} esta ativa")
+    public void aContaDeDestinoEstaAtiva(String arg0) {
+        transferenciaController.verificarContaDestinoAtiva();
     }
 }
