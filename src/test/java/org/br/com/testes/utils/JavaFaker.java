@@ -2,9 +2,6 @@ package org.br.com.testes.utils;
 
 import com.github.javafaker.Faker;
 import lombok.extern.apachecommons.CommonsLog;
-import org.br.com.testes.manager.CategoriaManager;
-import org.br.com.testes.manager.UsuarioManager;
-import org.br.com.testes.model.UsuarioRequest;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -52,28 +49,7 @@ public class JavaFaker {
 		return categoria;
 	}
 
-	/**
-	 * Gera dados para teste de artigo usando nomes específicos.
-	 * Usa dados que funcionam com a API.
-	 * Se nomeAutor for nulo ou vazio, utiliza o nome completo do usuário logado via UsuarioManager.
-	 *
-	 * @param nomeAutor Nome do autor do artigo (ou null para usar o usuário logado)
-	 * @param nomeCategoria Nome da categoria do artigo
-	 * @return Map contendo titulo, conteudo, nomeAutor, nomeCategoria e dataPublicacao
-	 */
-	public static Map<String, String> artigosTesteFixo(String nomeAutor, String nomeCategoria) {
-		if (nomeAutor == null || nomeAutor.isEmpty()) {
-			// Usa o nome completo do usuário logado, se disponível
-			nomeAutor = UsuarioManager.getNomeCompletoUsuario();
-		}
-		Map<String, String> artigo = new HashMap<>();
-		artigo.put("titulo", "Introdução aos Testes Automatizados");
-		artigo.put("conteudo", "Exemplos de ferramentas de testes automatizados...");
-		artigo.put("nomeAutor", nomeAutor);
-		artigo.put("nomeCategoria", nomeCategoria);
-		artigo.put("dataPublicacao", gerarDataPublicacao());
-		return artigo;
-	}
+
 
 	/**
 	 * Gera data de publicação no formato ISO 8601.

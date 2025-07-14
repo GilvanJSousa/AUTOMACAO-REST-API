@@ -69,7 +69,7 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   Examples:
     | CONTA_ORIGEM             | CONTA_DESTINO            | CONTA_DESTINO_NOVO       |
-    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 | 686fa208cbdb4375dbb8ed46 |
+    | 686fa208cbdb4375dbb8ed48 | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed46 |
 
   @CT-1012 @TransferenciaModificarValor
   Scenario Outline: Modificar o valor de uma transferência
@@ -79,7 +79,7 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
     Examples:
       | CONTA_ORIGEM             | CONTA_DESTINO            |
-      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
+      | 686fa208cbdb4375dbb8ed46 | 686fa208cbdb4375dbb8ed47 |
 
   @CT-1013 @TransferenciaRemover
   Scenario Outline: Remover uma transferência e reverter saldos

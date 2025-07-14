@@ -26,17 +26,16 @@ public class TransferenciaController {
 
     private static final String ENDPOINT_TRANSFERENCIA = "/transferencias";
 
+    String joaoSilva = "686fa208cbdb4375dbb8ed46";
+    String mariaSantos = "686fa208cbdb4375dbb8ed47";
+    String pedroOliveira = "686fa208cbdb4375dbb8ed48";
+    String anaCosta = "686fa208cbdb4375dbb8ed49";
+
     public TransferenciaController() {
         response = null;
     }
 
-
     public void prepararRequisicaoDeTransferencia(double valor) throws JsonProcessingException {
-
-        // Joao Silva =====> ID: 6867c26d12ba0eba945873a5
-        // Maria Santos ===> ID: 6867c26d12ba0eba945873a6
-        // Pedro Oliveira => ID: 6867c26d12ba0eba945873a7
-        // Ana Costa ======> ID: 6867c26d12ba0eba945873a8
 
         // Só gerar token se não tivermos um já definido
         if (TokenManager.getToken() == null) {
@@ -53,8 +52,8 @@ public class TransferenciaController {
         }
 
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("686fa208cbdb4375dbb8ed47")
-                .contaDestino("686fa208cbdb4375dbb8ed48")
+                .contaOrigem(joaoSilva)
+                .contaDestino(mariaSantos)
                 .token(tokenParaBody)
                 .valor(valor)
                 .build();
@@ -259,7 +258,7 @@ public class TransferenciaController {
         }
         
         // Consultar a conta de origem para verificar o saldo
-        String contaOrigem = "686fa208cbdb4375dbb8ed47";
+//        String contaOrigem = "686fa208cbdb4375dbb8ed47";
         
         Response contaResponse = given()
                 .baseUri(BASE_URL)
@@ -267,7 +266,7 @@ public class TransferenciaController {
                 .header("Authorization", "Bearer " + TokenManager.getToken())
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/contas/" + contaOrigem)
+                .get("/contas/" + mariaSantos)
                 .then()
                 .extract().response();
         
@@ -292,7 +291,7 @@ public class TransferenciaController {
             GerarToken.gerarTokenAdmin();
         }
         
-        String contaDestino = "686fa208cbdb4375dbb8ed48";
+//        String contaDestino = "686fa208cbdb4375dbb8ed48";
         
         Response contaResponse = given()
                 .baseUri(BASE_URL)
@@ -300,7 +299,7 @@ public class TransferenciaController {
                 .header("Authorization", "Bearer " + TokenManager.getToken())
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/contas/" + contaDestino)
+                .get("/contas/" + pedroOliveira)
                 .then()
                 .extract().response();
         
@@ -503,7 +502,7 @@ public class TransferenciaController {
         
         // Preparar requisição com novos dados
         TransferenciaRequest request = TransferenciaRequest.builder()
-                .contaOrigem("686fa208cbdb4375dbb8ed47") // Conta de origem fixa
+                .contaOrigem(mariaSantos) // Conta de origem fixa
                 .contaDestino(novaContaDestino)
                 .token(TokenManager.getToken())
                 .valor(novoValor)
