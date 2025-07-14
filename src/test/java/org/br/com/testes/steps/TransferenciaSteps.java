@@ -69,9 +69,18 @@ public class TransferenciaSteps {
         transferenciaController.definirTokenAutenticacao(token);
     }
 
+    // --- CT-1015: Validar conta inativa ---
+    private String contaOrigemCT1015;
+    private String contaDestinoCT1015;
+
     @When("uma transferencia de R$ {double} e realizada")
     public void umaTransferenciaDeRERealizada(double valor) throws JsonProcessingException {
-        transferenciaController.realizarTransferenciaComValidacao(valor);
+        // Se temos contas específicas do cenário CT-1015, usar elas
+        if (contaOrigemCT1015 != null && contaDestinoCT1015 != null) {
+            transferenciaController.realizarTransferenciaComValidacaoEntreContas(valor, contaOrigemCT1015, contaDestinoCT1015);
+        } else {
+            transferenciaController.realizarTransferenciaComValidacao(valor);
+        }
     }
 
     @Then("a transferencia e processada com sucesso")
@@ -154,6 +163,25 @@ public class TransferenciaSteps {
 
     @Then("a transferencia e modificada com sucesso")
     public void aTransferenciaEModificadaComSucesso() {
+
     }
 
+    @Given("que a conta de origem {string} possui saldo de R$ {double}")
+    public void queAContaDeOrigemPossuiSaldoDeR$(String contaOrigem, Double saldo) {
+        // Armazenar conta de origem para CT-1015
+        this.contaOrigemCT1015 = contaOrigem;
+        transferenciaController.verificarSaldoContaOrigem(contaOrigem, saldo);
+    }
+
+    @And("a conta de destino {string} esta inativa")
+    public void aContaDeDestinoEstaInativa(String contaDestino) {
+        // Armazenar conta de destino para CT-1015
+        this.contaDestinoCT1015 = contaDestino;
+        transferenciaController.verificarContaDestinoInativa(contaDestino);
+    }
+
+    @Then("o sistema retorna um erro indicando que a Conta de origem ou destino esta inativa.")
+    public void oSistemaRetornaUmErroIndicandoQueAContaDeOrigemOuDestinoEstaInativa() {
+        transferenciaController.validarErroContaInativa();
+    }
 }

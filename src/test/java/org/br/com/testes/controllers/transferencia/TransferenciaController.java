@@ -250,15 +250,19 @@ public class TransferenciaController {
      * Verifica se a conta de origem possui saldo suficiente
      */
     public void verificarSaldoContaOrigem(double saldoEsperado) {
-        LogFormatter.logStep("Verificando saldo da conta de origem: R$ " + saldoEsperado);
+        verificarSaldoContaOrigem(mariaSantos, saldoEsperado);
+    }
+
+    /**
+     * Verifica se a conta de origem específica possui saldo suficiente
+     */
+    public void verificarSaldoContaOrigem(String contaOrigem, double saldoEsperado) {
+        LogFormatter.logStep("Verificando saldo da conta de origem " + contaOrigem + ": R$ " + saldoEsperado);
         
         // Garantir que temos um token válido
         if (TokenManager.getToken() == null) {
             GerarToken.gerarTokenAdmin();
         }
-        
-        // Consultar a conta de origem para verificar o saldo
-//        String contaOrigem = "686fa208cbdb4375dbb8ed47";
         
         Response contaResponse = given()
                 .baseUri(BASE_URL)
@@ -266,17 +270,17 @@ public class TransferenciaController {
                 .header("Authorization", "Bearer " + TokenManager.getToken())
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/contas/" + mariaSantos)
+                .get("/contas/" + contaOrigem)
                 .then()
                 .extract().response();
         
         double saldoAtual = contaResponse.jsonPath().getDouble("saldo");
-        LogFormatter.logStep("Saldo atual da conta de origem: R$ " + saldoAtual);
+        LogFormatter.logStep("Saldo atual da conta de origem " + contaOrigem + ": R$ " + saldoAtual);
         
         if (saldoAtual >= saldoEsperado) {
-            LogFormatter.logStep("Conta de origem possui saldo suficiente para a transferencia");
+            LogFormatter.logStep("Conta de origem " + contaOrigem + " possui saldo suficiente para a transferencia");
         } else {
-            throw new RuntimeException("Saldo insuficiente na conta de origem. Saldo atual: R$ " + saldoAtual + ", Saldo necessario: R$ " + saldoEsperado);
+            throw new RuntimeException("Saldo insuficiente na conta de origem " + contaOrigem + ". Saldo atual: R$ " + saldoAtual + ", Saldo necessario: R$ " + saldoEsperado);
         }
     }
 
@@ -308,6 +312,35 @@ public class TransferenciaController {
         
         if (!contaAtiva) {
             throw new RuntimeException("Conta de destino nao esta ativa");
+        }
+    }
+
+    /**
+     * Verifica se a conta de destino está inativa
+     */
+    public void verificarContaDestinoInativa(String contaDestino) {
+        LogFormatter.logStep("Verificando se a conta de destino " + contaDestino + " esta inativa");
+        
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        Response contaResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaDestino)
+                .then()
+                .extract().response();
+        
+        boolean contaAtiva = contaResponse.jsonPath().getBoolean("ativa");
+        LogFormatter.logStep("Status da conta de destino " + contaDestino + ": " + (contaAtiva ? "Ativa" : "Inativa"));
+        
+        if (contaAtiva) {
+            throw new RuntimeException("Conta de destino " + contaDestino + " esta ativa, mas deveria estar inativa para este teste");
         }
     }
 
@@ -357,6 +390,46 @@ public class TransferenciaController {
         } else {
             throw new RuntimeException("Transferencia nao foi processada com sucesso. Status Code: " + statusCode);
         }
+    }
+
+    /**
+     * Realiza transferência entre contas específicas com validação
+     */
+    public void realizarTransferenciaComValidacaoEntreContas(double valor, String contaOrigem, String contaDestino) throws JsonProcessingException {
+        LogFormatter.logStep("Realizando transferencia de R$ " + valor + " entre conta origem " + contaOrigem + " e conta destino " + contaDestino);
+        
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        String token = TokenManager.getToken();
+        
+        // Preparar requisição com contas específicas
+        TransferenciaRequest request = TransferenciaRequest.builder()
+                .contaOrigem(contaOrigem)
+                .contaDestino(contaDestino)
+                .token(token)
+                .valor(valor)
+                .build();
+
+        String requestBody = new ObjectMapper().writeValueAsString(request);
+        
+        response = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post(ENDPOINT_TRANSFERENCIA)
+                .then()
+                .extract().response();
+        
+        LogFormatter.logJson(response.asPrettyString());
+        
+        // Para este cenário, esperamos um erro (conta inativa), então não validamos sucesso
+        LogFormatter.logStep("Transferencia realizada - Status Code: " + response.getStatusCode());
     }
 
     /**
@@ -662,6 +735,38 @@ public class TransferenciaController {
             LogFormatter.logStep("Erro de transferencia inexistente validado com sucesso");
         } else {
             throw new RuntimeException("Erro ao validar remocao de transferencia inexistente. Esperado status: " + statusCodeEsperado + ", recebido: " + statusCode + ". Esperado mensagem: " + mensagemEsperada + ", recebida: " + mensagemErro);
+        }
+    }
+
+    /**
+     * Valida erro de conta inativa na transferência
+     */
+    public void validarErroContaInativa() {
+        LogFormatter.logStep("Validando erro de conta inativa na transferencia");
+        
+        if (response == null) {
+            throw new RuntimeException("Nenhuma resposta disponivel para validacao");
+        }
+        
+        int statusCode = response.getStatusCode();
+        String mensagemErro = response.jsonPath().getString("error");
+        
+        LogFormatter.logStep("Status Code recebido: " + statusCode);
+        LogFormatter.logStep("Mensagem de erro recebida: " + mensagemErro);
+        
+        // Esperamos um erro 400 ou 422 para conta inativa
+        if (statusCode == 400 || statusCode == 422) {
+            LogFormatter.logStep("Status Code correto para conta inativa");
+            
+            if (mensagemErro != null && (mensagemErro.toLowerCase().contains("inativa") || 
+                                        mensagemErro.toLowerCase().contains("inactive") ||
+                                        mensagemErro.toLowerCase().contains("desabilitada"))) {
+                LogFormatter.logStep("Mensagem de erro de conta inativa validada corretamente");
+            } else {
+                LogFormatter.logStep("Mensagem de erro nao contem referencia a conta inativa, mas o status code esta correto");
+            }
+        } else {
+            throw new RuntimeException("Status code nao corresponde ao esperado para conta inativa. Esperado: 400 ou 422, Recebido: " + statusCode);
         }
     }
 

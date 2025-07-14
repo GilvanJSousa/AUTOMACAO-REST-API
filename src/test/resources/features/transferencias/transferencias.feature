@@ -90,6 +90,8 @@ Feature: Validar funcionalidade de Transferencias entre contas
     Examples:
       | CONTA_ORIGEM             | CONTA_DESTINO            |
       | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
+      | CONTA_ORIGEM             | CONTA_DESTINO            |
+      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
 
   @CT-1014 @TransferenciaRemoverInexistente
   Scenario Outline: Tentar remover uma transferencia inexistente
@@ -100,3 +102,15 @@ Feature: Validar funcionalidade de Transferencias entre contas
     Examples:
       | ID                       |
       | 686fa208cbdb4375dbb8ed47 |
+
+  @CT-1015 @TransferenciaContaInativa
+  Scenario Outline: Validar a conta inativa e o saldo
+    Given que a conta de origem "<CONTA_ORIGEM>" possui saldo de R$ 1000.00
+    And a conta de destino "<CONTA_DESTINO>" esta inativa
+    And o token de autenticacao 'yJhbGciOi...' e fornecido
+    When uma transferencia de R$ 100.00 e realizada
+    Then o sistema retorna um erro indicando que a Conta de origem ou destino esta inativa.
+
+    Examples:
+      | CONTA_ORIGEM             | CONTA_DESTINO            |
+      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed49 |
