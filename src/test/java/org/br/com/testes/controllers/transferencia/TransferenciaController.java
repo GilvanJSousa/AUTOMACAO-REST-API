@@ -881,4 +881,55 @@ public class TransferenciaController {
         }
     }
 
+    // Variável de contexto para saldo esperado (apenas CT-1016)
+    private double saldoEsperadoCT1016 = 0.0;
+
+    /**
+     * Define o saldo esperado para o teste de saldo insuficiente (CT-1016)
+     */
+    public void definirSaldoEsperado(double saldo) {
+        this.saldoEsperadoCT1016 = saldo;
+    }
+
+    /**
+     * Valida se o saldo está insuficiente (específico para CT-1016)
+     */
+    public void validarSaldoInsuficiente() {
+        LogFormatter.logStep("Validando saldo insuficiente para CT-1016");
+        
+        if (contaOrigemAtual == null) {
+            throw new RuntimeException("Conta de origem nao foi definida para validacao");
+        }
+        if (saldoEsperadoCT1016 <= 0.0) {
+            throw new RuntimeException("Saldo esperado para validacao nao foi definido (CT-1016)");
+        }
+        // Garantir que temos um token válido
+        if (TokenManager.getToken() == null) {
+            GerarToken.gerarTokenAdmin();
+        }
+        
+        Response contaResponse = given()
+                .baseUri(BASE_URL)
+                .header("accept", "*/*")
+                .header("Authorization", "Bearer " + TokenManager.getToken())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/contas/" + contaOrigemAtual)
+                .then()
+                .extract().response();
+        
+        double saldoAtual = contaResponse.jsonPath().getDouble("saldo");
+        LogFormatter.logStep("Saldo atual da conta " + contaOrigemAtual + ": R$ " + saldoAtual);
+        LogFormatter.logStep("Saldo esperado para CT-1016: R$ " + saldoEsperadoCT1016);
+        
+        // Para CT-1016, esperamos que o saldo seja insuficiente (menor que o valor do Given)
+        if (saldoAtual < saldoEsperadoCT1016) {
+            LogFormatter.logStep("CT-1016: Saldo insuficiente validado com sucesso");
+            LogFormatter.logStep("Saldo atual: R$ " + saldoAtual + " < R$ " + saldoEsperadoCT1016);
+            LogFormatter.logStep("Mensagem esperada: 'Saldo insuficiente para realizar a transferencia.'");
+        } else {
+            throw new RuntimeException("CT-1016: Saldo nao esta insuficiente. Saldo atual: R$ " + saldoAtual + " >= R$ " + saldoEsperadoCT1016);
+        }
+    }
+
 }

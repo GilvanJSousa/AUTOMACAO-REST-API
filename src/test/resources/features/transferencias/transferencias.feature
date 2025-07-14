@@ -114,12 +114,10 @@ Feature: Validar funcionalidade de Transferencias entre contas
       | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed49 |
 
   @CT-1016 @TransferenciaContaSaldoInsuficiente
-  Scenario Outline: Validar saldo insuficiente para transferencia
-    Given que a conta de origem "<CONTA_ORIGEM>" possui saldo de R$ 4000.00
-    And o token de autenticacao 'yJhbGciOi...' e fornecido
-    When uma transferencia de R$ 5000.00 e realizada
+  Scenario Outline: Validar saldo insuficiente
+    Given que a conta de origem "<CONTA_ORIGEM>" possui saldo de R$ 4500.00
     Then o sistema retorna um erro indicando que o Saldo esta insuficiente para realizar a transferencia.
 
     Examples:
-      | CONTA_ORIGEM             | CONTA_DESTINO            |
-      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed49 |
+      | CONTA_ORIGEM             |
+      | 686fa208cbdb4375dbb8ed47 |

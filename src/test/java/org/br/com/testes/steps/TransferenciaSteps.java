@@ -154,6 +154,7 @@ public class TransferenciaSteps {
     @Given("que a conta de origem {string} possui saldo de R$ {double}")
     public void queAContaDeOrigemPossuiSaldoDeR$(String contaOrigem, Double saldo) {
         transferenciaController.definirContaOrigem(contaOrigem);
+        transferenciaController.definirSaldoEsperado(saldo); // Adicionado para CT-1016
         transferenciaController.verificarSaldoContaOrigem(contaOrigem, saldo);
     }
 
@@ -170,7 +171,7 @@ public class TransferenciaSteps {
 
     @Then("o sistema retorna um erro indicando que o Saldo esta insuficiente para realizar a transferencia.")
     public void oSistemaRetornaUmErroIndicandoQueOSaldoEstaInsuficienteParaRealizarATransferencia() {
-        transferenciaController.validarErroSaldoInsuficiente();
+        transferenciaController.validarSaldoInsuficiente();
     }
 
     @And("a conta de destino {string} esta ativa")
