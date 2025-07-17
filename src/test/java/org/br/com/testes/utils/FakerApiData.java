@@ -8,7 +8,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.br.com.testes.model.UsuarioRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,17 +45,6 @@ public class FakerApiData {
 		generateFakeData();
 	}
 
-	public static UsuarioRequest UsuarioJavaFake() {
-		FakerApiData fakeData = new FakerApiData();
-		
-		return UsuarioRequest.builder()
-				.nomeCompleto("Usuario")
-				.nomeUsuario("Usuario")
-				.email("usuario@email.com")
-				.senha(fakeData.getPassword())
-				.build();
-	}
-
 	/**
 	 * Gera um email personalizado usando firstName e lastName.
 	 * Formato: firstName.lastName@exemplo.com
@@ -75,36 +63,6 @@ public class FakerApiData {
 			return emailAddress.substring(emailAddress.indexOf("@") + 1);
 		}
 		return "exemplo.com";
-	}
-
-	public static UsuarioRequest gerarUsuarioRequestSimples() {
-		FakerApiData fakeData = new FakerApiData();
-
-		// Gerar nome completo realista
-		String nomeCompleto = fakeData.getFullName();
-
-		// Extrair primeiro e último nome (remover acentos e caracteres especiais)
-		String nomeSemAcentos = nomeCompleto.replaceAll("[^a-zA-Z ]", "");
-		String[] nomes = nomeSemAcentos.split(" ");
-		String primeiroNome = nomes.length > 0 ? nomes[0].toLowerCase() : "usuario";
-		String ultimoNome = nomes.length > 1 ? nomes[nomes.length - 1].toLowerCase() : "teste";
-
-		// Montar nomeUsuario e email conforme solicitado
-		String nomeUsuario = primeiroNome + "_" + ultimoNome;
-		String dominio = fakeData.getDomain();
-		String email = ultimoNome + "." + primeiroNome + "@" + dominio;
-
-		// Senha: P@ssword + dois dígitos aleatórios
-		java.util.Random random = new java.util.Random();
-		int numeroAleatorio = random.nextInt(100); // 0 a 99
-		String senha = String.format("P@ssword%02d", numeroAleatorio);
-
-		return UsuarioRequest.builder()
-				.nomeCompleto(nomeCompleto)
-				.nomeUsuario(nomeUsuario)
-				.email(email)
-				.senha(senha)
-				.build();
 	}
 
 	/**

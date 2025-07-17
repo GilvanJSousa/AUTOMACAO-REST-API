@@ -69,7 +69,7 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
   Examples:
     | CONTA_ORIGEM             | CONTA_DESTINO            | CONTA_DESTINO_NOVO       |
-    | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 | 686fa208cbdb4375dbb8ed46 |
+    | 686fa208cbdb4375dbb8ed48 | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed46 |
 
   @CT-1012 @TransferenciaModificarValor
   Scenario Outline: Modificar o valor de uma transferência
@@ -79,7 +79,7 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
     Examples:
       | CONTA_ORIGEM             | CONTA_DESTINO            |
-      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed48 |
+      | 686fa208cbdb4375dbb8ed46 | 686fa208cbdb4375dbb8ed47 |
 
   @CT-1013 @TransferenciaRemover
   Scenario Outline: Remover uma transferência e reverter saldos
@@ -99,4 +99,25 @@ Feature: Validar funcionalidade de Transferencias entre contas
 
     Examples:
       | ID                       |
+      | 686fa208cbdb4375dbb8ed47 |
+
+  @CT-1015 @TransferenciaContaInativa
+  Scenario Outline: Validar a conta inativa e o saldo
+    Given que a conta de origem "<CONTA_ORIGEM>" possui saldo de R$ 1000.00
+    And a conta de destino "<CONTA_DESTINO>" esta inativa
+    And o token de autenticacao 'yJhbGciOi...' e fornecido
+    When uma transferencia de R$ 100.00 e realizada
+    Then o sistema retorna um erro indicando que a Conta de origem ou destino esta inativa.
+
+    Examples:
+      | CONTA_ORIGEM             | CONTA_DESTINO            |
+      | 686fa208cbdb4375dbb8ed47 | 686fa208cbdb4375dbb8ed49 |
+
+  @CT-1016 @TransferenciaContaSaldoInsuficiente
+  Scenario Outline: Validar saldo insuficiente
+    Given que a conta de origem "<CONTA_ORIGEM>" possui saldo de R$ 4500.00
+    Then o sistema retorna um erro indicando que o Saldo esta insuficiente para realizar a transferencia.
+
+    Examples:
+      | CONTA_ORIGEM             |
       | 686fa208cbdb4375dbb8ed47 |

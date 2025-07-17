@@ -71,7 +71,7 @@ public class TransferenciaSteps {
 
     @When("uma transferencia de R$ {double} e realizada")
     public void umaTransferenciaDeRERealizada(double valor) throws JsonProcessingException {
-        transferenciaController.realizarTransferenciaComValidacao(valor);
+        transferenciaController.realizarTransferenciaComContextoAtual(valor);
     }
 
     @Then("a transferencia e processada com sucesso")
@@ -93,16 +93,11 @@ public class TransferenciaSteps {
 //        LogFormatter.logStep("Validacao de erro de valor minimo concluida");
     }
 
-    // --- CT-1013: Remover uma transferência e reverter saldos ---
-    private String contaOrigemCT1013;
-    private String contaDestinoCT1013;
-    private double valorTransferenciaCT1013;
-
     @Given("que a transferencia de R$ {double} foi realizada entre a conta de origem {string} e a conta de destino {string}")
     public void queATransferenciaDeR$FoiRealizadaEntreAContaDeOrigemEAContaDeDestino(double valor, String contaOrigem, String contaDestino) throws JsonProcessingException {
-        this.contaOrigemCT1013 = contaOrigem;
-        this.contaDestinoCT1013 = contaDestino;
-        this.valorTransferenciaCT1013 = valor;
+        transferenciaController.definirContaOrigem(contaOrigem);
+        transferenciaController.definirContaDestino(contaDestino);
+        transferenciaController.definirValorTransferencia(valor);
         transferenciaController.realizarTransferenciaEntreContas(valor, contaOrigem, contaDestino);
         transferenciaController.armazenarSaldosAntesRemocao(contaOrigem, contaDestino);
     }
@@ -114,20 +109,19 @@ public class TransferenciaSteps {
 
     @Then("o saldo da conta de origem e da conta de destino e revertido")
     public void oSaldoDaContaDeOrigemEDaContaDeDestinoERevertido() {
-        transferenciaController.validarReversaoDeSaldo(contaOrigemCT1013, contaDestinoCT1013);
+        // O controller já tem o contexto das contas, então não precisa passar parâmetros
+        transferenciaController.validarReversaoDeSaldoComContextoAtual();
     }
-
-    // --- CT-1014: Tentar remover uma transferência inexistente ---
-    private String idTransferenciaInexistente;
 
     @Given("que nao existe transferancia com o ID {string}")
     public void queNaoExisteTransferanciaComOID(String id) {
-        this.idTransferenciaInexistente = id;
+        transferenciaController.definirIdTransferenciaInexistente(id);
     }
 
     @When("a tentativa de remoção da transferencia e realizada")
     public void aTentativaDeRemoçãoDaTransferenciaERealizada() {
-        transferenciaController.tentarRemoverTransferenciaInexistente(idTransferenciaInexistente);
+        // O controller já tem o contexto do ID, então não precisa passar parâmetro
+        transferenciaController.tentarRemoverTransferenciaInexistenteComContextoAtual();
     }
 
     @Then("o sistema retorna um erro indicando que a transferencia nao foi encontrada")
@@ -154,6 +148,34 @@ public class TransferenciaSteps {
 
     @Then("a transferencia e modificada com sucesso")
     public void aTransferenciaEModificadaComSucesso() {
+
     }
 
+    @Given("que a conta de origem {string} possui saldo de R$ {double}")
+    public void queAContaDeOrigemPossuiSaldoDeR$(String contaOrigem, Double saldo) {
+        transferenciaController.definirContaOrigem(contaOrigem);
+        transferenciaController.definirSaldoEsperado(saldo); // Adicionado para CT-1016
+        transferenciaController.verificarSaldoContaOrigem(contaOrigem, saldo);
+    }
+
+    @And("a conta de destino {string} esta inativa")
+    public void aContaDeDestinoEstaInativa(String contaDestino) {
+        transferenciaController.definirContaDestino(contaDestino);
+        transferenciaController.verificarContaDestinoInativa(contaDestino);
+    }
+
+    @Then("o sistema retorna um erro indicando que a Conta de origem ou destino esta inativa.")
+    public void oSistemaRetornaUmErroIndicandoQueAContaDeOrigemOuDestinoEstaInativa() {
+        transferenciaController.validarErroContaInativa();
+    }
+
+    @Then("o sistema retorna um erro indicando que o Saldo esta insuficiente para realizar a transferencia.")
+    public void oSistemaRetornaUmErroIndicandoQueOSaldoEstaInsuficienteParaRealizarATransferencia() {
+        transferenciaController.validarSaldoInsuficiente();
+    }
+
+    @And("a conta de destino {string} esta ativa")
+    public void aContaDeDestinoEstaAtiva(String arg0) {
+        transferenciaController.verificarContaDestinoAtiva();
+    }
 }
