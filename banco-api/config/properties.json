@@ -1,11 +1,11 @@
 {
   "server": {
     "rest": {
-      "port": 9090,
+      "port": 5050,
       "host": "localhost"
     },
     "graphql": {
-      "port": 9091,
+      "port": 5051,
       "host": "localhost"
     }
   },

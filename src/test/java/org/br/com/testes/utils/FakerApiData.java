@@ -68,8 +68,7 @@ public class FakerApiData {
 	/**
 	 * Gera dados de atualizacao contendo apenas nomeUsuario e senha.
 	 * Utilizado para requisições de atualizacao parcial de usuario.
-	 * 
-	 * @deprecated Use JavaFaker.DadosAtualizacaoJavaFake() instead
+	 * 	 * @deprecated Use JavaFaker.DadosAtualizacaoJavaFake() instead
 	 * @return Map contendo apenas os campos nomeUsuario e senha para atualizacao
 	 */
 	@Deprecated

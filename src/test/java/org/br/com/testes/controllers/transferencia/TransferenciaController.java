@@ -22,7 +22,7 @@ public class TransferenciaController {
 
     private String requestBody;
 
-    private static final String BASE_URL = "http://localhost:9090";
+    private static final String BASE_URL = "http://localhost:5050";
 
     private static final String ENDPOINT_TRANSFERENCIA = "/transferencias";
 

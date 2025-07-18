@@ -11,7 +11,7 @@ jobs:
     env:
       MONGO_URI: mongodb+srv://gillvanjs:KNAqSlJj0n6mawLV@cluster0.yia8ilv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       JWT_SECRET: KNAqSlJj0n6mawLV
-      PORT: 9090
+      PORT: 5050
 
     steps:
     - uses: actions/checkout@v3
