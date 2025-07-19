@@ -100,7 +100,7 @@ src/test/resources/features/ # Features Gherkin
       private static final String ENDPOINT_USUARIOS = "/usuarios";
 
       public void cadastrarNovoUsuario() {
-          UsuarioResquest usuarioRequest = UsuarioResquest.builder()
+          UsuarioRequest usuarioRequest = UsuarioRequest.builder()
               .nome(FakerApiData.gerarUsuarioFake().getNome())
               .email(FakerApiData.gerarUsuarioFake().getEmail())
               .password(FakerApiData.gerarUsuarioFake().getSenha())
@@ -128,14 +128,14 @@ src/test/resources/features/ # Features Gherkin
 
 ### E. Models (DTOs)
 
-- Local: `src/test/java/org/br/com/testes/model/usuario/UsuarioResquest.java`
+- Local: `src/test/java/org/br/com/testes/model/usuario/UsuarioRequest.java`
 - Exemplo:
   ```java
   @Data
   @Builder
   @NoArgsConstructor
   @AllArgsConstructor
-  public class UsuarioResquest {
+  public class UsuarioRequest {
       private String nome;
       private String email;
       private String password;
@@ -233,7 +233,7 @@ public void queCadastroUmUsuarioValidoParaOsTestes() {
 ### Controller
 ```java
 public void cadastrarNovoUsuario() {
-    UsuarioResquest usuarioRequest = UsuarioResquest.builder()
+    UsuarioRequest usuarioRequest = UsuarioRequest.builder()
         .nome(FakerApiData.gerarUsuarioFake().getNome())
         .email(FakerApiData.gerarUsuarioFake().getEmail())
         .password(FakerApiData.gerarUsuarioFake().getSenha())
@@ -255,7 +255,7 @@ public void cadastrarNovoUsuario() {
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioResquest {
+public class UsuarioRequest {
     private String nome;
     private String email;
     private String password;
